@@ -1,0 +1,21 @@
+<div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+<section *ngIf="object" class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">{{title}}: {{object.title}}</h1>
+        <button type="button" class="btn btn-secondary" *ngIf="prev_id" (click)="load_prev_object()">&lt;&lt;</button>
+        <img
+            src="{{base_url}}{{object.cover_photo.thumbs.thumb.url}}"
+            width="{{object.cover_photo.thumbs.thumb.width}}"
+            height="{{object.cover_photo.thumbs.thumb.height}}"
+            alt="{{object.cover_photo.title}}"
+        >
+        <button type="button" class="btn btn-secondary" *ngIf="more_pages()" (click)="load_next_object()">&gt;&gt;</button>
+        <p class="lead text-muted">{{object.description}}</p>
+        <p>
+            <a href="#" class="btn btn-primary">Main call to action</a>
+            <a href="#" class="btn btn-secondary">Secondary action</a>
+        </p>
+    </div>
+</section>

@@ -1,0 +1,24 @@
+<div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+<div class="album text-muted">
+    <div class="container">
+        <div class="row">
+            <div class="card" *ngFor="let object of list.get_objects()">
+                <!-- <a [routerLink]="['..', object.type_name, obj.id]"> -->
+                <a (click)="select_object(object); $event.stopPropagation()">
+                    <img
+                      src="{{base_url}}{{object.cover_photo.thumbs.thumb.url}}"
+                      width="{{object.cover_photo.thumbs.thumb.width}}"
+                      height="{{object.cover_photo.thumbs.thumb.height}}"
+                      alt="{{object.cover_photo.title}}"
+                    >
+                    <p class="card-text">{{object.title}}</p>
+                </a>
+            </div>
+            <div class="card" *ngIf="!finished">
+                <button type="button" (click)="get_next_page(); $event.stopPropagation()" aria-label="Load more.">Load more...</button>
+            </div>
+        </div>
+    </div>
+</div>
