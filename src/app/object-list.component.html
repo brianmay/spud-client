@@ -6,6 +6,7 @@
         <div class="row">
             <div class="card" *ngFor="let object of list.get_objects()">
                 <!-- <a [routerLink]="['..', object.type_name, obj.id]"> -->
+                <p *ngIf="selected_object && selected_object.id==object.id">SELECTED</p>
                 <a (click)="select_object(object); $event.stopPropagation()">
                     <img
                       src="{{base_url}}{{object.cover_photo.thumbs.thumb.url}}"

@@ -8,10 +8,10 @@
   </div>
 </section>
 
-<object_list [list]="list" (selected_object)="select_object($event)"></object_list>
+<object_list [list]="list" [(selected_object)]="selected_object"></object_list>
 
 <div *ngIf="selected_object" class="panel panel-default">
     <div class="panel-body">
-        <album_detail [list]="list" [object]="selected_object"></album_detail>
+        <album_detail [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></album_detail>
     </div>
 </div>

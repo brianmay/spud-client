@@ -13,7 +13,8 @@ import { base_url } from './settings';
 export class ObjectListComponent<GenObject extends BaseObject> implements OnInit {
     private readonly base_url : string = base_url
     @Input() list : ObjectList<GenObject>;
-    @Output() selected_object = new EventEmitter();
+    @Input() selected_object : GenObject;
+    @Output() selected_objectChange = new EventEmitter();
     //private objects : Array<GenObject>;
     private finished : boolean = false;
     private error : string
@@ -24,7 +25,7 @@ export class ObjectListComponent<GenObject extends BaseObject> implements OnInit
         this.get_next_page();
     }
 
-    get_next_page() : void {
+    private get_next_page() : void {
         this.list.get_next_page()
             .then((objects : Array<GenObject>) => {
                 // this.objects = this.list.get_objects()
@@ -38,7 +39,8 @@ export class ObjectListComponent<GenObject extends BaseObject> implements OnInit
             })
     }
 
-    select_object(object : GenObject) {
-        this.selected_object.emit(object);
+    private select_object(object : GenObject) {
+        this.selected_object = object
+        this.selected_objectChange.emit(object);
     }
 }
