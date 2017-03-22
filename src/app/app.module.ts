@@ -9,9 +9,9 @@ import { NavbarComponent } from './navbar.component';
 import { ObjectListComponent } from './object-list.component';
 
 import { AlbumListComponent, AlbumDetailComponent } from './album.component';
-import { CategoryListComponent } from './category.component';
-import { PlaceListComponent } from './place.component';
-import { PersonListComponent } from './person.component';
+import { CategoryListComponent, CategoryDetailComponent } from './category.component';
+import { PersonListComponent, PersonDetailComponent } from './person.component';
+import { PlaceListComponent, PlaceDetailComponent } from './place.component';
 
 import { SpudService } from './spud.service';
 
@@ -28,8 +28,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       AlbumListComponent,
       AlbumDetailComponent,
       CategoryListComponent,
+      CategoryDetailComponent,
       PlaceListComponent,
-      PersonListComponent
+      PlaceDetailComponent,
+      PersonListComponent,
+      PersonDetailComponent
     ],
     imports: [
       BrowserModule,

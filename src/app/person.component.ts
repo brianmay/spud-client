@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { BaseListComponent } from './base.component'
+import { ActivatedRoute } from '@angular/router';
+import { BaseListComponent, BaseDetailComponent } from './base.component'
 import { PersonObject, PersonType } from './person'
 
 import { SpudService } from './spud.service'
@@ -14,5 +15,21 @@ export class PersonListComponent extends BaseListComponent<PersonObject> {
 
     constructor(spud_service: SpudService) {
         super(new PersonType(), spud_service);
+    }
+}
+
+@Component({
+    selector: 'person_detail',
+    templateUrl: './base-detail.component.html',
+    styleUrls: ['./base-detail.component.css']
+})
+export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
+    title = 'Person';
+
+    constructor(
+            route: ActivatedRoute,
+            spud_service: SpudService
+            ) {
+        super(new PersonType(), route, spud_service);
     }
 }

@@ -12,6 +12,9 @@
 
 <div *ngIf="selected_object" class="panel panel-default">
     <div class="panel-body">
-        <album_detail [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></album_detail>
+        <album_detail *ngIf="selected_object.type_name==='albums'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></album_detail>
+        <category_detail *ngIf="selected_object.type_name==='categorys'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></category_detail>
+        <person_detail *ngIf="selected_object.type_name==='persons'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></person_detail>
+        <place_detail *ngIf="selected_object.type_name==='places'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></place_detail>
     </div>
 </div>
