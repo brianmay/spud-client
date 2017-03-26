@@ -3,6 +3,7 @@ import 'rxjs/add/operator/switchMap';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
+import * as s from './streamable';
 import { base_url } from './settings';
 import { BaseObject, BaseType } from './base';
 import { SpudService, ObjectList } from './spud.service';
@@ -20,7 +21,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
     ) {}
 
     ngOnInit(): void {
-        this.list = this.spud_service.get_list(this.type_obj)
+        this.list = this.spud_service.get_list(this.type_obj, null)
     }
 
     private select_object(object : GenObject) {
@@ -58,6 +59,8 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private error : string;
     private prev_id : number;
     private next_id : number;
+
+    private child_list : ObjectList<GenObject>;
 
     constructor(
         readonly type_obj : BaseType<GenObject>,
@@ -144,6 +147,11 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             this.prev_id = null;
             this.next_id = null;
         }
+
+        this.child_list = this.spud_service.get_list(this.type_obj, {
+            instance: object.id,
+            mode: 'children'
+        })
     }
 
     private handle_error(message: string): void {
