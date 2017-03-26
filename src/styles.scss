@@ -1,8 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-.navbar {
-  margin-bottom: 0;
+body {
+  padding-top: 56px;
+}
+
+.card { 
+  margin: 10px;
 }
 
 .jumbotron {
@@ -63,7 +67,7 @@ footer p {
 
 .photo_list {
 //    display: flex;
-    border: 1px solid #666;
+//    border: 1px solid #666;
 //    overflow-y: scroll;
 //    background: #fff;
 }

@@ -1,21 +1,25 @@
-<section class="jumbotron text-center">
-  <div class="container">
-    <h1 class="jumbotron-heading">{{title}} List</h1>
-    <p>
-      <a href="#" class="btn btn-primary">Main call to action</a>
-      <a href="#" class="btn btn-secondary">Secondary action</a>
-    </p>
-  </div>
-</section>
+<div class="card" *ngIf="!list.empty">
+    <h2 class="card-header">{{title}}</h2>
+    <div class="card-block">
 
-<object_list [list]="list" [(selected_object)]="selected_object"></object_list>
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h2 class="jumbotron-heading">{{title}}</h2>
+                <p>
+                    <a href="#" class="btn btn-primary">Main call to action</a>
+                    <a href="#" class="btn btn-secondary">Secondary action</a>
+                </p>
+            </div>
+        </section>
 
-<div *ngIf="selected_object" class="panel panel-default">
-    <div class="panel-body">
-        <album_detail *ngIf="selected_object.type_name==='albums'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></album_detail>
-        <category_detail *ngIf="selected_object.type_name==='categorys'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></category_detail>
-        <person_detail *ngIf="selected_object.type_name==='persons'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></person_detail>
-        <place_detail *ngIf="selected_object.type_name==='places'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></place_detail>
-        <photo_detail *ngIf="selected_object.type_name==='photos'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></photo_detail>
+        <object_list [list]="list" [(selected_object)]="selected_object"></object_list>
     </div>
+</div>
+
+<div *ngIf="selected_object" >
+    <album_detail *ngIf="selected_object.type_name==='albums'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></album_detail>
+    <category_detail *ngIf="selected_object.type_name==='categorys'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></category_detail>
+    <person_detail *ngIf="selected_object.type_name==='persons'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></person_detail>
+    <place_detail *ngIf="selected_object.type_name==='places'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></place_detail>
+    <photo_detail *ngIf="selected_object.type_name==='photos'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></photo_detail>
 </div>

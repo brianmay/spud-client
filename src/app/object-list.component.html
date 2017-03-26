@@ -12,7 +12,7 @@
         <p class="desc" *ngIf="object.desc">{{object.desc}}</p>
     </div>
 
-    <div class="photo_item" *ngIf="!finished">
+    <div class="photo_item" *ngIf="!list.finished">
         <button type="button" (click)="get_next_page(); $event.stopPropagation()" aria-label="Load more.">Load more...</button>
     </div>
 </div>

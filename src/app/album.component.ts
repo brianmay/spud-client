@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { PageScrollService } from 'ng2-page-scroll';
+
 import { BaseListComponent, BaseDetailComponent } from './base.component'
 import { AlbumObject, AlbumType } from './album'
-
 import { SpudService } from './spud.service'
 
 @Component({
@@ -10,10 +12,13 @@ import { SpudService } from './spud.service'
     templateUrl: './base-list.component.html',
 })
 export class AlbumListComponent extends BaseListComponent<AlbumObject> {
-    title = 'Album';
+    title = 'Album List';
 
-    constructor(spud_service: SpudService) {
-        super(new AlbumType(), spud_service);
+    constructor(
+            spud_service: SpudService,
+            page_scroll_service: PageScrollService,
+            ) {
+        super(new AlbumType(), spud_service, page_scroll_service);
     }
 }
 
@@ -22,13 +27,12 @@ export class AlbumListComponent extends BaseListComponent<AlbumObject> {
     templateUrl: './base-detail.component.html',
 })
 export class AlbumDetailComponent extends BaseDetailComponent<AlbumObject> {
-    title = 'Album';
-
     constructor(
             route: ActivatedRoute,
-            spud_service: SpudService
+            spud_service: SpudService,
+            page_scroll_service: PageScrollService,
             ) {
-        super(new AlbumType(), route, spud_service);
+        super(new AlbumType(), route, spud_service, page_scroll_service);
     }
 
     protected get_photo_criteria(object : AlbumObject) : Map<string,string> {

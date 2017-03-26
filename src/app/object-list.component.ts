@@ -17,7 +17,6 @@ export class ObjectListComponent<GenObject extends BaseObject> {
     //private objects : Array<GenObject>;
 
     private list : ObjectList<GenObject>;
-    private finished : boolean = false;
     private error : string
 
     constructor() {}
@@ -25,10 +24,6 @@ export class ObjectListComponent<GenObject extends BaseObject> {
     private get_next_page() : void {
         this.list.get_next_page()
             .then((objects : Array<GenObject>) => {
-                // this.objects = this.list.get_objects()
-                if (this.list.finished) {
-                    this.finished = true;
-                }
                 this.error = null;
             })
             .catch((message : string) => {

@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { PageScrollService } from 'ng2-page-scroll';
+
 import { BaseListComponent, BaseDetailComponent } from './base.component'
 import { PersonObject, PersonType } from './person'
-
 import { SpudService } from './spud.service'
 
 @Component({
@@ -10,10 +12,13 @@ import { SpudService } from './spud.service'
     templateUrl: './base-list.component.html',
 })
 export class PersonListComponent extends BaseListComponent<PersonObject> {
-    title = 'Person';
+    title = 'Person List';
 
-    constructor(spud_service: SpudService) {
-        super(new PersonType(), spud_service);
+    constructor(
+            spud_service: SpudService,
+            page_scroll_service: PageScrollService,
+            ) {
+        super(new PersonType(), spud_service, page_scroll_service);
     }
 }
 
@@ -22,13 +27,12 @@ export class PersonListComponent extends BaseListComponent<PersonObject> {
     templateUrl: './base-detail.component.html',
 })
 export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
-    title = 'Person';
-
     constructor(
             route: ActivatedRoute,
-            spud_service: SpudService
+            spud_service: SpudService,
+            page_scroll_service: PageScrollService,
             ) {
-        super(new PersonType(), route, spud_service);
+        super(new PersonType(), route, spud_service, page_scroll_service);
     }
 
     protected get_photo_criteria(object : PersonObject) : Map<string,string> {

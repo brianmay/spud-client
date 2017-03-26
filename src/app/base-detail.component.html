@@ -1,20 +1,35 @@
 <div *ngIf="error" class="alert alert-danger" role="alert">
     {{ error }}
 </div>
-<section *ngIf="object" class="jumbotron text-center">
-    <div class="container">
-        <h1 class="jumbotron-heading">{{title}}: {{object.title}}</h1>
-        <button type="button" class="btn btn-secondary" *ngIf="prev_id" (click)="load_prev_object()">&lt;&lt;</button>
-        <photo_mid [photo]="object.cover_photo"></photo_mid>
-        <button type="button" class="btn btn-secondary" *ngIf="more_pages()" (click)="load_next_object()">&gt;&gt;</button>
-        <p class="lead text-muted">{{object.description}}</p>
-        <p>
-            <a href="#" class="btn btn-primary">Main call to action</a>
-            <a href="#" class="btn btn-secondary">Secondary action</a>
-        </p>
+<div class="card" *ngIf="object">
+    <h2 class="card-header">{{object.title}}</h2>
+    <div class="card-block">
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 #details class="jumbotron-heading">{{ object.title }}</h1>
+                <button type="button" class="btn btn-secondary" *ngIf="prev_id" (click)="load_prev_object()">&lt;&lt;</button>
+                <photo_mid [photo]="object.cover_photo"></photo_mid>
+                <button type="button" class="btn btn-secondary" *ngIf="more_pages()" (click)="load_next_object()">&gt;&gt;</button>
+                <p class="lead text-muted">{{object.description}}</p>
+                <p>
+                    <a (click)="goto_children()" class="btn btn-secondary" *ngIf="!child_list.empty">Children</a>
+                    <a (click)="goto_photos()" class="btn btn-secondary" *ngIf="photo_list && !photo_list.empty">Photos</a>
+                </p>
+            </div>
+        </section>
+
+        <div #children></div>
+        <album_list *ngIf="type_obj.type_name==='albums'" [list]="child_list" title="{{ object.title }}: Children"></album_list>
+        <category_list *ngIf="type_obj.type_name==='categorys'" [list]="child_list" title="{{ object.title }}: Children"></category_list>
+        <person_list *ngIf="type_obj.type_name==='persons'" [list]="child_list" title="{{ object.title }}: Children"></person_list>
+        <place_list *ngIf="type_obj.type_name==='places'" [list]="child_list" title="{{ object.title }}: Children"></place_list>
+        <photo_list *ngIf="type_obj.type_name==='photos'" [list]="child_list" title="{{ object.title }}: Children"></photo_list>
+
+        <div #photos></div>
+        <album_list *ngIf="type_obj.type_name==='albums' && photo_list" [list]="photo_list" title="{{ object.title }}: Photos"></album_list>
+        <category_list *ngIf="type_obj.type_name==='categorys' && photo_list" [list]="photo_list" title="{{ object.title }}: Photos"></category_list>
+        <person_list *ngIf="type_obj.type_name==='persons' && photo_list" [list]="photo_list" title="{{ object.title }}: Photos"></person_list>
+        <place_list *ngIf="type_obj.type_name==='places' && photo_list" [list]="photo_list" title="{{ object.title }}: Photos"></place_list>
+        <photo_list *ngIf="type_obj.type_name==='photos' && photo_list" [list]="photo_list" title="{{ object.title }}: Photos"></photo_list>
     </div>
-</section>
-
-<object_list *ngIf="child_list" [list]="child_list"></object_list>
-
-<object_list *ngIf="photo_list" [list]="photo_list"></object_list>
+</div>

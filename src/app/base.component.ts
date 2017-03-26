@@ -1,7 +1,9 @@
 import 'rxjs/add/operator/switchMap';
 
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, ViewChild, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+
+import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 
 import * as s from './streamable';
 import { base_url } from './settings';
@@ -12,17 +14,20 @@ import { SpudService, ObjectList } from './spud.service';
 export abstract class BaseListComponent<GenObject extends BaseObject>
         implements OnInit {
 
-    abstract title : string;
-    private list : ObjectList<GenObject>;
+    @Input() title : string;
+    @Input() list : ObjectList<GenObject>;
     private selected_object : GenObject;
 
     constructor(
         readonly type_obj : BaseType<GenObject>,
         private spud_service: SpudService,
+        private pageScrollService: PageScrollService,
     ) {}
 
     ngOnInit(): void {
-        this.list = this.spud_service.get_list(this.type_obj, null)
+        if (this.list == null) {
+            this.list = this.spud_service.get_list(this.type_obj, null)
+        }
     }
 
     private select_object(object : GenObject) {
@@ -31,16 +36,14 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
 }
 
 export abstract class BaseDetailComponent<GenObject extends BaseObject>
-        implements OnInit, OnChanges {
+        implements OnInit, OnChanges, AfterViewChecked {
 
     private readonly base_url : string = base_url
-
-    abstract title : string;
 
     private object_id : number;
     @Input('object_id') set input_object_id(object_id: number) {
         if (this.object_id !== object_id) {
-            console.log("got input id", object_id);
+            console.log("got input id(1)", this.object_id, object_id);
             this.object_id = object_id;
             this.object = null;
         }
@@ -49,7 +52,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private object : GenObject;
     @Input('object') set input_object(object: GenObject) {
         if (this.object == null || this.object.id !== object.id) {
-            console.log("got input object", object);
+            console.log("got input object(2)", this.object.id, object);
             this.object_id = object.id;
             this.object = object;
         }
@@ -64,10 +67,17 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private child_list : ObjectList<GenObject>;
     private photo_list : ObjectList<PhotoObject>;
 
+    private scroll : Boolean = false;
+
+    @ViewChild('details') details;
+    @ViewChild('children') children;
+    @ViewChild('photos') photos;
+
     constructor(
         readonly type_obj : BaseType<GenObject>,
         private route: ActivatedRoute,
         private spud_service: SpudService,
+        private pageScrollService: PageScrollService,
     ) {}
 
     ngOnInit(): void {
@@ -85,6 +95,8 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                 loaded_object => this.loaded_object(loaded_object),
                 message => this.handle_error(message),
             )
+
+        this.details.changes.subscribe(changes => console.log(changes));
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -99,8 +111,17 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         }
     }
 
+    ngAfterViewChecked() {
+        if (this.scroll) {
+            let pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({document: null, scrollTarget: this.details.nativeElement, pageScrollOffset: 56 });
+            this.pageScrollService.start(pageScrollInstance);
+            this.scroll = false;
+        }
+    }
+
     load_object(id : number) {
         console.log("loading with signal", id)
+        this.object_id = id;
         this.spud_service.get_object(this.type_obj, id)
             .then(loaded_object => {
                 this.loaded_object(loaded_object);
@@ -123,6 +144,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                     let index = this.list.get_index(this.object.id);
                     this.prev_id = index.prev_id;
                     this.next_id = index.next_id;
+                    this.object_id = this.next_id;
                     return this.spud_service.get_object(this.type_obj, this.next_id)
                 })
                 .then(
@@ -161,6 +183,8 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         } else {
             this.photo_list = null;
         }
+
+        this.scroll = true
     }
 
     private handle_error(message: string): void {
@@ -180,4 +204,14 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     protected abstract get_photo_criteria(object : GenObject) : Map<string,string>;
+
+    private goto_children() : void {
+        let pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({document: null, scrollTarget: this.children.nativeElement, pageScrollOffset: 56 });
+        this.pageScrollService.start(pageScrollInstance);
+    }
+
+    private goto_photos() : void {
+        let pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({document: null, scrollTarget: this.photos.nativeElement, pageScrollOffset: 56 });
+        this.pageScrollService.start(pageScrollInstance);
+    }
 }

@@ -1,4 +1,4 @@
-<img
+<img *ngIf="photo && photo.thumbs.thumb"
   src="{{base_url}}{{photo.thumbs.thumb.url}}"
   width="{{photo.thumbs.thumb.width}}"
   height="{{photo.thumbs.thumb.height}}"
