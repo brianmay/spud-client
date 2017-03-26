@@ -12,9 +12,9 @@
             <a href="#" class="btn btn-primary">Main call to action</a>
             <a href="#" class="btn btn-secondary">Secondary action</a>
         </p>
-
-        <object_list [list]="child_list"></object_list>
-
-        <object_list *ngIf="photo_list" [list]="photo_list"></object_list>
     </div>
 </section>
+
+<object_list *ngIf="child_list" [list]="child_list"></object_list>
+
+<object_list *ngIf="photo_list" [list]="photo_list"></object_list>
