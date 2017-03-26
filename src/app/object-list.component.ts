@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { BaseObject } from './base';
 
 import { ObjectList } from './spud.service';
@@ -7,19 +7,20 @@ import { ObjectList } from './spud.service';
     selector: 'object_list',
     templateUrl: './object-list.component.html',
 })
-export class ObjectListComponent<GenObject extends BaseObject> implements OnInit {
-    @Input() list : ObjectList<GenObject>;
+export class ObjectListComponent<GenObject extends BaseObject> {
+    @Input('list') set set_list(list : ObjectList<GenObject>) {
+        this.list = list;
+        this.get_next_page();
+    }
     @Input() selected_object : GenObject;
     @Output() selected_objectChange = new EventEmitter();
     //private objects : Array<GenObject>;
+
+    private list : ObjectList<GenObject>;
     private finished : boolean = false;
     private error : string
 
     constructor() {}
-
-    ngOnInit(): void {
-        this.get_next_page();
-    }
 
     private get_next_page() : void {
         this.list.get_next_page()
