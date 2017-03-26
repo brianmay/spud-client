@@ -3,15 +3,12 @@ import { BaseObject } from './base';
 
 import { ObjectList } from './spud.service';
 
-import { base_url } from './settings';
-
 @Component({
     selector: 'object_list',
     templateUrl: './object-list.component.html',
     styleUrls: ['./object-list.component.css']
 })
 export class ObjectListComponent<GenObject extends BaseObject> implements OnInit {
-    private readonly base_url : string = base_url
     @Input() list : ObjectList<GenObject>;
     @Input() selected_object : GenObject;
     @Output() selected_objectChange = new EventEmitter();

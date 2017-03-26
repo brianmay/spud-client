@@ -5,6 +5,7 @@ import { AlbumListComponent, AlbumDetailComponent } from './album.component';
 import { CategoryListComponent, CategoryDetailComponent } from './category.component';
 import { PersonListComponent, PersonDetailComponent } from './person.component';
 import { PlaceListComponent, PlaceDetailComponent } from './place.component';
+import { PhotoListComponent, PhotoDetailComponent } from './photo.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/albums', pathMatch: 'full' },
@@ -16,6 +17,8 @@ const routes: Routes = [
     { path: 'persons/:id', component: PersonDetailComponent },
     { path: 'places', component: PlaceListComponent },
     { path: 'places/:id', component: PlaceDetailComponent },
+    { path: 'photos', component: PhotoListComponent },
+    { path: 'photos/:id', component: PhotoDetailComponent },
 ];
 
 @NgModule({

@@ -12,6 +12,7 @@ import { AlbumListComponent, AlbumDetailComponent } from './album.component';
 import { CategoryListComponent, CategoryDetailComponent } from './category.component';
 import { PersonListComponent, PersonDetailComponent } from './person.component';
 import { PlaceListComponent, PlaceDetailComponent } from './place.component';
+import { PhotoListComponent, PhotoDetailComponent, PhotoThumbComponent } from './photo.component';
 
 import { SpudService } from './spud.service';
 
@@ -32,7 +33,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       PlaceListComponent,
       PlaceDetailComponent,
       PersonListComponent,
-      PersonDetailComponent
+      PersonDetailComponent,
+      PhotoListComponent,
+      PhotoDetailComponent,
+      PhotoThumbComponent,
     ],
     imports: [
       BrowserModule,

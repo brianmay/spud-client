@@ -66,6 +66,8 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
     set_streamable(streamable : s.Streamable) {
         super.set_streamable(streamable)
 
+        this.cover_photo = this
+
         this.action = s.get_streamable_string(streamable, 'action')
         let utc_offset : number = s.get_streamable_number(streamable, 'datetime_utc_offset')
         this.datetime = s.get_streamable_datetimezone(streamable, 'datetime', utc_offset)

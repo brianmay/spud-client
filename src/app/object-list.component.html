@@ -2,20 +2,16 @@
     {{ error }}
 </div>
 <div class="photo_list">
-    <div class="photo_item" 
+    <div class="photo_item"
             *ngFor="let object of list.get_objects()"
             [class.selected]="selected_object && selected_object.id==object.id"
             (click)="select_object(object); $event.stopPropagation()"
             >
-        <img
-          src="{{base_url}}{{object.cover_photo.thumbs.thumb.url}}"
-          width="{{object.cover_photo.thumbs.thumb.width}}"
-          height="{{object.cover_photo.thumbs.thumb.height}}"
-          alt="{{object.cover_photo.title}}"
-        >
+        <photo_thumb [photo]="object.cover_photo"></photo_thumb>
         <p class="title" *ngIf="object.title">{{object.title}}</p>
         <p class="desc" *ngIf="object.desc">{{object.desc}}</p>
     </div>
+
     <div class="photo_item" *ngIf="!finished">
         <button type="button" (click)="get_next_page(); $event.stopPropagation()" aria-label="Load more.">Load more...</button>
     </div>
