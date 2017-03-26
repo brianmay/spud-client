@@ -30,4 +30,11 @@ export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
             ) {
         super(new PersonType(), route, spud_service);
     }
+
+    protected get_photo_criteria(object : PersonObject) : Map<string,string> {
+        let photo_criteria = new Map<string,string>()
+        photo_criteria.set('person', String(object.id))
+        photo_criteria.set('person_descendants', String(true))
+        return photo_criteria
+    }
 }

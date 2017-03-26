@@ -30,4 +30,11 @@ export class CategoryDetailComponent extends BaseDetailComponent<CategoryObject>
             ) {
         super(new CategoryType(), route, spud_service);
     }
+
+    protected get_photo_criteria(object : CategoryObject) : Map<string,string> {
+        let photo_criteria = new Map<string,string>()
+        photo_criteria.set('category', String(object.id))
+        photo_criteria.set('category_descendants', String(true))
+        return photo_criteria
+    }
 }

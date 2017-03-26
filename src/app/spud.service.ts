@@ -24,7 +24,7 @@ export class ObjectList<GenObject extends BaseObject> {
     constructor(
         private http: Http,
         readonly type_obj : BaseType<GenObject>,
-        readonly criteria : s.Streamable,
+        readonly criteria : Map<string,string>,
     ) { };
 
     private streamable_to_object_list(
@@ -55,9 +55,9 @@ export class ObjectList<GenObject extends BaseObject> {
         let params = new URLSearchParams();
 
         if (this.criteria != null) {
-            for (let key in (this.criteria as any)) {
-                params.set(key, this.criteria[key]);
-            }
+            this.criteria.forEach((value: string, key: string) => {
+                params.set(key, value);
+            });
         }
         params.set('page', String(this.page));
 
@@ -106,7 +106,7 @@ export class SpudService {
         return results;
     }
 
-    get_list<GenObject extends BaseObject>(type_obj : BaseType<GenObject>, criteria : s.Streamable): ObjectList<GenObject> {
+    get_list<GenObject extends BaseObject>(type_obj : BaseType<GenObject>, criteria : Map<string,string>): ObjectList<GenObject> {
         return new ObjectList(this.http, type_obj, criteria)
     }
 

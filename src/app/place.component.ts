@@ -30,4 +30,11 @@ export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
             ) {
         super(new PlaceType(), route, spud_service);
     }
+
+    protected get_photo_criteria(object : PlaceObject) : Map<string,string> {
+        let photo_criteria = new Map<string,string>()
+        photo_criteria.set('place', String(object.id))
+        photo_criteria.set('place_descendants', String(true))
+        return photo_criteria
+    }
 }

@@ -30,4 +30,11 @@ export class AlbumDetailComponent extends BaseDetailComponent<AlbumObject> {
             ) {
         super(new AlbumType(), route, spud_service);
     }
+
+    protected get_photo_criteria(object : AlbumObject) : Map<string,string> {
+        let photo_criteria = new Map<string,string>()
+        photo_criteria.set('album', String(object.id))
+        photo_criteria.set('album_descendants', String(true))
+        return photo_criteria
+    }
 }

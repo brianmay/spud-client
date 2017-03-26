@@ -6,6 +6,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import * as s from './streamable';
 import { base_url } from './settings';
 import { BaseObject, BaseType } from './base';
+import { PhotoObject, PhotoType } from './photo';
 import { SpudService, ObjectList } from './spud.service';
 
 export abstract class BaseListComponent<GenObject extends BaseObject>
@@ -61,6 +62,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private next_id : number;
 
     private child_list : ObjectList<GenObject>;
+    private photo_list : ObjectList<PhotoObject>;
 
     constructor(
         readonly type_obj : BaseType<GenObject>,
@@ -148,10 +150,17 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             this.next_id = null;
         }
 
-        this.child_list = this.spud_service.get_list(this.type_obj, {
-            instance: object.id,
-            mode: 'children'
-        })
+        let child_criteria = new Map<string,string>();
+        child_criteria.set('instance', String(object.id));
+        child_criteria.set('mode', 'children');
+        this.child_list = this.spud_service.get_list(this.type_obj, child_criteria);
+
+        let photo_criteria : Map<string,string> = this.get_photo_criteria(object);
+        if (photo_criteria != null) {
+            this.photo_list = this.spud_service.get_list(new PhotoType(), photo_criteria);
+        } else {
+            this.photo_list = null;
+        }
     }
 
     private handle_error(message: string): void {
@@ -169,4 +178,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             return !this.list.finished;
         }
     }
+
+    protected abstract get_photo_criteria(object : GenObject) : Map<string,string>;
 }
