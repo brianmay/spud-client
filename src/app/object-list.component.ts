@@ -6,7 +6,6 @@ import { ObjectList } from './spud.service';
 @Component({
     selector: 'object_list',
     templateUrl: './object-list.component.html',
-    styleUrls: ['./object-list.component.css']
 })
 export class ObjectListComponent<GenObject extends BaseObject> implements OnInit {
     @Input() list : ObjectList<GenObject>;

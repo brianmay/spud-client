@@ -10,7 +10,6 @@ import { SpudService } from './spud.service'
 @Component({
     selector: 'photo_list',
     templateUrl: './base-list.component.html',
-    styleUrls: ['./base-list.component.css']
 })
 export class PhotoListComponent extends BaseListComponent<PhotoObject> {
     title = 'Photo';
@@ -23,7 +22,6 @@ export class PhotoListComponent extends BaseListComponent<PhotoObject> {
 @Component({
     selector: 'photo_detail',
     templateUrl: './base-detail.component.html',
-    styleUrls: ['./base-detail.component.css']
 })
 export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
     title = 'Photo';
@@ -39,7 +37,6 @@ export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
 @Component({
     selector: 'photo_thumb',
     templateUrl: './photo-thumb.component.html',
-    styleUrls: ['./photo-thumb.component.css']
 })
 export class PhotoThumbComponent {
     @Input() photo : PhotoObject;

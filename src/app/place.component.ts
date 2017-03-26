@@ -8,7 +8,6 @@ import { SpudService } from './spud.service'
 @Component({
     selector: 'place_list',
     templateUrl: './base-list.component.html',
-    styleUrls: ['./base-list.component.css']
 })
 export class PlaceListComponent extends BaseListComponent<PlaceObject> {
     title = 'Place';
@@ -21,7 +20,6 @@ export class PlaceListComponent extends BaseListComponent<PlaceObject> {
 @Component({
     selector: 'place_detail',
     templateUrl: './base-detail.component.html',
-    styleUrls: ['./base-detail.component.css']
 })
 export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
     title = 'Place';
