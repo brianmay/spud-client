@@ -46,3 +46,12 @@ export class PhotoThumbComponent {
     @Input() photo : PhotoObject;
     private readonly base_url : string = base_url
 }
+
+@Component({
+    selector: 'photo_mid',
+    templateUrl: './photo-mid.component.html',
+})
+export class PhotoMidComponent {
+    @Input() photo : PhotoObject;
+    private readonly base_url : string = base_url
+}
