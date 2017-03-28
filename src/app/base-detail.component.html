@@ -1,6 +1,6 @@
-<div *ngIf="error" class="alert alert-danger" role="alert">
+<ngb-alert *ngIf="error" [dismissible]="false">
     {{ error }}
-</div>
+</ngb-alert>
 <div class="card" *ngIf="object">
     <h2 class="card-header">{{object.title}}</h2>
     <div class="card-block">
