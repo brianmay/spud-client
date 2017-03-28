@@ -95,8 +95,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                 loaded_object => this.loaded_object(loaded_object),
                 message => this.handle_error(message),
             )
-
-        this.details.changes.subscribe(changes => console.log(changes));
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
