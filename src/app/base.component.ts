@@ -21,13 +21,20 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
     private selected_object : GenObject;
 
     constructor(
+        @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
         @Inject(SpudService) protected readonly spud_service: SpudService,
         @Inject(PageScrollService) protected readonly pageScrollService: PageScrollService,
     ) {}
 
     ngOnInit(): void {
         if (this.list == null) {
-            this.list = this.spud_service.get_list(this.type_obj, null)
+            this.route.queryParams
+                .subscribe((params: Params) => {
+                    let criteria = new Map<string, string>();
+                    criteria.set('q', params['q']);
+                    this.list = this.spud_service.get_list(this.type_obj, criteria)
+                })
+
         }
     }
 

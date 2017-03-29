@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
     selector: 'app-navbar',
@@ -6,4 +7,16 @@ import { Component } from '@angular/core';
 })
 export class NavbarComponent {
     private isCollapsed : boolean = true;
+    private q : string = '';
+
+    constructor(
+        @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
+    ) {}
+
+    ngOnInit(): void {
+        this.route.queryParams
+            .subscribe((params: Params) => {
+                this.q = params['q'];
+            })
+    }
 }
