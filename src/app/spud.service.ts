@@ -1,4 +1,4 @@
-import { NumberDict } from './basic_types';
+import { NumberDict } from './basic';
 import { Injectable } from '@angular/core';
 import { Headers, Http, URLSearchParams } from '@angular/http';
 

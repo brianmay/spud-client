@@ -1,5 +1,5 @@
 import * as s from './streamable'
-import { DateTimeZone } from './basic_types'
+import { DateTimeZone } from './basic'
 import { BaseObject, BaseType } from './base'
 
 export class AlbumObject extends BaseObject {

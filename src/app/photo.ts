@@ -1,4 +1,4 @@
-import { DateTimeZone, StringDict } from './basic_types'
+import { DateTimeZone, StringDict } from './basic'
 import * as s from './streamable'
 import { BaseObject, BaseType, PhotoInterface } from './base'
 import { set_photo_constructor } from './base'
