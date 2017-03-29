@@ -8,3 +8,12 @@ import { BaseObject } from './base';
 export class ObjectLinkComponent<GenObject extends BaseObject> {
     @Input() object : GenObject;
 }
+
+@Component({
+    selector: 'object_array',
+    templateUrl: './object-array.component.html',
+})
+export class ObjectArrayComponent<GenObject extends BaseObject> {
+    @Input() list : Array<GenObject>;
+    @Input() sep : string = ", ";
+}

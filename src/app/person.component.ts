@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { PageScrollService } from 'ng2-page-scroll';
@@ -29,4 +29,12 @@ export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
         photo_criteria.set('person_descendants', String(true))
         return photo_criteria
     }
+}
+
+@Component({
+    selector: 'person_infobox',
+    templateUrl: './person-infobox.component.html',
+})
+export class PersonInfoboxComponent {
+    @Input() object : PersonObject;
 }

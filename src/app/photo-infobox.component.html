@@ -1,0 +1,62 @@
+<table class="table">
+    <tbody>
+        <tr>
+            <th scope="row">Action</th>
+            <td>{{ object.action }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Datetime</th>
+            <td><basic_datetimezone [datetimezone]="object.datetime"></basic_datetimezone></td>
+        </tr>
+        <tr>
+            <th scope="row">Flash Used</th>
+            <td>{{ object.flash_used }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Focal Length</th>
+            <td>{{ object.focal_length }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Exposure</th>
+            <td>{{ object.exposure }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Aperture</th>
+            <td>{{ object.aperture }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Iso Equiv</th>
+            <td>{{ object.iso_equiv }}</td>
+        </tr>
+        <tr>
+            <th scope="row">metering_mode</th>
+            <td>{{ object.metering_mode }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Albums</th>
+            <td>
+                <object_array [list]="object.albums"></object_array>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Categories</th>
+            <td>
+                <object_array [list]="object.categorys"></object_array>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">People</th>
+            <td>
+                <object_array [list]="object.persons"></object_array>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Photographer</th>
+            <td><object_link [object]="object.photographer"></object_link></td>
+        </tr>
+        <tr>
+            <th scope="row">Place</th>
+            <td><object_link [object]="object.place"></object_link></td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,3 @@
+<span *ngFor="let object of list; let isLast=last">
+    <a href="/{{object.type_name}}/{{object.id}}">{{object.title}}</a>{{isLast ? '' : sep}}
+</span>

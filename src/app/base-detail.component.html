@@ -16,6 +16,10 @@
                     <a (click)="goto_photos()" class="btn btn-secondary" *ngIf="photo_list && !photo_list.empty">Photos</a>
                 </p>
                 <album_infobox *ngIf="object.type_name==='albums'" [object]="object"></album_infobox>
+                <category_infobox *ngIf="object.type_name==='categorys'" [object]="object"></category_infobox>
+                <person_infobox *ngIf="object.type_name==='persons'" [object]="object"></person_infobox>
+                <place_infobox *ngIf="object.type_name==='places'" [object]="object"></place_infobox>
+                <photo_infobox *ngIf="object.type_name==='photos'" [object]="object"></photo_infobox>
             </div>
         </section>
 

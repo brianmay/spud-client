@@ -1,0 +1,38 @@
+<table class="table">
+    <tbody>
+        <tr>
+            <th scope="row">Address</th>
+            <td>{{address}},<br/>{{object.address2}}</td>
+        </tr>
+        <tr>
+            <th scope="row">City</th>
+            <td>{{object.city}}</td>
+        </tr>
+        <tr>
+            <th scope="row">State</th>
+            <td>{{object.state}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Country</th>
+            <td>{{object.country}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Postcode</th>
+            <td>{{object.postcode}}</td>
+        </tr>
+        <tr>
+            <th scope="row">URL</th>
+            <td><a href="{{object.url}}">{{object.urldesc}}</a></td>
+        </tr>
+        <tr>
+            <th scope="row">Notes</th>
+            <td>{{object.notes}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Ascendants</th>
+            <td>
+                <object_array [list]="object.ascendants.slice().reverse()" [sep]="' / '"></object_array>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
 
@@ -30,4 +30,12 @@ export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
         photo_criteria.set('place_descendants', String(true))
         return photo_criteria
     }
+}
+
+@Component({
+    selector: 'place_infobox',
+    templateUrl: './place-infobox.component.html',
+})
+export class PlaceInfoboxComponent {
+    @Input() object : PlaceObject;
 }

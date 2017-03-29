@@ -30,6 +30,14 @@ export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
 }
 
 @Component({
+    selector: 'photo_infobox',
+    templateUrl: './photo-infobox.component.html',
+})
+export class PhotoInfoboxComponent {
+    @Input() object : PhotoObject;
+}
+
+@Component({
     selector: 'photo_thumb',
     templateUrl: './photo-thumb.component.html',
 })

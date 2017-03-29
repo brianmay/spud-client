@@ -9,14 +9,14 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
 
 import { BasicDatetimezoneComponent } from './basic.component';
-import { ObjectLinkComponent } from './object.component';
+import { ObjectLinkComponent, ObjectArrayComponent } from './object.component';
 import { ObjectListComponent } from './object-list.component';
 
 import { AlbumListComponent, AlbumDetailComponent, AlbumInfoboxComponent } from './album.component';
-import { CategoryListComponent, CategoryDetailComponent } from './category.component';
-import { PersonListComponent, PersonDetailComponent } from './person.component';
-import { PlaceListComponent, PlaceDetailComponent } from './place.component';
-import { PhotoListComponent, PhotoDetailComponent, PhotoThumbComponent, PhotoMidComponent } from './photo.component';
+import { CategoryListComponent, CategoryDetailComponent, CategoryInfoboxComponent } from './category.component';
+import { PersonListComponent, PersonDetailComponent, PersonInfoboxComponent } from './person.component';
+import { PlaceListComponent, PlaceDetailComponent, PlaceInfoboxComponent } from './place.component';
+import { PhotoListComponent, PhotoDetailComponent, PhotoInfoboxComponent, PhotoThumbComponent, PhotoMidComponent } from './photo.component';
 
 import { SpudService } from './spud.service';
 
@@ -31,18 +31,23 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       NavbarComponent,
       BasicDatetimezoneComponent,
       ObjectLinkComponent,
+      ObjectArrayComponent,
       ObjectListComponent,
       AlbumListComponent,
       AlbumDetailComponent,
       AlbumInfoboxComponent,
       CategoryListComponent,
       CategoryDetailComponent,
+      CategoryInfoboxComponent,
       PlaceListComponent,
       PlaceDetailComponent,
+      PlaceInfoboxComponent,
       PersonListComponent,
       PersonDetailComponent,
+      PersonInfoboxComponent,
       PhotoListComponent,
       PhotoDetailComponent,
+      PhotoInfoboxComponent,
       PhotoThumbComponent,
       PhotoMidComponent,
     ],
