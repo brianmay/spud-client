@@ -13,13 +13,7 @@ import { SpudService } from './spud.service'
 })
 export class AlbumListComponent extends BaseListComponent<AlbumObject> {
     title = 'Album List';
-
-    constructor(
-            spud_service: SpudService,
-            page_scroll_service: PageScrollService,
-            ) {
-        super(new AlbumType(), spud_service, page_scroll_service);
-    }
+    protected readonly type_obj = new AlbumType();
 }
 
 @Component({
@@ -27,13 +21,7 @@ export class AlbumListComponent extends BaseListComponent<AlbumObject> {
     templateUrl: './base-detail.component.html',
 })
 export class AlbumDetailComponent extends BaseDetailComponent<AlbumObject> {
-    constructor(
-            route: ActivatedRoute,
-            spud_service: SpudService,
-            page_scroll_service: PageScrollService,
-            ) {
-        super(new AlbumType(), route, spud_service, page_scroll_service);
-    }
+    protected readonly type_obj = new AlbumType();
 
     protected get_photo_criteria(object : AlbumObject) : Map<string,string> {
         let photo_criteria = new Map<string,string>()

@@ -13,13 +13,7 @@ import { SpudService } from './spud.service'
 })
 export class PersonListComponent extends BaseListComponent<PersonObject> {
     title = 'Person List';
-
-    constructor(
-            spud_service: SpudService,
-            page_scroll_service: PageScrollService,
-            ) {
-        super(new PersonType(), spud_service, page_scroll_service);
-    }
+    protected readonly type_obj = new PersonType();
 }
 
 @Component({
@@ -27,13 +21,7 @@ export class PersonListComponent extends BaseListComponent<PersonObject> {
     templateUrl: './base-detail.component.html',
 })
 export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
-    constructor(
-            route: ActivatedRoute,
-            spud_service: SpudService,
-            page_scroll_service: PageScrollService,
-            ) {
-        super(new PersonType(), route, spud_service, page_scroll_service);
-    }
+    protected readonly type_obj = new PersonType();
 
     protected get_photo_criteria(object : PersonObject) : Map<string,string> {
         let photo_criteria = new Map<string,string>()

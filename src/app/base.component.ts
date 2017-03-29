@@ -1,6 +1,6 @@
 import 'rxjs/add/operator/switchMap';
 
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, ViewChild, AfterViewChecked, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
@@ -14,14 +14,15 @@ import { SpudService, ObjectList } from './spud.service';
 export abstract class BaseListComponent<GenObject extends BaseObject>
         implements OnInit {
 
+    protected abstract readonly type_obj : BaseType<GenObject>
+
     @Input() title : string;
     @Input() list : ObjectList<GenObject>;
     private selected_object : GenObject;
 
     constructor(
-        readonly type_obj : BaseType<GenObject>,
-        private spud_service: SpudService,
-        private pageScrollService: PageScrollService,
+        @Inject(SpudService) protected readonly spud_service: SpudService,
+        @Inject(PageScrollService) protected readonly pageScrollService: PageScrollService,
     ) {}
 
     ngOnInit(): void {
@@ -39,6 +40,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         implements OnInit, OnChanges, AfterViewChecked {
 
     private readonly base_url : string = base_url
+    protected abstract readonly type_obj : BaseType<GenObject>
 
     private object_id : number;
     @Input('object_id') set input_object_id(object_id: number) {
@@ -74,10 +76,9 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     @ViewChild('photos') photos;
 
     constructor(
-        readonly type_obj : BaseType<GenObject>,
-        private route: ActivatedRoute,
-        private spud_service: SpudService,
-        private pageScrollService: PageScrollService,
+        @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
+        @Inject(SpudService) protected readonly spud_service: SpudService,
+        @Inject(PageScrollService) protected readonly pageScrollService: PageScrollService,
     ) {}
 
     ngOnInit(): void {

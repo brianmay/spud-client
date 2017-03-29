@@ -14,13 +14,7 @@ import { SpudService } from './spud.service'
 })
 export class PlaceListComponent extends BaseListComponent<PlaceObject> {
     title = 'Place List';
-
-    constructor(
-            spud_service: SpudService,
-            page_scroll_service: PageScrollService,
-            ) {
-        super(new PlaceType(), spud_service, page_scroll_service);
-    }
+    protected readonly type_obj = new PlaceType();
 }
 
 @Component({
@@ -28,13 +22,7 @@ export class PlaceListComponent extends BaseListComponent<PlaceObject> {
     templateUrl: './base-detail.component.html',
 })
 export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
-    constructor(
-            route: ActivatedRoute,
-            spud_service: SpudService,
-            page_scroll_service: PageScrollService,
-            ) {
-        super(new PlaceType(), route, spud_service, page_scroll_service);
-    }
+    protected readonly type_obj = new PlaceType();
 
     protected get_photo_criteria(object : PlaceObject) : Map<string,string> {
         let photo_criteria = new Map<string,string>()
