@@ -9,6 +9,14 @@ body {
   margin: 10px;
 }
 
+.card .collapse.show {
+    display: block;
+}
+
+.card .collapse {
+    display: none;
+}
+
 .jumbotron {
   padding-top: 6rem;
   padding-bottom: 6rem;
