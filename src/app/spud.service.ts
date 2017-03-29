@@ -20,7 +20,7 @@ export class ObjectList<GenObject extends BaseObject> {
     private objects : GenObject[] = [];
     private index : NumberDict<IndexEntry> = {};
     finished : boolean = false;
-    empty : boolean = false;
+    empty : boolean = true;
 
     constructor(
         private http: Http,
@@ -48,10 +48,7 @@ export class ObjectList<GenObject extends BaseObject> {
                 this.index[this.prev_id].next_id = object.id
             }
             this.prev_id = object.id
-        }
-
-        if (this.finished) {
-            this.empty = (this.objects.length === 0)
+            this.empty = false
         }
         return results;
     }

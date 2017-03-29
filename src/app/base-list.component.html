@@ -1,4 +1,4 @@
-<div class="card" *ngIf="!list.empty">
+<div class="card" [ngbCollapse]="list.empty">
     <h2 class="card-header">{{title}}</h2>
     <div class="card-block">
 
