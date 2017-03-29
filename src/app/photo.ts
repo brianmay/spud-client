@@ -53,7 +53,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
     thumbs : StringDict<PhotoThumb>
     videos : StringDict<Array<PriorityPhotoVideo>>
 
-    constructor() { super('photos'); }
+    constructor() { super('photos', "Photo"); }
 
     public static initialize() : void {
         set_photo_constructor((streamable : s.Streamable) : PhotoInterface => {

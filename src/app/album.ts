@@ -10,7 +10,7 @@ export class AlbumObject extends BaseObject {
     ascendants : Array<AlbumObject>
     parent : AlbumObject
 
-    constructor() { super('albums'); }
+    constructor() { super('albums', "Album"); }
 
     set_streamable(streamable : s.Streamable) {
         super.set_streamable(streamable)

@@ -26,7 +26,7 @@ export class PersonObject extends BaseObject {
     nephews_nieces : Array<PersonObject>
     grandchildren : Array<PersonObject>
 
-    constructor() { super('persons'); }
+    constructor() { super('persons', "Person"); }
 
     set_streamable(streamable : s.Streamable) {
         super.set_streamable(streamable)

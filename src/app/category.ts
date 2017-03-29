@@ -8,7 +8,7 @@ export class CategoryObject extends BaseObject {
     ascendants : Array<CategoryObject>
     parent : CategoryObject
 
-    constructor() { super('categorys'); }
+    constructor() { super('categorys', "Category"); }
 
     set_streamable(streamable : s.Streamable) : void {
         super.set_streamable(streamable)

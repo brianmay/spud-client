@@ -24,7 +24,7 @@ export class BaseObject {
     title : string
     cover_photo : PhotoInterface
 
-    constructor(readonly type_name : string) {}
+    constructor(readonly type_name : string, readonly type_verbose : string) {}
 
     set_streamable(streamable : s.Streamable) {
         this.id = s.get_streamable_number(streamable, "id")

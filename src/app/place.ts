@@ -14,7 +14,7 @@ export class PlaceObject extends BaseObject {
     ascendants : Array<PlaceObject>
     parent : PlaceObject
 
-    constructor() { super('places'); }
+    constructor() { super('places', "Place"); }
 
     set_streamable(streamable : s.Streamable) {
         super.set_streamable(streamable)
