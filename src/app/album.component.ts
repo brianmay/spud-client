@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { PageScrollService } from 'ng2-page-scroll';
@@ -41,4 +41,12 @@ export class AlbumDetailComponent extends BaseDetailComponent<AlbumObject> {
         photo_criteria.set('album_descendants', String(true))
         return photo_criteria
     }
+}
+
+@Component({
+    selector: 'album_infobox',
+    templateUrl: './album-infobox.component.html',
+})
+export class AlbumInfoboxComponent {
+    @Input() object : AlbumObject;
 }

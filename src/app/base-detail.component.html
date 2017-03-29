@@ -15,6 +15,7 @@
                     <a (click)="goto_children()" class="btn btn-secondary" *ngIf="!child_list.empty">Children</a>
                     <a (click)="goto_photos()" class="btn btn-secondary" *ngIf="photo_list && !photo_list.empty">Photos</a>
                 </p>
+                <album_infobox *ngIf="object.type_name==='albums'" [object]="object"></album_infobox>
             </div>
         </section>
 

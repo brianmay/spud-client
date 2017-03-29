@@ -12,7 +12,7 @@ import { BasicDatetimezoneComponent } from './basic.component';
 import { ObjectLinkComponent } from './object.component';
 import { ObjectListComponent } from './object-list.component';
 
-import { AlbumListComponent, AlbumDetailComponent } from './album.component';
+import { AlbumListComponent, AlbumDetailComponent, AlbumInfoboxComponent } from './album.component';
 import { CategoryListComponent, CategoryDetailComponent } from './category.component';
 import { PersonListComponent, PersonDetailComponent } from './person.component';
 import { PlaceListComponent, PlaceDetailComponent } from './place.component';
@@ -34,6 +34,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       ObjectListComponent,
       AlbumListComponent,
       AlbumDetailComponent,
+      AlbumInfoboxComponent,
       CategoryListComponent,
       CategoryDetailComponent,
       PlaceListComponent,
