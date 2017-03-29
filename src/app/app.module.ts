@@ -8,6 +8,8 @@ import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
 
+import { BasicDatetimezoneComponent } from './basic.component';
+import { ObjectLinkComponent } from './object.component';
 import { ObjectListComponent } from './object-list.component';
 
 import { AlbumListComponent, AlbumDetailComponent } from './album.component';
@@ -27,6 +29,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     declarations: [
       AppComponent,
       NavbarComponent,
+      BasicDatetimezoneComponent,
+      ObjectLinkComponent,
       ObjectListComponent,
       AlbumListComponent,
       AlbumDetailComponent,
