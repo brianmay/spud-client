@@ -1,6 +1,6 @@
 import 'rxjs/add/operator/switchMap';
 
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, ViewChild, AfterViewChecked, Inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, ViewChild, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
@@ -37,7 +37,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
 }
 
 export abstract class BaseDetailComponent<GenObject extends BaseObject>
-        implements OnInit, OnChanges, AfterViewChecked {
+        implements OnInit, OnChanges {
 
     private readonly base_url : string = base_url
     protected abstract readonly type_obj : BaseType<GenObject>
@@ -68,8 +68,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     private child_list : ObjectList<GenObject>;
     private photo_list : ObjectList<PhotoObject>;
-
-    private scroll : Boolean = false;
 
     @ViewChild('details') details;
     @ViewChild('children') children;
@@ -107,14 +105,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         } else {
             console.log("got changes, no need to load", this.object.id);
             this.loaded_object(this.object);
-        }
-    }
-
-    ngAfterViewChecked() {
-        if (this.scroll) {
-            let pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({document: null, scrollTarget: this.details.nativeElement, pageScrollOffset: 56 });
-            this.pageScrollService.start(pageScrollInstance);
-            this.scroll = false;
         }
     }
 
@@ -183,7 +173,8 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             this.photo_list = null;
         }
 
-        this.scroll = true
+        let pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({document: null, scrollTarget: this.details.nativeElement, pageScrollOffset: 56 });
+        this.pageScrollService.start(pageScrollInstance);
     }
 
     private handle_error(message: string): void {

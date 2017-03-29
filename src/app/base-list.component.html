@@ -1,17 +1,6 @@
 <div class="card" [ngbCollapse]="list.empty">
     <h2 class="card-header">{{title}}</h2>
     <div class="card-block">
-
-        <section class="jumbotron text-center">
-            <div class="container">
-                <h2 class="jumbotron-heading">{{title}}</h2>
-                <p>
-                    <a href="#" class="btn btn-primary">Main call to action</a>
-                    <a href="#" class="btn btn-secondary">Secondary action</a>
-                </p>
-            </div>
-        </section>
-
         <object_list [list]="list" [(selected_object)]="selected_object"></object_list>
     </div>
 </div>

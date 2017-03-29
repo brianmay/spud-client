@@ -1,12 +1,12 @@
 <ngb-alert *ngIf="error" [dismissible]="false">
     {{ error }}
 </ngb-alert>
+<div #details></div>
 <div class="card" *ngIf="object">
     <h2 class="card-header">{{object.type_verbose}}: {{object.title}}</h2>
     <div class="card-block">
-        <section class="jumbotron text-center">
+        <section class="text-center">
             <div class="container">
-                <h1 #details class="jumbotron-heading">{{ object.title }}</h1>
                 <button type="button" class="btn btn-secondary" *ngIf="prev_id" (click)="load_prev_object()">&lt;&lt;</button>
                 <photo_mid [photo]="object.cover_photo"></photo_mid>
                 <button type="button" class="btn btn-secondary" *ngIf="more_pages()" (click)="load_next_object()">&gt;&gt;</button>
