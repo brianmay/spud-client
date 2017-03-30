@@ -26,7 +26,7 @@ export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
     protected get_photo_criteria(object : PersonObject) : Map<string,string> {
         let photo_criteria = new Map<string,string>()
         photo_criteria.set('person', String(object.id))
-        photo_criteria.set('person_descendants', String(true))
+        photo_criteria.set('person_descendants', String(false))
         return photo_criteria
     }
 }
