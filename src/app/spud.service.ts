@@ -38,6 +38,11 @@ export class ObjectList<GenObject extends BaseObject> {
         let array : s.Streamable[] = s.streamable_to_array(streamable['results']);
         for (let i of array) {
             let object : GenObject = this.type_obj.object_from_streamable(i);
+            if (this.index[object.id] != null) {
+                // If this is a duplicate photo, skip it.
+                continue
+            }
+
             results.push(object);
             this.objects.push(object);
 
