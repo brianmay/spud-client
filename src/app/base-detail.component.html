@@ -7,13 +7,17 @@
     <div class="card-block">
         <section class="text-center">
             <div class="container">
-                <button type="button" class="btn btn-secondary" *ngIf="prev_id" (click)="load_prev_object()">&lt;&lt;</button>
-                <photo_mid [photo]="object.cover_photo"></photo_mid>
-                <button type="button" class="btn btn-secondary" *ngIf="more_pages()" (click)="load_next_object()">&gt;&gt;</button>
+                <div #image class="image">
+                    <button type="button" class="btn btn-secondary btn-prev" *ngIf="prev_id" (click)="load_prev_object()">&lt;&lt;</button>
+                    <photo_mid *ngIf="!is_fullscreen" [photo]="object.cover_photo"></photo_mid>
+                    <photo_large *ngIf="is_fullscreen" [photo]="object.cover_photo"></photo_large>
+                    <button type="button" class="btn btn-secondary btn-next" *ngIf="more_pages()" (click)="load_next_object()">&gt;&gt;</button>
+                </div>
                 <p class="lead text-muted">{{object.description}}</p>
                 <p>
                     <a (click)="goto_children()" class="btn btn-secondary" *ngIf="!child_list.empty">Children</a>
                     <a (click)="goto_photos()" class="btn btn-secondary" *ngIf="photo_list && !photo_list.empty">Photos</a>
+                    <a (click)="full_screen()" class="btn btn-secondary">Full Screen</a>
                 </p>
                 <album_infobox *ngIf="object.type_name==='albums'" [object]="object"></album_infobox>
                 <category_infobox *ngIf="object.type_name==='categorys'" [object]="object"></category_infobox>

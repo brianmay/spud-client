@@ -1,6 +1,6 @@
 import 'rxjs/add/operator/switchMap';
 
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, ViewChild, Inject, HostListener } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
@@ -77,8 +77,27 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private photo_list : ObjectList<PhotoObject>;
 
     @ViewChild('details') details;
+    @ViewChild('image') image;
     @ViewChild('children') children;
     @ViewChild('photos') photos;
+
+    private is_fullscreen : boolean = false;
+    @HostListener("document:fullscreenchange", ['$event.target']) fullScreen0(target) {
+        console.log("meow0", target.ownerDocument.fullscreenElement != null);
+        this.is_fullscreen = target.ownerDocument.fullscreenElement != null;
+    }
+    @HostListener("document:mozFullScreen", ['$event.target']) fullScreen1(target) {
+        console.log("meow1", target.ownerDocument.mozFullScreenElement != null);
+        this.is_fullscreen = target.ownerDocument.mozFullScreenElement != null;
+    }
+    @HostListener("document:webkitfullscreenchange", ['$event.target']) fullScreen2(target) {
+        console.log("meow2", target.ownerDocument.webkitFullscreenElement != null);
+        this.is_fullscreen = target.ownerDocument.webkitFullscreenElement != null;
+    }
+    @HostListener("document:msfullscreenchange", ['$event.target']) fullScreen3(target) {
+        console.log("meow3", target.ownerDocument.msFullscreenElement != null);
+        this.is_fullscreen = target.ownerDocument.msFullscreenElement != null;
+    }
 
     constructor(
         @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
@@ -210,5 +229,18 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private goto_photos() : void {
         let pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({document: null, scrollTarget: this.photos.nativeElement, pageScrollOffset: 56 });
         this.pageScrollService.start(pageScrollInstance);
+    }
+
+    private full_screen() : void {
+        let fullscreenDiv = this.image.nativeElement;
+        let fullscreenFunc = fullscreenDiv.requestFullscreen;
+        if (!fullscreenFunc) {
+            ['mozRequestFullScreen',
+             'msRequestFullscreen',
+             'webkitRequestFullScreen'].forEach(function (req) {
+                fullscreenFunc = fullscreenFunc || fullscreenDiv[req];
+             });
+        }
+        fullscreenFunc.call(fullscreenDiv);
     }
 }
