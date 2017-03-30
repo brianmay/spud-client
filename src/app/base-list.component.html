@@ -6,9 +6,9 @@
 </div>
 
 <div *ngIf="selected_object" >
-    <album_detail *ngIf="selected_object.type_name==='albums'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></album_detail>
-    <category_detail *ngIf="selected_object.type_name==='categorys'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></category_detail>
-    <person_detail *ngIf="selected_object.type_name==='persons'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></person_detail>
-    <place_detail *ngIf="selected_object.type_name==='places'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></place_detail>
-    <photo_detail *ngIf="selected_object.type_name==='photos'" [list]="list" [object_id]="selected_object.id" (objectChange)="select_object($event)"></photo_detail>
+    <album_detail    *ngIf="selected_object.type_name==='albums'"    [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></album_detail>
+    <category_detail *ngIf="selected_object.type_name==='categorys'" [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></category_detail>
+    <person_detail   *ngIf="selected_object.type_name==='persons'"   [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></person_detail>
+    <place_detail    *ngIf="selected_object.type_name==='places'"    [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></place_detail>
+    <photo_detail    *ngIf="selected_object.type_name==='photos'"    [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></photo_detail>
 </div>

@@ -12,8 +12,8 @@ export class AlbumObject extends BaseObject {
 
     constructor() { super('albums', "Album"); }
 
-    set_streamable(streamable : s.Streamable) {
-        super.set_streamable(streamable)
+    set_streamable(streamable : s.Streamable, full_object : boolean) {
+        super.set_streamable(streamable, full_object)
 
         this.description = s.get_streamable_string(streamable, 'description')
         this.sort_order = s.get_streamable_string(streamable, 'sort_order')
@@ -26,13 +26,13 @@ export class AlbumObject extends BaseObject {
         for (let i=0; i<ascendants.length; i++) {
             let item = ascendants[i]
             let album = new AlbumObject()
-            album.set_streamable(item)
+            album.set_streamable(item, false)
             this.ascendants.push(album)
         }
         if (ascendants.length > 0) {
             let item = ascendants[0]
             this.parent = new AlbumObject()
-            this.parent.set_streamable(item)
+            this.parent.set_streamable(item, false)
         } else {
             this.parent = null
         }
@@ -57,9 +57,9 @@ export class AlbumObject extends BaseObject {
 export class AlbumType extends BaseType<AlbumObject> {
     constructor() { super('albums'); }
 
-    object_from_streamable(streamable : s.Streamable) : AlbumObject {
+    object_from_streamable(streamable : s.Streamable, full_object : boolean) : AlbumObject {
         let obj = new AlbumObject()
-        obj.set_streamable(streamable)
+        obj.set_streamable(streamable, full_object)
         return obj
     }
 }

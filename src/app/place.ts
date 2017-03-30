@@ -16,8 +16,8 @@ export class PlaceObject extends BaseObject {
 
     constructor() { super('places', "Place"); }
 
-    set_streamable(streamable : s.Streamable) {
-        super.set_streamable(streamable)
+    set_streamable(streamable : s.Streamable, full_object : boolean) {
+        super.set_streamable(streamable, full_object)
 
         this.address = s.get_streamable_string(streamable, 'address')
         this.address2 = s.get_streamable_string(streamable, 'address2')
@@ -34,13 +34,13 @@ export class PlaceObject extends BaseObject {
         for (let i=0; i<ascendants.length; i++) {
             let item = ascendants[i]
             let place = new PlaceObject()
-            place.set_streamable(item)
+            place.set_streamable(item, false)
             this.ascendants.push(place)
         }
         if (ascendants.length > 0) {
             let item = ascendants[0]
             this.parent = new PlaceObject()
-            this.parent.set_streamable(item)
+            this.parent.set_streamable(item, false)
         } else {
             this.parent = null
         }
@@ -69,9 +69,9 @@ export class PlaceObject extends BaseObject {
 export class PlaceType extends BaseType<PlaceObject> {
     constructor() { super('places'); }
 
-    object_from_streamable(streamable : s.Streamable) : PlaceObject {
+    object_from_streamable(streamable : s.Streamable, full_object : boolean) : PlaceObject {
         let obj = new PlaceObject()
-        obj.set_streamable(streamable)
+        obj.set_streamable(streamable, full_object)
         return obj
     }
 }

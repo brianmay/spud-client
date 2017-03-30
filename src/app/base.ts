@@ -23,10 +23,12 @@ export class BaseObject {
     id : number
     title : string
     cover_photo : PhotoInterface
+    private full_object : boolean
 
     constructor(readonly type_name : string, readonly type_verbose : string) {}
 
-    set_streamable(streamable : s.Streamable) {
+    set_streamable(streamable : s.Streamable, full_object : boolean) {
+        this.full_object = full_object
         this.id = s.get_streamable_number(streamable, "id")
         this.title = s.get_streamable_string(streamable, "title")
 
@@ -45,9 +47,13 @@ export class BaseObject {
         }
         return streamable
     }
+
+    is_full_object() : boolean {
+        return this.full_object
+    }
 }
 
 export abstract class BaseType<GenObject extends BaseObject> {
     constructor(readonly type_name : string) {}
-    abstract object_from_streamable(streamable : s.Streamable) : GenObject;
+    abstract object_from_streamable(streamable : s.Streamable, full_object : boolean) : GenObject;
 }

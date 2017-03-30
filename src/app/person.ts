@@ -28,8 +28,8 @@ export class PersonObject extends BaseObject {
 
     constructor() { super('persons', "Person"); }
 
-    set_streamable(streamable : s.Streamable) {
-        super.set_streamable(streamable)
+    set_streamable(streamable : s.Streamable, full_object : boolean) {
+        super.set_streamable(streamable, full_object)
 
         this.first_name = s.get_streamable_string(streamable, 'first_name')
         this.middle_name = s.get_streamable_string(streamable, 'middle_name')
@@ -44,7 +44,7 @@ export class PersonObject extends BaseObject {
         let streamable_work = s.get_streamable_item(streamable, 'work')
         if (streamable_work != null) {
             this.work = new PlaceObject()
-            this.work.set_streamable(streamable_work)
+            this.work.set_streamable(streamable_work, false)
         } else {
             this.work = null
         }
@@ -52,7 +52,7 @@ export class PersonObject extends BaseObject {
         let streamable_home = s.get_streamable_item(streamable, 'home')
         if (streamable_home != null) {
             this.home = new PlaceObject()
-            this.home.set_streamable(streamable_home)
+            this.home.set_streamable(streamable_home, false)
         } else {
             this.home = null
         }
@@ -60,7 +60,7 @@ export class PersonObject extends BaseObject {
         let streamable_mother = s.get_streamable_item(streamable, 'mother')
         if (streamable_mother != null) {
             this.mother = new PersonObject()
-            this.mother.set_streamable(streamable_mother)
+            this.mother.set_streamable(streamable_mother, false)
         } else {
             this.mother = null
         }
@@ -68,7 +68,7 @@ export class PersonObject extends BaseObject {
         let streamable_father = s.get_streamable_item(streamable, 'father')
         if (streamable_father != null) {
             this.father = new PersonObject()
-            this.father.set_streamable(streamable_mother)
+            this.father.set_streamable(streamable_mother, false)
         } else {
             this.father = null
         }
@@ -76,7 +76,7 @@ export class PersonObject extends BaseObject {
         let streamable_spouse = s.get_streamable_item(streamable, 'spouse')
         if (streamable_spouse != null) {
             this.spouse = new PersonObject()
-            this.spouse.set_streamable(streamable_mother)
+            this.spouse.set_streamable(streamable_mother, false)
         } else {
             this.spouse = null
         }
@@ -86,7 +86,7 @@ export class PersonObject extends BaseObject {
         for (let i=0; i<streamable_grandparents.length; i++) {
             let item = streamable_grandparents[i]
             let person = new PersonObject()
-            person.set_streamable(item)
+            person.set_streamable(item, false)
             this.grandparents.push(person)
         }
 
@@ -95,7 +95,7 @@ export class PersonObject extends BaseObject {
         for (let i=0; i<streamable_uncles_aunts.length; i++) {
             let item = streamable_uncles_aunts[i]
             let person = new PersonObject()
-            person.set_streamable(item)
+            person.set_streamable(item, false)
             this.uncles_aunts.push(person)
         }
 
@@ -104,7 +104,7 @@ export class PersonObject extends BaseObject {
         for (let i=0; i<streamable_parents.length; i++) {
             let item = streamable_parents[i]
             let person = new PersonObject()
-            person.set_streamable(item)
+            person.set_streamable(item, false)
             this.parents.push(person)
         }
 
@@ -113,7 +113,7 @@ export class PersonObject extends BaseObject {
         for (let i=0; i<streamable_siblings.length; i++) {
             let item = streamable_siblings[i]
             let person = new PersonObject()
-            person.set_streamable(item)
+            person.set_streamable(item, false)
             this.siblings.push(person)
         }
 
@@ -122,7 +122,7 @@ export class PersonObject extends BaseObject {
         for (let i=0; i<streamable_cousins.length; i++) {
             let item = streamable_cousins[i]
             let person = new PersonObject()
-            person.set_streamable(item)
+            person.set_streamable(item, false)
             this.cousins.push(person)
         }
 
@@ -131,7 +131,7 @@ export class PersonObject extends BaseObject {
         for (let i=0; i<streamable_children.length; i++) {
             let item = streamable_children[i]
             let person = new PersonObject()
-            person.set_streamable(item)
+            person.set_streamable(item, false)
             this.children.push(person)
         }
 
@@ -140,7 +140,7 @@ export class PersonObject extends BaseObject {
         for (let i=0; i<streamable_nephews_nieces.length; i++) {
             let item = streamable_nephews_nieces[i]
             let person = new PersonObject()
-            person.set_streamable(item)
+            person.set_streamable(item, false)
             this.nephews_nieces.push(person)
         }
 
@@ -149,7 +149,7 @@ export class PersonObject extends BaseObject {
         for (let i=0; i<streamable_grandchildren.length; i++) {
             let item = streamable_grandchildren[i]
             let person = new PersonObject()
-            person.set_streamable(item)
+            person.set_streamable(item, false)
             this.grandchildren.push(person)
         }
     }
@@ -203,9 +203,9 @@ export class PersonObject extends BaseObject {
 export class PersonType extends BaseType<PersonObject> {
     constructor() { super('persons'); }
 
-    object_from_streamable(streamable : s.Streamable) : PersonObject {
+    object_from_streamable(streamable : s.Streamable, full_object : boolean) : PersonObject {
         let obj = new PersonObject()
-        obj.set_streamable(streamable)
+        obj.set_streamable(streamable, full_object)
         return obj
     }
 }

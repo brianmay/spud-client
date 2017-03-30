@@ -9,7 +9,7 @@ import { PersonObject, PersonType } from './person'
 import { PlaceObject, PlaceType } from './place'
 
 function streamable_to_object<GenObject extends BaseObject>(streamable: s.Streamable, obj_type: BaseType<GenObject>) : GenObject {
-    return obj_type.object_from_streamable(streamable)
+    return obj_type.object_from_streamable(streamable, false)
 }
 
 class PhotoThumb {
@@ -53,13 +53,13 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
     public static initialize() : void {
         set_photo_constructor((streamable : s.Streamable) : PhotoInterface => {
             let obj = new PhotoObject()
-            obj.set_streamable(streamable)
+            obj.set_streamable(streamable, false)
             return obj
         })
     }
 
-    set_streamable(streamable : s.Streamable) {
-        super.set_streamable(streamable)
+    set_streamable(streamable : s.Streamable, full_object : boolean) {
+        super.set_streamable(streamable, full_object)
 
         this.cover_photo = this
 
@@ -191,9 +191,9 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
 export class PhotoType extends BaseType<PhotoObject> {
     constructor() { super('photos'); }
 
-    object_from_streamable(streamable : s.Streamable) : PhotoObject {
+    object_from_streamable(streamable : s.Streamable, full_object : boolean) : PhotoObject {
         let obj = new PhotoObject()
-        obj.set_streamable(streamable)
+        obj.set_streamable(streamable, full_object)
         return obj
     }
 }

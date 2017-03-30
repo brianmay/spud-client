@@ -37,7 +37,7 @@ export class ObjectList<GenObject extends BaseObject> {
         let results : GenObject[] = [];
         let array : s.Streamable[] = s.streamable_to_array(streamable['results']);
         for (let i of array) {
-            let object : GenObject = this.type_obj.object_from_streamable(i);
+            let object : GenObject = this.type_obj.object_from_streamable(i, true);
             if (this.index[object.id] != null) {
                 // If this is a duplicate photo, skip it.
                 continue
@@ -108,7 +108,7 @@ export class SpudService {
     get_object<GenObject extends BaseObject>(type_obj : BaseType<GenObject>, id : number): Promise<GenObject> {
         return this.http.get(api_url + type_obj.type_name + "/" + id + "/")
             .toPromise()
-            .then(response => type_obj.object_from_streamable(response.json()))
+            .then(response => type_obj.object_from_streamable(response.json(), true))
             .catch(this.handleError);
     }
 

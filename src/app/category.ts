@@ -10,8 +10,8 @@ export class CategoryObject extends BaseObject {
 
     constructor() { super('categorys', "Category"); }
 
-    set_streamable(streamable : s.Streamable) : void {
-        super.set_streamable(streamable)
+    set_streamable(streamable : s.Streamable, full_object : boolean) : void {
+        super.set_streamable(streamable, full_object)
 
         this.description = s.get_streamable_string(streamable, 'description')
         this.sort_order = s.get_streamable_string(streamable, 'sort_order')
@@ -22,13 +22,13 @@ export class CategoryObject extends BaseObject {
         for (let i=0; i<ascendants.length; i++) {
             let item = ascendants[i]
             let category = new CategoryObject()
-            category.set_streamable(item)
+            category.set_streamable(item, false)
             this.ascendants.push(category)
         }
         if (ascendants.length > 0) {
             let item = ascendants[0]
             this.parent = new CategoryObject()
-            this.parent.set_streamable(item)
+            this.parent.set_streamable(item, false)
         } else {
             this.parent = null
         }
@@ -51,9 +51,9 @@ export class CategoryObject extends BaseObject {
 export class CategoryType extends BaseType<CategoryObject> {
     constructor() { super('categorys'); }
 
-    object_from_streamable(streamable : s.Streamable) : CategoryObject {
+    object_from_streamable(streamable : s.Streamable, full_object : boolean) : CategoryObject {
         let obj = new CategoryObject()
-        obj.set_streamable(streamable)
+        obj.set_streamable(streamable, full_object)
         return obj
     }
 }

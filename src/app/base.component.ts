@@ -49,24 +49,16 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private readonly base_url : string = base_url
     protected abstract readonly type_obj : BaseType<GenObject>
 
-    private object_id : number;
-    @Input('object_id') set input_object_id(object_id: number) {
-        if (this.object_id !== object_id) {
-            console.log("got input id(1)", this.object_id, object_id);
-            this.object_id = object_id;
-            this.object = null;
-        }
-    }
-
     private object : GenObject;
     @Input('object') set input_object(object: GenObject) {
-        if (this.object == null || this.object.id !== object.id) {
-            console.log("got input object(2)", this.object.id, object);
-            this.object_id = object.id;
+        if (this.object != object) {
+            console.log("got input object", object);
             this.object = object;
         }
     }
     @Output() objectChange = new EventEmitter();
+
+    @Output() object_selected = new EventEmitter();
 
     @Input() list : ObjectList<GenObject>;
     private error : string;
@@ -106,7 +98,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     ) {}
 
     ngOnInit(): void {
-        if (this.object_id != null) {
+        if (this.object != null) {
             return
         }
 
@@ -123,9 +115,9 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (this.object == null) {
-            console.log("got changes, need to load", this.object_id);
-            this.spud_service.get_object(this.type_obj, this.object_id)
+        if (this.object != null && !this.object.is_full_object()) {
+            console.log("got changes, need to load", this.object.id);
+            this.spud_service.get_object(this.type_obj, this.object.id)
                 .then(loaded_object => this.loaded_object(loaded_object))
                 .catch((message : string) => this.handle_error(message));
         } else {
@@ -136,13 +128,8 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     load_object(id : number) {
         console.log("loading with signal", id)
-        this.object_id = id;
         this.spud_service.get_object(this.type_obj, id)
-            .then(loaded_object => {
-                this.loaded_object(loaded_object);
-                console.log("emit(1)", loaded_object.id);
-                this.objectChange.emit(loaded_object);
-            })
+            .then(loaded_object => this.loaded_object(loaded_object))
             .catch((message : string) => this.handle_error(message))
     }
 
@@ -159,16 +146,10 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                     let index = this.list.get_index(this.object.id);
                     this.prev_id = index.prev_id;
                     this.next_id = index.next_id;
-                    this.object_id = this.next_id;
+                    this.object.id = this.next_id;
                     return this.spud_service.get_object(this.type_obj, this.next_id)
                 })
-                .then(
-                    loaded_object => {
-                        this.loaded_object(loaded_object);
-                        console.log("emit(2)", loaded_object.id);
-                        this.objectChange.emit(loaded_object);
-                    },
-                )
+                .then(loaded_object => this.loaded_object(loaded_object))
                 .catch((message : string) => this.handle_error(message))
         }
 
@@ -201,10 +182,12 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
         let pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({document: null, scrollTarget: this.details.nativeElement, pageScrollOffset: 56 });
         this.pageScrollService.start(pageScrollInstance);
+
+        console.log("emit object_selected", object.id);
+        this.object_selected.emit(object);
     }
 
     private handle_error(message: string): void {
-        this.object_id = null;
         this.object = null;
         this.error = message;
     }
