@@ -25,11 +25,6 @@ class PhotoVideo {
     format : string
 }
 
-class PriorityPhotoVideo {
-    0: number
-    1: PhotoVideo
-}
-
 export class PhotoObject extends BaseObject implements PhotoInterface {
     action : string
     datetime : DateTimeZone
@@ -51,7 +46,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
 
     orig_url : string
     thumbs : StringDict<PhotoThumb>
-    videos : StringDict<Array<PriorityPhotoVideo>>
+    videos : StringDict<Array<PhotoVideo>>
 
     constructor() { super('photos', "Photo"); }
 
@@ -132,14 +127,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
             this.videos[size] = []
             let streamable_array = s.streamable_to_array(item)
             for (let i=0; i<streamable_array.length; i++) {
-                let array_item = s.streamable_to_array(streamable_array[i])
-
-                if (array_item.length != 2) {
-                    continue
-                }
-
-                let priority : number = s.streamable_to_number(array_item[0])
-                let svideo : s.Streamable = array_item[1]
+                let svideo : s.Streamable = streamable_array[i]
 
                 let video : PhotoVideo = new PhotoVideo()
                 video.width = s.get_streamable_number(svideo, 'width')
@@ -147,7 +135,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
                 video.url = s.get_streamable_string(svideo, 'url')
                 video.format = s.get_streamable_string(svideo, 'format')
 
-                this.videos[size].push( [priority, video] )
+                this.videos[size].push(video)
             }
         }
     }
