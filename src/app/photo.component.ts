@@ -54,3 +54,12 @@ export class PhotoMidComponent {
     @Input() photo : PhotoObject;
     private readonly base_url : string = base_url
 }
+
+@Component({
+    selector: 'photo_large',
+    templateUrl: './photo-large.component.html',
+})
+export class PhotoLargeComponent {
+    @Input() photo : PhotoObject;
+    private readonly base_url : string = base_url
+}
