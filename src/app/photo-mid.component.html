@@ -1,7 +1,7 @@
-<video *ngIf="photo.videos" controls='controls' width="{{photo.videos[320][0].width}}" height="{{photo.videos[320][0].height}}">
+<video *ngIf="photo && photo.videos[320]" controls='controls' width="{{photo.videos[320][0].width}}" height="{{photo.videos[320][0].height}}">
     <source *ngFor="let v of photo.videos[320]" src="{{base_url}}{{v.url}}" type="{{v.format}}"/>
 </video>
-<img *ngIf="photo && !photo.videos && photo.thumbs.mid"
+<img *ngIf="photo && !photo.videos[320] && photo.thumbs.mid"
   src="{{base_url}}{{photo.thumbs.mid.url}}"
   width="{{photo.thumbs.mid.width}}"
   height="{{photo.thumbs.mid.height}}"
