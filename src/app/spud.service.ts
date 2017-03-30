@@ -101,18 +101,6 @@ export class SpudService {
 
     constructor(private http: Http) { };
 
-    streamable_to_object_list<GenObject extends BaseObject>(
-            type_obj : BaseType<GenObject>,
-            streamable : s.Streamable) : GenObject[] {
-        let results : GenObject[] = [];
-        let array : s.Streamable[] = s.streamable_to_array(streamable['results'])
-        for (let i of array) {
-            let object : GenObject = type_obj.object_from_streamable(i)
-            results.push(type_obj.object_from_streamable(i));
-        }
-        return results;
-    }
-
     get_list<GenObject extends BaseObject>(type_obj : BaseType<GenObject>, criteria : Map<string,string>): ObjectList<GenObject> {
         return new ObjectList(this.http, type_obj, criteria)
     }
