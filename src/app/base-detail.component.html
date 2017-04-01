@@ -15,7 +15,7 @@
                 </div>
                 <p class="lead text-muted">{{object.description}}</p>
                 <p>
-                    <a (click)="goto_children()" class="btn btn-secondary" *ngIf="!child_list.empty">Children</a>
+                    <a (click)="goto_children()" class="btn btn-secondary" *ngIf="child_list && !child_list.empty">Children</a>
                     <a (click)="goto_photos()" class="btn btn-secondary" *ngIf="photo_list && !photo_list.empty">Photos</a>
                     <a (click)="full_screen()" class="btn btn-secondary">Full Screen</a>
                 </p>

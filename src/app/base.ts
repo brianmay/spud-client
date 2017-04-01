@@ -48,7 +48,7 @@ export class BaseObject {
         return streamable
     }
 
-    is_full_object() : boolean {
+    get is_full_object() : boolean {
         return this.full_object
     }
 }

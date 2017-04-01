@@ -7,6 +7,7 @@ import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 
 import * as s from './streamable';
 import { base_url } from './settings';
+import { Session } from './session';
 import { BaseObject, BaseType } from './base';
 import { PhotoObject, PhotoType } from './photo';
 import { SpudService, ObjectList } from './spud.service';
@@ -15,6 +16,8 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
         implements OnInit {
 
     protected abstract readonly type_obj : BaseType<GenObject>
+    protected session : Session = new Session();
+    protected criteria : Map<string, string> = null;
 
     @Input() title : string;
     @Input() list : ObjectList<GenObject>;
@@ -30,12 +33,20 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
         if (this.list == null) {
             this.route.queryParams
                 .subscribe((params: Params) => {
-                    let criteria = new Map<string, string>();
-                    criteria.set('q', params['q']);
-                    this.list = this.spud_service.get_list(this.type_obj, criteria)
+                    this.criteria = new Map<string, string>();
+                    this.criteria.set('q', params['q']);
+                    this.list = this.spud_service.get_list(this.type_obj, this.criteria)
                 })
 
         }
+
+        this.spud_service.session_change
+            .subscribe(session => {
+                if (this.session !== session) {
+                    this.list = this.spud_service.get_list(this.type_obj, this.criteria)
+                    this.selected_object = null
+                }
+            });
     }
 
     private select_object(object : GenObject) {
@@ -48,10 +59,11 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     private readonly base_url : string = base_url
     protected abstract readonly type_obj : BaseType<GenObject>
+    protected session : Session = new Session();
 
     private object : GenObject;
     @Input('object') set input_object(object: GenObject) {
-        if (this.object != object) {
+        if (this.object !== object) {
             console.log("got input object", object);
             this.object = object;
         }
@@ -112,16 +124,23 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                 loaded_object => this.loaded_object(loaded_object),
                 message => this.handle_error(message),
             )
+
+        this.spud_service.session_change
+            .subscribe(session => {
+                if (this.session !== session && this.object != null) {
+                    this.load_object(this.object.id)
+                }
+            });
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (this.object != null && !this.object.is_full_object()) {
-            console.log("got changes, need to load", this.object.id);
+        if (this.object != null && !this.object.is_full_object) {
+            console.log("got changes, need to load", this.object);
             this.spud_service.get_object(this.type_obj, this.object.id)
                 .then(loaded_object => this.loaded_object(loaded_object))
                 .catch((message : string) => this.handle_error(message));
         } else {
-            console.log("got changes, no need to load", this.object.id);
+            console.log("got changes, no need to load", this.object);
             this.loaded_object(this.object);
         }
     }
@@ -156,7 +175,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     private loaded_object(object : GenObject) : void {
-        console.log("loaded", object.id);
+        console.log("loaded", object);
         this.object = object;
         this.error = null;
         if (this.list != null) {
@@ -183,7 +202,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         let pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({document: null, scrollTarget: this.details.nativeElement, pageScrollOffset: 56 });
         this.pageScrollService.start(pageScrollInstance);
 
-        console.log("emit object_selected", object.id);
+        console.log("emit object_selected", object);
         this.object_selected.emit(object);
     }
 

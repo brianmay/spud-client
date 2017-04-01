@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
@@ -59,9 +60,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       NgbModule.forRoot(),
       AppRoutingModule,
       Ng2PageScrollModule.forRoot(),
+      LocalStorageModule.withConfig({
+          prefix: 'spud',
+          storageType: 'localStorage'
+      })
     ],
     providers: [
-        SpudService
+        SpudService,
     ],
     bootstrap: [
         AppComponent
