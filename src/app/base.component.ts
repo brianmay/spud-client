@@ -20,7 +20,18 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
     protected criteria : Map<string, string> = null;
 
     @Input() title : string;
-    @Input() list : ObjectList<GenObject>;
+
+    private _list : ObjectList<GenObject>;
+
+    @Input() set list(list : ObjectList<GenObject>) {
+        if (this._list !== list) {
+            this._list = list;
+            this.selected_object = null;
+        }
+    }
+    get list() : ObjectList<GenObject> {
+        return this._list;
+    }
     private selected_object : GenObject;
 
     constructor(
