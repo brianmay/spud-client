@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { PageScrollService } from 'ng2-page-scroll';
@@ -51,7 +51,17 @@ export class PhotoThumbComponent {
     templateUrl: './photo-mid.component.html',
 })
 export class PhotoMidComponent {
-    @Input() photo : PhotoObject;
+    @ViewChild('video') video;
+    _photo : PhotoObject;
+    @Input('photo') set photo(photo:PhotoObject) {
+        if (this._photo!==photo && this.video) {
+            this.video.nativeElement.load()
+        }
+        this._photo = photo;
+    }
+    get photo() : PhotoObject {
+        return this._photo;
+    }
     private readonly base_url : string = base_url
 }
 
@@ -60,6 +70,16 @@ export class PhotoMidComponent {
     templateUrl: './photo-large.component.html',
 })
 export class PhotoLargeComponent {
-    @Input() photo : PhotoObject;
+    @ViewChild('video') video;
+    _photo : PhotoObject;
+    @Input('photo') set photo(photo:PhotoObject) {
+        if (this._photo!==photo && this.video) {
+            this.video.nativeElement.load()
+        }
+        this._photo = photo;
+    }
+    get photo() : PhotoObject {
+        return this._photo;
+    }
     private readonly base_url : string = base_url
 }
