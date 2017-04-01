@@ -17,17 +17,17 @@ class IndexEntry {
 }
 
 function handleError(error: any): Promise<any> {
-    if (error.statusText) {
-        return Promise.reject(error.statusText);
-    } else {
+    try {
         let json = error.json();
         if (json.detail) {
             console.error('An JSON error occurred', json.detail);
             return Promise.reject(json.detail);
         } else {
             console.error('An error occurred', error.toString());
-            return Promise.reject(error.toString())
+            return Promise.reject(error.toString());
         }
+    } catch(err) {
+        return Promise.reject(error.statusText);
     }
 }
 
