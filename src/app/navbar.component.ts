@@ -1,7 +1,8 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
+import { Subscription }   from 'rxjs/Subscription';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { Session } from './session';
@@ -19,6 +20,9 @@ export class NavbarComponent {
     private unauth_password : string;
     private error : string;
 
+    private router_subscription : Subscription;
+    private session_subscription : Subscription;
+
     @ViewChild('error_template') error_template;
 
     constructor(
@@ -29,11 +33,11 @@ export class NavbarComponent {
     ) {}
 
     ngOnInit(): void {
-        this.route.queryParams
+        this.router_subscription = this.route.queryParams
             .subscribe((params: Params) => {
                 this.q = params['q'];
             });
-        this.spud_service.session_change
+        this.session_subscription = this.spud_service.session_change
             .subscribe(session => {
                 this.session = session;
                 this.local_storage_service.set('token', session.token);
@@ -78,5 +82,10 @@ export class NavbarComponent {
     private check_session() : void {
         this.spud_service.get_session()
             .catch((error : string) => this.open_error(error));
+    }
+
+    ngOnDestroy() : void {
+        this.router_subscription.unsubscribe();
+        this.session_subscription.unsubscribe();
     }
 }

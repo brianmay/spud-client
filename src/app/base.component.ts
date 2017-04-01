@@ -1,6 +1,7 @@
 import 'rxjs/add/operator/switchMap';
+import { Subscription }   from 'rxjs/Subscription';
 
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, ViewChild, Inject, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, SimpleChange, ViewChild, Inject, HostListener } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
@@ -13,11 +14,14 @@ import { PhotoObject, PhotoType } from './photo';
 import { SpudService, ObjectList } from './spud.service';
 
 export abstract class BaseListComponent<GenObject extends BaseObject>
-        implements OnInit {
+        implements OnInit, OnDestroy {
 
     protected abstract readonly type_obj : BaseType<GenObject>
     protected session : Session = new Session();
     protected criteria : Map<string, string> = null;
+
+    private router_subscription : Subscription;
+    private session_subscription : Subscription;
 
     @Input() title : string;
 
@@ -42,7 +46,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
 
     ngOnInit(): void {
         if (this.list == null) {
-            this.route.queryParams
+            this.router_subscription = this.route.queryParams
                 .subscribe((params: Params) => {
                     this.criteria = new Map<string, string>();
                     this.criteria.set('q', params['q']);
@@ -51,7 +55,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
 
         }
 
-        this.spud_service.session_change
+        this.session_subscription = this.spud_service.session_change
             .subscribe(session => {
                 if (this.session !== session) {
                     this.list = this.spud_service.get_list(this.type_obj, this.criteria)
@@ -60,17 +64,27 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
             });
     }
 
-    private select_object(object : GenObject) {
+    private select_object(object : GenObject) : void {
         this.selected_object = object
+    }
+
+    ngOnDestroy() : void {
+        if (this.router_subscription != null) {
+            this.router_subscription.unsubscribe();
+        }
+        this.session_subscription.unsubscribe();
     }
 }
 
 export abstract class BaseDetailComponent<GenObject extends BaseObject>
-        implements OnInit, OnChanges {
+        implements OnInit, OnChanges, OnDestroy {
 
     private readonly base_url : string = base_url
     protected abstract readonly type_obj : BaseType<GenObject>
     protected session : Session = new Session();
+
+    private router_subscription : Subscription;
+    private session_subscription : Subscription;
 
     private object : GenObject;
     @Input('object') set input_object(object: GenObject) {
@@ -121,22 +135,20 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     ) {}
 
     ngOnInit(): void {
-        if (this.object != null) {
-            return
+        if (this.object == null) {
+            this.router_subscription = this.route.params
+                .switchMap((params: Params) => {
+                    let id : number = params['id'];
+                    let x : Promise<GenObject> = this.spud_service.get_object(this.type_obj, id);
+                    return x;
+                })
+                .subscribe(
+                    loaded_object => this.loaded_object(loaded_object),
+                    message => this.handle_error(message),
+                )
         }
 
-        this.route.params
-            .switchMap((params: Params) => {
-                let id : number = params['id'];
-                let x : Promise<GenObject> = this.spud_service.get_object(this.type_obj, id);
-                return x;
-            })
-            .subscribe(
-                loaded_object => this.loaded_object(loaded_object),
-                message => this.handle_error(message),
-            )
-
-        this.spud_service.session_change
+        this.session_subscription = this.spud_service.session_change
             .subscribe(session => {
                 if (this.session !== session && this.object != null) {
                     this.load_object(this.object.id)
@@ -257,5 +269,12 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
              });
         }
         fullscreenFunc.call(fullscreenDiv);
+    }
+
+    ngOnDestroy() : void {
+        if (this.router_subscription != null) {
+            this.router_subscription.unsubscribe();
+        }
+        this.session_subscription.unsubscribe();
     }
 }
