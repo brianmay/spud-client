@@ -16,12 +16,28 @@ class IndexEntry {
     next_id : number;
 }
 
+function handleError(error: any): Promise<any> {
+    if (error.statusText) {
+        return Promise.reject(error.statusText);
+    } else {
+        let json = error.json();
+        if (json.detail) {
+            console.error('An JSON error occurred', json.detail);
+            return Promise.reject(json.detail);
+        } else {
+            console.error('An error occurred', error.toString());
+            return Promise.reject(error.toString())
+        }
+    }
+}
+
 export class ObjectList<GenObject extends BaseObject> {
     private page : number = 1;
     private prev_id : number = null;
     private objects : GenObject[] = [];
     private index : NumberDict<IndexEntry> = {};
     finished : boolean = false;
+    error : boolean = false;
     empty : boolean = true;
 
     constructor(
@@ -78,6 +94,7 @@ export class ObjectList<GenObject extends BaseObject> {
 
     get_next_page(): Promise<GenObject[]> {
         let params = new URLSearchParams();
+        this.error=false;
 
         if (this.criteria != null) {
             this.criteria.forEach((value: string, key: string) => {
@@ -95,18 +112,10 @@ export class ObjectList<GenObject extends BaseObject> {
                 this.page = this.page + 1;
                 return this.streamable_to_object_list(response.json());
             })
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        let json = error.json();
-        if (json.detail) {
-            console.error('An JSON error occurred', json.detail);
-            return Promise.reject(json.detail);
-        } else {
-            console.error('An error occurred', error.toString());
-            return Promise.reject(error.toString())
-        }
+            .catch(error => {
+                this.error=true;
+                return handleError(error);
+            });
     }
 
     get_index(id : number) : IndexEntry {
@@ -158,7 +167,7 @@ export class SpudService {
         return this.http.get(api_url + type_obj.type_name + "/" + id + "/", this.options)
             .toPromise()
             .then(response => type_obj.object_from_streamable(response.json(), true))
-            .catch(this.handleError);
+            .catch(handleError);
     }
 
     get_session() : Promise<Session> {
@@ -171,7 +180,7 @@ export class SpudService {
                 console.log(response);
                 return session;
              })
-            .catch(this.handleError);
+            .catch(handleError);
     }
 
     login(username, password) : Promise<Session> {
@@ -184,7 +193,7 @@ export class SpudService {
                 console.log(response);
                 return session;
              })
-            .catch(this.handleError);
+            .catch(handleError);
     }
 
     logout() : Promise<Session> {
@@ -197,19 +206,8 @@ export class SpudService {
                 console.log(response);
                 return session;
              })
-            .catch(this.handleError);
+            .catch(handleError);
     }
 
-
-    private handleError(error: any): Promise<any> {
-        let json = error.json();
-        if (json.detail) {
-            console.error('An JSON error occurred', json.detail);
-            return Promise.reject(json.detail);
-        } else {
-            console.error('An error occurred', error.toString());
-            return Promise.reject(error.toString())
-        }
-    }
 }
 

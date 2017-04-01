@@ -1,4 +1,4 @@
-<div class="card" [ngbCollapse]="list.empty">
+<div class="card" [ngbCollapse]="list.empty && !list.error">
     <h2 class="card-header">{{title}}</h2>
     <div class="card-block">
         <object_list [list]="list" [(selected_object)]="selected_object"></object_list>
