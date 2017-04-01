@@ -106,7 +106,7 @@ footer p {
     &:-webkit-full-screen {
         @content;
     }
-    &:-mozilla-full-screen {
+    &:-moz-full-screen {
         @content;
     }
     &:-ms-fullscreen {

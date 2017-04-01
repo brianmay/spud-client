@@ -87,19 +87,19 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     private is_fullscreen : boolean = false;
     @HostListener("document:fullscreenchange", ['$event.target']) fullScreen0(target) {
-        console.log("meow0", target.ownerDocument.fullscreenElement != null);
+        console.log("meow0", target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.fullscreenElement != null;
     }
-    @HostListener("document:mozFullScreen", ['$event.target']) fullScreen1(target) {
-        console.log("meow1", target.ownerDocument.mozFullScreenElement != null);
-        this.is_fullscreen = target.ownerDocument.mozFullScreenElement != null;
+    @HostListener("document:mozfullscreenchange", ['$event.target']) fullScreen1(target) {
+        console.log("meow1", target, target.mozFullScreenElement);
+        this.is_fullscreen = target.mozFullScreenElement != null;
     }
     @HostListener("document:webkitfullscreenchange", ['$event.target']) fullScreen2(target) {
-        console.log("meow2", target.ownerDocument.webkitFullscreenElement != null);
+        console.log("meow2", target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.webkitFullscreenElement != null;
     }
     @HostListener("document:msfullscreenchange", ['$event.target']) fullScreen3(target) {
-        console.log("meow3", target.ownerDocument.msFullscreenElement != null);
+        console.log("meow3", target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.msFullscreenElement != null;
     }
 
