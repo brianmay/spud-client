@@ -23,6 +23,7 @@
         <input type="password" class="form-control" id="password"
                required
                [(ngModel)]="unauth_password" name="password"
+               (keyup.enter)="login_form.form.valid && c()"
                #password="ngModel">
         <div [hidden]="password.valid || password.pristine"
              class="alert alert-danger">
@@ -32,7 +33,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" [disabled]="!login_form.form.valid" (click)="c()">Login</button>
+    <button type="button" class="btn btn-primary" [disabled]="!login_form.form.valid" (click)="c()">Login</button>
   </div>
 </template>
 
