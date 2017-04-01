@@ -191,8 +191,10 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         this.error = null;
         if (this.list != null) {
             let index = this.list.get_index(object.id);
-            this.prev_id = index.prev_id;
-            this.next_id = index.next_id;
+            if (index != null) {
+                this.prev_id = index.prev_id;
+                this.next_id = index.next_id;
+            }
         } else {
             this.prev_id = null;
             this.next_id = null;
