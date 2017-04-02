@@ -4,8 +4,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
 import { PhotoObject } from './app/photo';
 PhotoObject.initialize();
 
@@ -13,4 +11,5 @@ if (environment.production) {
   enableProdMode();
 }
 
+//noinspection JSIgnoredPromiseFromCall
 platformBrowserDynamic().bootstrapModule(AppModule);

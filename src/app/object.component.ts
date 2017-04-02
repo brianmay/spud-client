@@ -6,7 +6,7 @@ import { BaseObject } from './base';
     templateUrl: './object-link.component.html',
 })
 export class ObjectLinkComponent<GenObject extends BaseObject> {
-    @Input() object : GenObject;
+    @Input() object: GenObject;
 }
 
 @Component({
@@ -14,6 +14,6 @@ export class ObjectLinkComponent<GenObject extends BaseObject> {
     templateUrl: './object-array.component.html',
 })
 export class ObjectArrayComponent<GenObject extends BaseObject> {
-    @Input() list : Array<GenObject>;
-    @Input() sep : string = ", ";
+    @Input() list: Array<GenObject>;
+    @Input() sep = ', ';
 }

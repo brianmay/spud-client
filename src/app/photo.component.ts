@@ -1,12 +1,8 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { PageScrollService } from 'ng2-page-scroll';
-
-import { BaseListComponent, BaseDetailComponent } from './base.component'
+import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { base_url } from './settings';
-import { PhotoObject, PhotoType } from './photo'
-import { SpudService } from './spud.service'
+import { PhotoObject, PhotoType } from './photo';
 
 @Component({
     selector: 'photo_list',
@@ -14,7 +10,7 @@ import { SpudService } from './spud.service'
 })
 export class PhotoListComponent extends BaseListComponent<PhotoObject> {
     title = 'Photo List';
-    protected readonly type_obj = new PhotoType();
+    public readonly type_obj = new PhotoType();
 }
 
 @Component({
@@ -22,9 +18,9 @@ export class PhotoListComponent extends BaseListComponent<PhotoObject> {
     templateUrl: './base-detail.component.html',
 })
 export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
-    protected readonly type_obj = new PhotoType();
+    public readonly type_obj = new PhotoType();
 
-    protected get_photo_criteria(object : PhotoObject) : Map<string,string> {
+    protected get_photo_criteria(object: PhotoObject): Map<string, string> {
         return null;
     }
 }
@@ -34,7 +30,7 @@ export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
     templateUrl: './photo-infobox.component.html',
 })
 export class PhotoInfoboxComponent {
-    @Input() object : PhotoObject;
+    @Input() object: PhotoObject;
 }
 
 @Component({
@@ -42,8 +38,8 @@ export class PhotoInfoboxComponent {
     templateUrl: './photo-thumb.component.html',
 })
 export class PhotoThumbComponent {
-    @Input() photo : PhotoObject;
-    private readonly base_url : string = base_url
+    @Input() photo: PhotoObject;
+    private readonly base_url: string = base_url;
 }
 
 @Component({
@@ -52,17 +48,17 @@ export class PhotoThumbComponent {
 })
 export class PhotoMidComponent {
     @ViewChild('video') video;
-    _photo : PhotoObject;
-    @Input('photo') set photo(photo:PhotoObject) {
-        if (this._photo!==photo && this.video) {
-            this.video.nativeElement.load()
+    _photo: PhotoObject;
+    @Input('photo') set photo(photo: PhotoObject) {
+        if (this._photo !== photo && this.video) {
+            this.video.nativeElement.load();
         }
         this._photo = photo;
     }
-    get photo() : PhotoObject {
+    get photo(): PhotoObject {
         return this._photo;
     }
-    private readonly base_url : string = base_url
+    readonly base_url: string = base_url;
 }
 
 @Component({
@@ -71,15 +67,15 @@ export class PhotoMidComponent {
 })
 export class PhotoLargeComponent {
     @ViewChild('video') video;
-    _photo : PhotoObject;
-    @Input('photo') set photo(photo:PhotoObject) {
-        if (this._photo!==photo && this.video) {
-            this.video.nativeElement.load()
+    _photo: PhotoObject;
+    @Input('photo') set photo(photo: PhotoObject) {
+        if (this._photo !== photo && this.video) {
+            this.video.nativeElement.load();
         }
         this._photo = photo;
     }
-    get photo() : PhotoObject {
+    get photo(): PhotoObject {
         return this._photo;
     }
-    private readonly base_url : string = base_url
+    readonly base_url: string = base_url;
 }

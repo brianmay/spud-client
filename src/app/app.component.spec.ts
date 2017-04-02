@@ -4,7 +4,8 @@ import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
     beforeEach(async(() => {
-      TestBed.configureTestingModule({
+      //noinspection JSIgnoredPromiseFromCall
+        TestBed.configureTestingModule({
         declarations: [
           AppComponent
         ],

@@ -8,31 +8,32 @@ import { ObjectList } from './spud.service';
     templateUrl: './object-list.component.html',
 })
 export class ObjectListComponent<GenObject extends BaseObject> {
-    @Input('list') set set_list(list : ObjectList<GenObject>) {
+    @Input('list') set set_list(list: ObjectList<GenObject>) {
         this.list = list;
         this.get_next_page();
     }
-    @Input() selected_object : GenObject;
+    @Input() selected_object: GenObject;
     @Output() selected_objectChange = new EventEmitter();
-    //private objects : Array<GenObject>;
+    // private objects: Array<GenObject>;
 
-    private list : ObjectList<GenObject>;
-    private error : string
+    public list: ObjectList<GenObject>;
+    public error: string;
 
     constructor() {}
 
-    private get_next_page() : void {
+    public get_next_page(): void {
+        //noinspection JSUnusedLocalSymbols
         this.list.get_next_page()
-            .then((objects : Array<GenObject>) => {
+            .then((objects: Array<GenObject>) => {
                 this.error = null;
             })
-            .catch((message : string) => {
+            .catch((message: string) => {
                 this.error = message;
-            })
+            });
     }
 
-    private select_object(object : GenObject) {
-        this.selected_object = object
+    public select_object(object: GenObject) {
+        this.selected_object = object;
         this.selected_objectChange.emit(object);
     }
 }

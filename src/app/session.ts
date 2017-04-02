@@ -1,13 +1,13 @@
-import * as s from './streamable'
+import * as s from './streamable';
 
 export class Session {
-    logged_in: boolean = false;
+    logged_in = false;
     token: string;
     first_name: string;
     last_name: string;
 
-    set_streamable(streamable : s.Streamable) {
-        let user = s.get_streamable_item(streamable, 'user')
+    set_streamable(streamable: s.Streamable) {
+        const user = s.get_streamable_item(streamable, 'user');
         if (user != null) {
             this.logged_in = true;
             this.token = s.get_streamable_string(streamable, 'token');
@@ -21,11 +21,11 @@ export class Session {
         }
     }
 
-    private get full_name() : string {
+    get full_name(): string {
         if (this.logged_in) {
             return `${this.first_name} ${this.last_name}`;
         } else {
-            return "Anonymous"
+            return 'Anonymous';
         }
     }
 }

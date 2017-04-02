@@ -9,6 +9,6 @@ export class StringDict<T> {
 }
 
 export class DateTimeZone {
-    0 : moment.Moment;
-    1 : number;
+    0: moment.Moment;
+    1: number;
 }

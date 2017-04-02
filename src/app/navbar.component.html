@@ -53,11 +53,11 @@
 </template>
 
 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="is_collapsed = !is_collapsed" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <a class="navbar-brand" href="#">SPUD</a>
-  <div class="navbar-collapse" [ngbCollapse]="isCollapsed" id="navbarCollapse">
+  <div class="navbar-collapse" [ngbCollapse]="is_collapsed" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/albums">Albums</a>

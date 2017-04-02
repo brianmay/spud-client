@@ -1,11 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { PageScrollService } from 'ng2-page-scroll';
-
-import { BaseListComponent, BaseDetailComponent } from './base.component'
-import { PersonObject, PersonType } from './person'
-import { SpudService } from './spud.service'
+import { BaseListComponent, BaseDetailComponent } from './base.component';
+import { PersonObject, PersonType } from './person';
 
 @Component({
     selector: 'person_list',
@@ -13,7 +9,7 @@ import { SpudService } from './spud.service'
 })
 export class PersonListComponent extends BaseListComponent<PersonObject> {
     title = 'Person List';
-    protected readonly type_obj = new PersonType();
+    public readonly type_obj = new PersonType();
 }
 
 @Component({
@@ -21,13 +17,13 @@ export class PersonListComponent extends BaseListComponent<PersonObject> {
     templateUrl: './base-detail.component.html',
 })
 export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
-    protected readonly type_obj = new PersonType();
+    public readonly type_obj = new PersonType();
 
-    protected get_photo_criteria(object : PersonObject) : Map<string,string> {
-        let photo_criteria = new Map<string,string>()
-        photo_criteria.set('person', String(object.id))
-        photo_criteria.set('person_descendants', String(false))
-        return photo_criteria
+    protected get_photo_criteria(object: PersonObject): Map<string, string> {
+        const photo_criteria = new Map<string, string>();
+        photo_criteria.set('person', String(object.id));
+        photo_criteria.set('person_descendants', String(false));
+        return photo_criteria;
     }
 }
 
@@ -36,5 +32,5 @@ export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
     templateUrl: './person-infobox.component.html',
 })
 export class PersonInfoboxComponent {
-    @Input() object : PersonObject;
+    @Input() object: PersonObject;
 }

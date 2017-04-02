@@ -1,8 +1,8 @@
-import { Component, Inject, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Inject, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subscription }   from 'rxjs/Subscription';
+import { Subscription } from 'rxjs/Subscription';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { Session } from './session';
@@ -12,16 +12,16 @@ import { SpudService } from './spud.service';
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
 })
-export class NavbarComponent {
-    private isCollapsed : boolean = true;
-    private q : string = '';
-    private session : Session = new Session;
-    private unauth_username : string;
-    private unauth_password : string;
-    private error : string;
+export class NavbarComponent implements OnInit, OnDestroy {
+    public is_collapsed = true;
+    public q = '';
+    public session: Session = new Session;
+    public unauth_username: string;
+    public unauth_password: string;
+    public error: string;
 
-    private router_subscription : Subscription;
-    private session_subscription : Subscription;
+    private router_subscription: Subscription;
+    private session_subscription: Subscription;
 
     @ViewChild('error_template') error_template;
 
@@ -44,47 +44,45 @@ export class NavbarComponent {
             });
 
         this.session = this.spud_service.session;
-        let token : string = this.local_storage_service.get<string>('token');
+        const token: string = this.local_storage_service.get<string>('token');
         if (token != null) {
             this.session.token = token;
             this.spud_service.get_session()
-                .catch((error : string) => {
+                .catch((error: string) => {
                     this.open_error(error);
                     this.session.token = null;
                 });
         }
     }
 
-    private open_error(error : string) : void {
+    private open_error(error: string): void {
         this.error = error;
-        this.modalService.open(this.error_template).result.then(result => {
-            }, reason => {
-            });
+        this.modalService.open(this.error_template);
     }
 
-    private login(template) : void {
+    public login(template): void {
         this.modalService.open(template).result.then(result => {
-                let promise = this.spud_service.login(this.unauth_username, this.unauth_password);
-                this.unauth_password=null;
+                const promise = this.spud_service.login(this.unauth_username, this.unauth_password);
+                this.unauth_password = null;
                 return promise;
             }, reason => {
-                this.unauth_password=null;
-                this.error="Login Failed: "+reason;
+                this.unauth_password = null;
+                this.error = 'Login Failed: ' + reason;
             })
-            .catch((error : string) => this.open_error(error));
+            .catch((error: string) => this.open_error(error));
     }
 
-    private logout() : void {
+    public logout(): void {
         this.spud_service.logout()
-            .catch((error : string) => this.open_error(error));
+            .catch((error: string) => this.open_error(error));
     }
 
-    private check_session() : void {
+    public check_session(): void {
         this.spud_service.get_session()
-            .catch((error : string) => this.open_error(error));
+            .catch((error: string) => this.open_error(error));
     }
 
-    ngOnDestroy() : void {
+    ngOnDestroy(): void {
         this.router_subscription.unsubscribe();
         this.session_subscription.unsubscribe();
     }
