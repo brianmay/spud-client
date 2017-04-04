@@ -1,8 +1,11 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, Inject, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PageScrollService } from 'ng2-page-scroll';
 
 import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { base_url } from './settings';
 import { PhotoObject, PhotoType } from './photo';
+import { SpudService } from './spud.service';
 
 @Component({
     selector: 'photo_list',
@@ -11,6 +14,13 @@ import { PhotoObject, PhotoType } from './photo';
 export class PhotoListComponent extends BaseListComponent<PhotoObject> {
     title = 'Photo List';
     public readonly type_obj = new PhotoType();
+
+    constructor(
+        @Inject(ActivatedRoute) route: ActivatedRoute,
+        @Inject(SpudService) spud_service: SpudService,
+    ) {
+        super(route, spud_service);
+    }
 }
 
 @Component({
@@ -19,6 +29,14 @@ export class PhotoListComponent extends BaseListComponent<PhotoObject> {
 })
 export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
     public readonly type_obj = new PhotoType();
+
+    constructor(
+        @Inject(ActivatedRoute) route: ActivatedRoute,
+        @Inject(SpudService) spud_service: SpudService,
+        @Inject(PageScrollService) page_scroll_service: PageScrollService,
+    ) {
+        super(route, spud_service, page_scroll_service);
+    }
 
     protected get_photo_criteria(object: PhotoObject): Map<string, string> {
         return null;

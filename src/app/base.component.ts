@@ -1,7 +1,19 @@
 import 'rxjs/add/operator/switchMap';
 import { Subscription } from 'rxjs/Subscription';
 
-import { OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, SimpleChange, ViewChild, Inject, HostListener } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    OnChanges,
+    OnDestroy,
+    SimpleChange,
+    ViewChild,
+    Inject,
+    HostListener
+} from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
