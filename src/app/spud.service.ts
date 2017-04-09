@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptionsArgs } from '@angular/http';
 
+import { List } from 'immutable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/toPromise';
 
@@ -16,25 +17,28 @@ class IndexEntry {
     next_id: number;
 }
 
-function handleError(error: any): Promise<any> {
+function error_to_string(error: any): string {
     if (error.headers.get('Content-Type') === 'application/json') {
         const json = error.json();
         console.error('An JSON error occurred', json.detail);
-        return Promise.reject(json.detail);
+        return json.detail;
     } else {
         console.error('An error occurred', error.toString());
-        return Promise.reject(error.toString());
+        return error.toString();
     }
 }
 
 export class ObjectList<GenObject extends BaseObject> {
     private page = 1;
     private prev_id: number = null;
-    private objects: GenObject[] = [];
+    private objects: List<GenObject> = List<GenObject>();
     private index: NumberDict<IndexEntry> = {};
     finished = false;
     error = false;
     empty = true;
+
+    new_page_source = new Subject<List<GenObject>>();
+    new_page = this.new_page_source.asObservable();
 
     constructor(
         private readonly http: Http,
@@ -58,12 +62,13 @@ export class ObjectList<GenObject extends BaseObject> {
 
 
     private streamable_to_object_list(
-            streamable: s.Streamable): GenObject[] {
+            streamable: s.Streamable): void {
         if (!streamable['next']) {
             this.finished = true;
         }
 
-        const results: GenObject[] = [];
+        const objects: List<GenObject> = this.objects.asMutable();
+
         const array: s.Streamable[] = s.streamable_to_array(streamable['results']);
         for (const i of array) {
             const object: GenObject = this.type_obj.object_from_streamable(i, false);
@@ -72,8 +77,7 @@ export class ObjectList<GenObject extends BaseObject> {
                 continue;
             }
 
-            results.push(object);
-            this.objects.push(object);
+            objects.push(object);
 
             this.index[object.id] = new IndexEntry();
             this.index[object.id].prev_id = this.prev_id;
@@ -84,10 +88,11 @@ export class ObjectList<GenObject extends BaseObject> {
             this.prev_id = object.id;
             this.empty = false;
         }
-        return results;
+
+        this.objects = objects.asImmutable();
     }
 
-    get_next_page(): Promise<GenObject[]> {
+    get_next_page(): Promise<List<GenObject>> {
         const params = new URLSearchParams();
         this.error = false;
 
@@ -105,11 +110,13 @@ export class ObjectList<GenObject extends BaseObject> {
             .toPromise()
             .then(response => {
                 this.page = this.page + 1;
-                return this.streamable_to_object_list(response.json());
+                this.streamable_to_object_list(response.json());
+                this.new_page_source.next(this.objects);
+                return this.objects;
             })
             .catch(error => {
                 this.error = true;
-                return handleError(error);
+                this.new_page_source.error(error_to_string(error));
             });
     }
 
@@ -117,7 +124,7 @@ export class ObjectList<GenObject extends BaseObject> {
         return this.index[id];
     }
 
-    get_objects(): GenObject[] {
+    get_objects(): List<GenObject> {
         return this.objects;
     }
 }
@@ -160,7 +167,9 @@ export class SpudService {
         return this.http.get(api_url + type_obj.type_name + '/' + id + '/', this.options)
             .toPromise()
             .then(response => type_obj.object_from_streamable(response.json(), true))
-            .catch(handleError);
+            .catch(error => {
+                return Promise.reject(error_to_string(error));
+            });
     }
 
     get_session(): Promise<Session> {
@@ -172,8 +181,10 @@ export class SpudService {
                 this.session = session;
                 console.log(response);
                 return session;
-             })
-            .catch(handleError);
+            })
+            .catch(error => {
+                return Promise.reject(error_to_string(error));
+            });
     }
 
     login(username, password): Promise<Session> {
@@ -185,8 +196,10 @@ export class SpudService {
                 this.session = session;
                 console.log(response);
                 return session;
-             })
-            .catch(handleError);
+            })
+            .catch(error => {
+                return Promise.reject(error_to_string(error));
+            });
     }
 
     logout(): Promise<Session> {
@@ -199,7 +212,9 @@ export class SpudService {
                 console.log(response);
                 return session;
              })
-            .catch(handleError);
+            .catch(error => {
+                return Promise.reject(error_to_string(error));
+            });
     }
 
 }

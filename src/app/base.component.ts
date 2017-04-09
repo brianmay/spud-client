@@ -2,7 +2,6 @@ import 'rxjs/add/operator/switchMap';
 import { Subscription } from 'rxjs/Subscription';
 
 import {
-    Component,
     OnInit,
     Input,
     Output,
@@ -16,6 +15,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
+import { List } from 'immutable';
 import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 
 import { Session } from './session';
@@ -108,8 +108,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     @Input() list: ObjectList<GenObject>;
     private error: string;
-    private prev_id: number;
-    private next_id: number;
 
     private child_list: ObjectList<GenObject>;
     private photo_list: ObjectList<PhotoObject>;
@@ -184,20 +182,25 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     load_prev_object(): void {
-        this.load_object(this.prev_id);
+        const index = this.list.get_index(this.object.id);
+        if (index != null && index.prev_id != null) {
+            this.load_object(index.prev_id);
+        }
     }
 
     load_next_object(): void {
-        if (this.next_id != null) {
-            this.load_object(this.next_id);
+        const index = this.list.get_index(this.object.id);
+        if (index != null && index.next_id != null) {
+            this.load_object(index.next_id);
         } else {
             this.list.get_next_page()
-                .then((objects: Array<GenObject>) => {
-                    const index = this.list.get_index(this.object.id);
-                    this.prev_id = index.prev_id;
-                    this.next_id = index.next_id;
-                    this.object.id = this.next_id;
-                    return this.spud_service.get_object(this.type_obj, this.next_id);
+                .then((objects: List<GenObject>) : Promise<GenObject> => {
+                    const index2 = this.list.get_index(this.object.id);
+                    if (index2 != null && index2.next_id != null) {
+                        return this.spud_service.get_object(this.type_obj, index2.next_id);
+                    } else {
+                        return Promise.reject('Cannot find index of next item');
+                    }
                 })
                 .then(loaded_object => this.loaded_object(loaded_object))
                 .catch((message: string) => this.handle_error(message));
@@ -209,16 +212,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         console.log('loaded', object);
         this.object = object;
         this.error = null;
-        if (this.list != null) {
-            const index = this.list.get_index(object.id);
-            if (index != null) {
-                this.prev_id = index.prev_id;
-                this.next_id = index.next_id;
-            }
-        } else {
-            this.prev_id = null;
-            this.next_id = null;
-        }
 
         const child_criteria = new Map<string, string>();
         child_criteria.set('instance', String(object.id));
@@ -245,10 +238,24 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         this.error = message;
     }
 
-    public more_pages(): boolean {
+    public has_prev_page(): boolean {
         if (this.list == null) {
             return false;
-        } else if (this.next_id != null) {
+        }
+        const index = this.list.get_index(this.object.id);
+        if (index != null) {
+            return !!index.prev_id;
+        } else {
+            return false;
+        }
+    }
+
+    public has_next_page(): boolean {
+        if (this.list == null) {
+            return false;
+        }
+        const index = this.list.get_index(this.object.id);
+        if (index.next_id != null) {
             return true;
         } else {
             return !this.list.finished;

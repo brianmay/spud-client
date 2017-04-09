@@ -3,7 +3,7 @@
 </ngb-alert>
 <div class="photo_list">
     <div class="photo_item"
-            *ngFor="let object of list.get_objects()"
+            *ngFor="let object of objects"
             [class.selected]="selected_object && selected_object.id==object.id"
             (click)="select_object(object); $event.stopPropagation()"
             >
