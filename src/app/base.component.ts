@@ -18,7 +18,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 
-import { Session } from './session';
+import { Permission, Session } from './session';
 import { BaseObject, BaseType } from './base';
 import { PhotoObject, PhotoType } from './photo';
 import { SpudService, ObjectList, IndexEntry } from './spud.service';
@@ -89,6 +89,10 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
             this.session_subscription.unsubscribe();
         }
     };
+
+    get permission(): Permission {
+        return this.session.permissions.get(this.type_obj.type_name);
+    }
 }
 
 export abstract class BaseDetailComponent<GenObject extends BaseObject>
@@ -364,5 +368,9 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         if (this.list_subscription != null) {
             this.list_subscription.unsubscribe();
         }
+    }
+
+    get permission(): Permission {
+        return this.session.permissions.get(this.type_obj.type_name);
     }
 }

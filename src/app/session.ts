@@ -1,6 +1,6 @@
 import * as s from './streamable';
 
-class Permission {
+export class Permission {
     can_create: boolean;
     can_change: boolean;
     can_delete: boolean;
