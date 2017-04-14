@@ -15,8 +15,8 @@
                 </div>
                 <p class="lead text-muted">{{object.description}}</p>
                 <p>
-                    <a (click)="goto_children()" class="btn btn-secondary" *ngIf="child_list && (!child_list.empty || child_list.error)">Children</a>
-                    <a (click)="goto_photos()" class="btn btn-secondary" *ngIf="photo_list && (!photo_list.empty || photo_list.error)">Photos</a>
+                    <a (click)="goto_children()" class="btn btn-secondary" *ngIf="!child_list_empty">Children</a>
+                    <a (click)="goto_photos()" class="btn btn-secondary" *ngIf="!photo_list_empty">Photos</a>
                     <a (click)="full_screen()" class="btn btn-secondary">Full Screen</a>
                 </p>
                 <album_infobox *ngIf="object.type_name==='albums'" [object]="object"></album_infobox>
@@ -27,18 +27,20 @@
             </div>
         </section>
 
-        <div #children></div>
-        <album_list *ngIf="type_obj.type_name==='albums'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></album_list>
-        <category_list *ngIf="type_obj.type_name==='categorys'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></category_list>
-        <person_list *ngIf="type_obj.type_name==='persons'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></person_list>
-        <place_list *ngIf="type_obj.type_name==='places'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></place_list>
-        <photo_list *ngIf="type_obj.type_name==='photos'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></photo_list>
+        <div *ngIf="!child_list_empty" #children>
+            <album_list *ngIf="type_obj.type_name==='albums'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></album_list>
+            <category_list *ngIf="type_obj.type_name==='categorys'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></category_list>
+            <person_list *ngIf="type_obj.type_name==='persons'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></person_list>
+            <place_list *ngIf="type_obj.type_name==='places'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></place_list>
+            <photo_list *ngIf="type_obj.type_name==='photos'" [list]="child_list" title="{{object.type_verbose}}: {{ object.title }}: Children"></photo_list>
+        </div>
 
-        <div #photos></div>
-        <album_list *ngIf="type_obj.type_name==='albums' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></album_list>
-        <category_list *ngIf="type_obj.type_name==='categorys' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></category_list>
-        <person_list *ngIf="type_obj.type_name==='persons' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></person_list>
-        <place_list *ngIf="type_obj.type_name==='places' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></place_list>
-        <photo_list *ngIf="type_obj.type_name==='photos' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></photo_list>
+        <div *ngIf="!photo_list_empty" #photos>
+            <album_list *ngIf="type_obj.type_name==='albums' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></album_list>
+            <category_list *ngIf="type_obj.type_name==='categorys' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></category_list>
+            <person_list *ngIf="type_obj.type_name==='persons' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></person_list>
+            <place_list *ngIf="type_obj.type_name==='places' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></place_list>
+            <photo_list *ngIf="type_obj.type_name==='photos' && photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></photo_list>
+        </div>
     </div>
 </div>

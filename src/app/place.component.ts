@@ -1,4 +1,4 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Input, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageScrollService } from 'ng2-page-scroll';
 
@@ -9,6 +9,7 @@ import { SpudService } from './spud.service';
 @Component({
     selector: 'place_list',
     templateUrl: './base-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaceListComponent extends BaseListComponent<PlaceObject> {
     title = 'Place List';
@@ -17,14 +18,16 @@ export class PlaceListComponent extends BaseListComponent<PlaceObject> {
     constructor(
         @Inject(ActivatedRoute) route: ActivatedRoute,
         @Inject(SpudService) spud_service: SpudService,
+        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
     ) {
-        super(route, spud_service);
+        super(route, spud_service, ref);
     }
 }
 
 @Component({
     selector: 'place_detail',
     templateUrl: './base-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
     public readonly type_obj = new PlaceType();
@@ -33,8 +36,9 @@ export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
         @Inject(ActivatedRoute) route: ActivatedRoute,
         @Inject(SpudService) spud_service: SpudService,
         @Inject(PageScrollService) page_scroll_service: PageScrollService,
+        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
     ) {
-        super(route, spud_service, page_scroll_service);
+        super(route, spud_service, page_scroll_service, ref);
     }
 
     protected get_photo_criteria(object: PlaceObject): Map<string, string> {
@@ -48,6 +52,7 @@ export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
 @Component({
     selector: 'place_infobox',
     templateUrl: './place-infobox.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaceInfoboxComponent {
     @Input() object: PlaceObject;

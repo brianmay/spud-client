@@ -1,4 +1,4 @@
-import { Component, Input, Inject, ViewChild } from '@angular/core';
+import { Component, Input, Inject, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageScrollService } from 'ng2-page-scroll';
 
@@ -10,6 +10,7 @@ import { SpudService } from './spud.service';
 @Component({
     selector: 'photo_list',
     templateUrl: './base-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoListComponent extends BaseListComponent<PhotoObject> {
     title = 'Photo List';
@@ -18,14 +19,16 @@ export class PhotoListComponent extends BaseListComponent<PhotoObject> {
     constructor(
         @Inject(ActivatedRoute) route: ActivatedRoute,
         @Inject(SpudService) spud_service: SpudService,
+        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
     ) {
-        super(route, spud_service);
+        super(route, spud_service, ref);
     }
 }
 
 @Component({
     selector: 'photo_detail',
     templateUrl: './base-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
     public readonly type_obj = new PhotoType();
@@ -34,8 +37,9 @@ export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
         @Inject(ActivatedRoute) route: ActivatedRoute,
         @Inject(SpudService) spud_service: SpudService,
         @Inject(PageScrollService) page_scroll_service: PageScrollService,
+        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
     ) {
-        super(route, spud_service, page_scroll_service);
+        super(route, spud_service, page_scroll_service, ref);
     }
 
     protected get_photo_criteria(object: PhotoObject): Map<string, string> {
@@ -46,6 +50,7 @@ export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
 @Component({
     selector: 'photo_infobox',
     templateUrl: './photo-infobox.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoInfoboxComponent {
     @Input() object: PhotoObject;
@@ -54,6 +59,7 @@ export class PhotoInfoboxComponent {
 @Component({
     selector: 'photo_thumb',
     templateUrl: './photo-thumb.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoThumbComponent {
     @Input() photo: PhotoObject;
@@ -82,6 +88,7 @@ export class PhotoMidComponent {
 @Component({
     selector: 'photo_large',
     templateUrl: './photo-large.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoLargeComponent {
     @ViewChild('video') video;

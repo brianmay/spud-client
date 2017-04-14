@@ -1,4 +1,4 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Input, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageScrollService } from 'ng2-page-scroll';
 
@@ -9,6 +9,7 @@ import { SpudService } from './spud.service';
 @Component({
     selector: 'person_list',
     templateUrl: './base-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonListComponent extends BaseListComponent<PersonObject> {
     title = 'Person List';
@@ -17,14 +18,16 @@ export class PersonListComponent extends BaseListComponent<PersonObject> {
     constructor(
         @Inject(ActivatedRoute) route: ActivatedRoute,
         @Inject(SpudService) spud_service: SpudService,
+        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
     ) {
-        super(route, spud_service);
+        super(route, spud_service, ref);
     }
 }
 
 @Component({
     selector: 'person_detail',
     templateUrl: './base-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
     public readonly type_obj = new PersonType();
@@ -33,8 +36,9 @@ export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
         @Inject(ActivatedRoute) route: ActivatedRoute,
         @Inject(SpudService) spud_service: SpudService,
         @Inject(PageScrollService) page_scroll_service: PageScrollService,
+        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
     ) {
-        super(route, spud_service, page_scroll_service);
+        super(route, spud_service, page_scroll_service, ref);
     }
 
     protected get_photo_criteria(object: PersonObject): Map<string, string> {
@@ -48,6 +52,7 @@ export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
 @Component({
     selector: 'person_infobox',
     templateUrl: './person-infobox.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonInfoboxComponent {
     @Input() object: PersonObject;

@@ -4,6 +4,7 @@ import { Headers, Http, URLSearchParams, RequestOptionsArgs } from '@angular/htt
 import { List } from 'immutable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/take';
 
 import { NumberDict } from './basic';
 import { api_url } from './settings';
@@ -12,7 +13,7 @@ import { BaseObject, BaseType } from './base';
 import { Session } from './session';
 
 
-class IndexEntry {
+export class IndexEntry {
     prev_id: number;
     next_id: number;
 }
@@ -33,9 +34,8 @@ export class ObjectList<GenObject extends BaseObject> {
     private prev_id: number = null;
     private objects: List<GenObject> = List<GenObject>();
     private index: NumberDict<IndexEntry> = {};
-    finished = false;
-    error = false;
-    empty = true;
+    private finished = false;
+    private loading = false;
 
     new_page_source = new Subject<List<GenObject>>();
     new_page = this.new_page_source.asObservable();
@@ -63,10 +63,6 @@ export class ObjectList<GenObject extends BaseObject> {
 
     private streamable_to_object_list(
             streamable: s.Streamable): void {
-        if (!streamable['next']) {
-            this.finished = true;
-        }
-
         const objects: List<GenObject> = this.objects.asMutable();
 
         const array: s.Streamable[] = s.streamable_to_array(streamable['results']);
@@ -86,15 +82,19 @@ export class ObjectList<GenObject extends BaseObject> {
                 this.index[this.prev_id].next_id = object.id;
             }
             this.prev_id = object.id;
-            this.empty = false;
         }
 
         this.objects = objects.asImmutable();
     }
 
-    get_next_page(): Promise<List<GenObject>> {
+    get_next_page(): void {
+        if (this.loading || this.finished) {
+            return;
+        }
+
+        this.loading = true;
+
         const params = new URLSearchParams();
-        this.error = false;
 
         if (this.criteria != null) {
             this.criteria.forEach((value: string, key: string) => {
@@ -106,16 +106,21 @@ export class ObjectList<GenObject extends BaseObject> {
         const options: RequestOptionsArgs = this.options;
         options.search = params;
 
-        return this.http.get(api_url + this.type_obj.type_name + '/', options)
+        this.http.get(api_url + this.type_obj.type_name + '/', options)
             .toPromise()
             .then(response => {
+                this.loading = false;
                 this.page = this.page + 1;
-                this.streamable_to_object_list(response.json());
+                const data = response.json();
+                this.streamable_to_object_list(data);
                 this.new_page_source.next(this.objects);
-                return this.objects;
+                if (!data['next']) {
+                    this.finished = true;
+                    this.new_page_source.complete();
+                }
             })
             .catch(error => {
-                this.error = true;
+                this.loading = false;
                 this.new_page_source.error(error_to_string(error));
             });
     }
@@ -126,6 +131,25 @@ export class ObjectList<GenObject extends BaseObject> {
 
     get_objects(): List<GenObject> {
         return this.objects;
+    }
+
+    on_next_page(): Promise<List<GenObject>> {
+        if (this.finished) {
+            return Promise.reject('All pages loaded');
+        }
+        this.get_next_page();
+        return this.new_page.take(1).toPromise();
+    }
+
+    get_is_empty(): Promise<boolean> {
+        if (this.objects.size === 0 && this.finished) {
+            return Promise.resolve(true);
+        } else if (this.objects.size > 0) {
+            return Promise.resolve(false);
+        }
+        return this.on_next_page()
+            .then(() => this.objects.size === 0)
+            .catch(error => error);
     }
 }
 

@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, ViewChild, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,6 +11,7 @@ import { SpudService } from './spud.service';
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent implements OnInit, OnDestroy {
     public is_collapsed = true;
@@ -29,18 +30,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
         @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
         @Inject(NgbModal) private modalService: NgbModal,
         @Inject(SpudService) private spud_service: SpudService,
-        @Inject(LocalStorageService) private local_storage_service: LocalStorageService
+        @Inject(LocalStorageService) private local_storage_service: LocalStorageService,
+        @Inject(ChangeDetectorRef) protected readonly ref: ChangeDetectorRef,
     ) {}
 
     ngOnInit(): void {
         this.router_subscription = this.route.queryParams
             .subscribe((params: Params) => {
                 this.q = params['q'];
+                this.ref.markForCheck();
             });
         this.session_subscription = this.spud_service.session_change
             .subscribe(session => {
                 this.session = session;
                 this.local_storage_service.set('token', session.token);
+                this.ref.markForCheck();
             });
 
         this.session = this.spud_service.session;
@@ -51,6 +55,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                 .catch((error: string) => {
                     this.open_error(error);
                     this.session.token = null;
+                    this.ref.markForCheck();
                 });
         }
     }
@@ -67,7 +72,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
                 return promise;
             }, reason => {
                 this.unauth_password = null;
-                this.error = 'Login Failed: ' + reason;
             })
             .catch((error: string) => this.open_error(error));
     }

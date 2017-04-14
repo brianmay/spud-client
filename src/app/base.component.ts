@@ -11,17 +11,17 @@ import {
     SimpleChange,
     ViewChild,
     Inject,
-    HostListener
+    HostListener,
+    ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { List } from 'immutable';
 import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 
 import { Session } from './session';
 import { BaseObject, BaseType } from './base';
 import { PhotoObject, PhotoType } from './photo';
-import { SpudService, ObjectList } from './spud.service';
+import { SpudService, ObjectList, IndexEntry } from './spud.service';
 
 export abstract class BaseListComponent<GenObject extends BaseObject>
         implements OnInit, OnDestroy {
@@ -51,7 +51,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
     constructor(
         @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
         @Inject(SpudService) protected readonly spud_service: SpudService,
-//        @Inject(PageScrollService) protected readonly page_scroll_service: PageScrollService,
+        @Inject(ChangeDetectorRef) protected readonly ref: ChangeDetectorRef,
     ) {}
 
     ngOnInit(): void {
@@ -61,6 +61,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
                     this.criteria = new Map<string, string>();
                     this.criteria.set('q', params['q']);
                     this.list = this.spud_service.get_list(this.type_obj, this.criteria);
+                    this.ref.markForCheck();
                 });
 
         }
@@ -70,19 +71,23 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
                 if (this.session !== session) {
                     this.list = this.spud_service.get_list(this.type_obj, this.criteria);
                     this.selected_object = null;
+                    this.ref.markForCheck();
                 }
             });
     };
 
     public select_object(object: GenObject): void {
         this.selected_object = object;
+        this.ref.markForCheck();
     }
 
     ngOnDestroy(): void {
         if (this.router_subscription != null) {
             this.router_subscription.unsubscribe();
         }
-        this.session_subscription.unsubscribe();
+        if (this.session_subscription != null) {
+            this.session_subscription.unsubscribe();
+        }
     };
 }
 
@@ -94,6 +99,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     private router_subscription: Subscription;
     private session_subscription: Subscription;
+    private list_subscription: Subscription;
 
     private object: GenObject;
     //noinspection JSUnusedGlobalSymbols
@@ -106,11 +112,37 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     @Output() object_selected = new EventEmitter();
 
-    @Input() list: ObjectList<GenObject>;
+    @Input('list') set set_list(list: ObjectList<GenObject>) {
+        if (this.list_subscription != null) {
+            this.list_subscription.unsubscribe();
+        }
+        this.list = list;
+        this.index = null;
+        this.index_complete = false;
+        this.error = null;
+        this.list_subscription = this.list.new_page.subscribe(
+            (objects) => {
+                this.index = this.list.get_index(this.object.id);
+                this.ref.markForCheck();
+            },
+            (error) => this.handle_error(error),
+            () => {
+                this.index_complete = true;
+                this.ref.markForCheck();
+            }
+        );
+    }
+
+    private list: ObjectList<GenObject>;
+    public index: IndexEntry;
+    private index_complete = false;
     private error: string;
 
     private child_list: ObjectList<GenObject>;
     private photo_list: ObjectList<PhotoObject>;
+
+    public child_list_empty = true;
+    public photo_list_empty = true;
 
     @ViewChild('details') details;
     @ViewChild('image') image;
@@ -121,24 +153,29 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     @HostListener('document:fullscreenchange', ['$event.target']) fullScreen0(target) {
         console.log('meow0', target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.fullscreenElement != null;
+        this.ref.markForCheck();
     }
     @HostListener('document:mozfullscreenchange', ['$event.target']) fullScreen1(target) {
         console.log('meow1', target, target.mozFullScreenElement);
         this.is_fullscreen = target.mozFullScreenElement != null;
+        this.ref.markForCheck();
     }
     @HostListener('document:webkitfullscreenchange', ['$event.target']) fullScreen2(target) {
         console.log('meow2', target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.webkitFullscreenElement != null;
+        this.ref.markForCheck();
     }
     @HostListener('document:msfullscreenchange', ['$event.target']) fullScreen3(target) {
         console.log('meow3', target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.msFullscreenElement != null;
+        this.ref.markForCheck();
     }
 
     constructor(
         @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
         @Inject(SpudService) protected readonly spud_service: SpudService,
         @Inject(PageScrollService) protected readonly page_scroll_service: PageScrollService,
+        @Inject(ChangeDetectorRef) protected readonly ref: ChangeDetectorRef,
     ) {}
 
     ngOnInit(): void {
@@ -182,30 +219,29 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     load_prev_object(): void {
-        const index = this.list.get_index(this.object.id);
+        const index = this.index;
         if (index != null && index.prev_id != null) {
             this.load_object(index.prev_id);
         }
     }
 
     load_next_object(): void {
-        const index = this.list.get_index(this.object.id);
+        const index = this.index;
         if (index != null && index.next_id != null) {
             this.load_object(index.next_id);
-        } else {
-            this.list.get_next_page()
-                .then((objects: List<GenObject>) : Promise<GenObject> => {
-                    const index2 = this.list.get_index(this.object.id);
-                    if (index2 != null && index2.next_id != null) {
-                        return this.spud_service.get_object(this.type_obj, index2.next_id);
-                    } else {
-                        return Promise.reject('Cannot find index of next item');
+        } else if (!this.index_complete) {
+            this.list.on_next_page()
+                .then(() => {
+                    this.index = this.list.get_index(this.object.id);
+                    this.ref.markForCheck();
+                    if (this.index != null && this.index.next_id != null) {
+                        return this.spud_service.get_object(
+                            this.type_obj, this.index.next_id);
                     }
                 })
                 .then(loaded_object => this.loaded_object(loaded_object))
                 .catch((message: string) => this.handle_error(message));
         }
-
     }
 
     private loaded_object(object: GenObject): void {
@@ -213,14 +249,36 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         this.object = object;
         this.error = null;
 
+        this.child_list_empty = true;
+        this.photo_list_empty = true;
+
         const child_criteria = new Map<string, string>();
         child_criteria.set('instance', String(object.id));
         child_criteria.set('mode', 'children');
+
         this.child_list = this.spud_service.get_list(this.type_obj, child_criteria);
+        this.child_list.get_is_empty()
+            .then(empty => {
+                this.child_list_empty = empty;
+                this.ref.markForCheck();
+            })
+            .catch(error => {
+                this.child_list_empty = false;
+                this.ref.markForCheck();
+            });
 
         const photo_criteria: Map<string, string> = this.get_photo_criteria(object);
         if (photo_criteria != null) {
             this.photo_list = this.spud_service.get_list(new PhotoType(), photo_criteria);
+            this.photo_list.get_is_empty()
+                .then(empty => {
+                    this.photo_list_empty = empty;
+                    this.ref.markForCheck();
+                })
+                .catch(error => {
+                    this.photo_list_empty = false;
+                    this.ref.markForCheck();
+                });
         } else {
             this.photo_list = null;
         }
@@ -231,18 +289,26 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
         console.log('emit object_selected', object);
         this.object_selected.emit(object);
+
+        if (this.list != null) {
+            this.index = this.list.get_index(object.id);
+        } else {
+            this.index = null;
+        }
+        this.ref.markForCheck();
     }
 
     private handle_error(message: string): void {
         this.object = null;
         this.error = message;
+        this.ref.markForCheck();
     }
 
     public has_prev_page(): boolean {
         if (this.list == null) {
             return false;
         }
-        const index = this.list.get_index(this.object.id);
+        const index = this.index;
         if (index != null) {
             return !!index.prev_id;
         } else {
@@ -254,11 +320,11 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         if (this.list == null) {
             return false;
         }
-        const index = this.list.get_index(this.object.id);
-        if (index.next_id != null) {
+        const index = this.index;
+        if (index != null && index.next_id != null) {
             return true;
         } else {
-            return !this.list.finished;
+            return !this.index_complete;
         }
     }
 
@@ -287,6 +353,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
              });
         }
         fullscreenFunc.call(fullscreenDiv);
+        this.ref.markForCheck()
     }
 
     ngOnDestroy(): void {
@@ -294,5 +361,8 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             this.router_subscription.unsubscribe();
         }
         this.session_subscription.unsubscribe();
+        if (this.list_subscription != null) {
+            this.list_subscription.unsubscribe();
+        }
     }
 }
