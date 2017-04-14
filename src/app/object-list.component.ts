@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 
 import { List } from 'immutable';
-import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import { BaseObject } from './base';
