@@ -104,7 +104,7 @@ export class ObjectList<GenObject extends BaseObject> {
         params.set('page', String(this.page));
 
         const options: RequestOptionsArgs = this.options;
-        options.search = params;
+        options.params = params;
 
         this.http.get(api_url + this.type_obj.type_name + '/', options)
             .toPromise()
