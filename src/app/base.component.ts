@@ -101,7 +101,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private session_subscription: Subscription;
     private list_subscription: Subscription;
 
-    private object: GenObject;
+    public object: GenObject;
     //noinspection JSUnusedGlobalSymbols
     @Input('object') set input_object(object: GenObject) {
         if (this.object !== object) {
@@ -136,7 +136,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private list: ObjectList<GenObject>;
     public index: IndexEntry;
     private index_complete = false;
-    private error: string;
+    public error: string;
 
     private child_list: ObjectList<GenObject>;
     private photo_list: ObjectList<PhotoObject>;

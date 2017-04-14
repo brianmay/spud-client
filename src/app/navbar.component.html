@@ -1,4 +1,4 @@
-<template #login_template let-c="close" let-d="dismiss">
+<ng-template #login_template let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Login</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -35,9 +35,9 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" [disabled]="!login_form.form.valid" (click)="c()">Login</button>
   </div>
-</template>
+</ng-template>
 
-<template #error_template let-c="close" let-d="dismiss">
+<ng-template #error_template let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Error</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -50,7 +50,7 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="c()">Close</button>
   </div>
-</template>
+</ng-template>
 
 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
   <button class="navbar-toggler navbar-toggler-right" type="button" (click)="is_collapsed = !is_collapsed" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

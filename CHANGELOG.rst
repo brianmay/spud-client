@@ -15,6 +15,12 @@ Changed
 ~~~~~~~
 * Upgrade to Angular 4.0
 * Use onPush change detection.
+* Upgraded @ng-bootstrap/ng-bootstrap.
+
+Fixed
+~~~~~
+* Address not shown correctly.
+* Angular warnings/errors fixed.
 
 0.0.0 - 2017-04-05
 ------------------
