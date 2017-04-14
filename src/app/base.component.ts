@@ -353,7 +353,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
              });
         }
         fullscreenFunc.call(fullscreenDiv);
-        this.ref.markForCheck()
+        this.ref.markForCheck();
     }
 
     ngOnDestroy(): void {
