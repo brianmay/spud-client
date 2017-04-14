@@ -30,23 +30,23 @@ export function streamable_to_string(value: Streamable): string {
     }
 }
 
-// export function streamable_to_boolean(value: Streamable): boolean {
-//     if (typeof value === 'string') {
-//         if (value.toLowerCase() === 'true') {
-//             return true;
-//         } else if (value.toLowerCase() === 'false') {
-//             return false;
-//         } else {
-//             return null;
-//         }
-//     } else if (typeof value === 'number') {
-//         return !!(value);
-//     } else if (typeof value === 'boolean') {
-//         return value;
-//     } else {
-//         return null;
-//     }
-// }
+export function streamable_to_boolean(value: Streamable): boolean {
+    if (typeof value === 'string') {
+        if (value.toLowerCase() === 'true') {
+            return true;
+        } else if (value.toLowerCase() === 'false') {
+            return false;
+        } else {
+            return null;
+        }
+    } else if (typeof value === 'number') {
+        return !!(value);
+    } else if (typeof value === 'boolean') {
+        return value;
+    } else {
+        return null;
+    }
+}
 
 export function streamable_to_datetimezone(value: Streamable, offset: number): DateTimeZone {
     if (typeof value === 'string') {
@@ -109,10 +109,10 @@ export function get_streamable_string(streamable: Streamable, key: string): stri
     return streamable_to_string(value);
 }
 
-// export function get_streamable_boolean(streamable: Streamable, key: string): boolean {
-//     const value = get_streamable_item(streamable, key);
-//     return streamable_to_boolean(value);
-// }
+export function get_streamable_boolean(streamable: Streamable, key: string): boolean {
+    const value = get_streamable_item(streamable, key);
+    return streamable_to_boolean(value);
+}
 
 export function get_streamable_datetimezone(streamable: Streamable, key: string, offset: number): DateTimeZone {
     const value = get_streamable_item(streamable, key);
