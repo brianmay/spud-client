@@ -203,7 +203,6 @@ export class SpudService {
                 const session: Session = new Session();
                 session.set_streamable(response.json());
                 this.session = session;
-                console.log(response);
                 return session;
             })
             .catch(error => {
@@ -218,7 +217,6 @@ export class SpudService {
                 const session: Session = new Session();
                 session.set_streamable(response.json());
                 this.session = session;
-                console.log(response);
                 return session;
             })
             .catch(error => {
@@ -233,7 +231,6 @@ export class SpudService {
                 const session: Session = new Session();
                 session.set_streamable(response.json());
                 this.session = session;
-                console.log(response);
                 return session;
              })
             .catch(error => {
