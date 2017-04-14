@@ -10,8 +10,7 @@ import {AppComponent} from './app.component';
 import {NavbarComponent} from './navbar.component';
 
 import {BasicDatetimezoneComponent} from './basic.component';
-import {ObjectLinkComponent, ObjectArrayComponent} from './object.component';
-import {ObjectListComponent} from './object-list.component';
+import {ObjectLinkComponent, ObjectListComponent, ObjectArrayComponent} from './object.component';
 
 import {
     AlbumListComponent,
