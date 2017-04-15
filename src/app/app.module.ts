@@ -10,7 +10,12 @@ import {AppComponent} from './app.component';
 import {NavbarComponent} from './navbar.component';
 
 import {BasicDatetimezoneComponent} from './basic.component';
-import {ObjectLinkComponent, ObjectListComponent, ObjectArrayComponent} from './object.component';
+import {
+    ObjectArrayComponent,
+    ObjectLinkComponent,
+    ObjectListComponent,
+    ObjectListItemComponent,
+} from './object.component';
 
 import {
     AlbumListComponent,
@@ -56,6 +61,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         ObjectLinkComponent,
         ObjectArrayComponent,
         ObjectListComponent,
+        ObjectListItemComponent,
         AlbumListComponent,
         AlbumDetailComponent,
         AlbumInfoboxComponent,

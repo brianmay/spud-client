@@ -34,6 +34,21 @@ export class ObjectArrayComponent<GenObject extends BaseObject> {
 }
 
 @Component({
+    selector: 'object_list_item',
+    templateUrl: './object-list-item.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ObjectListItemComponent<GenObject extends BaseObject> {
+    @Input() object: GenObject;
+    @Input() selected: boolean;
+
+    @Output() selected_change = new EventEmitter();
+    public select_object() {
+        this.selected_change.emit(true);
+    }
+}
+
+@Component({
     selector: 'object_list',
     templateUrl: './object-list.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,

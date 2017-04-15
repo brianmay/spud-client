@@ -2,15 +2,12 @@
     {{ error }}
 </ngb-alert>
 <div class="photo_list">
-    <div class="photo_item"
-            *ngFor="let object of objects"
-            [class.selected]="selected_object && selected_object.id==object.id"
-            (click)="select_object(object); $event.stopPropagation()"
-            >
-        <photo_thumb [photo]="object.cover_photo"></photo_thumb>
-        <p class="title" *ngIf="object.title">{{object.title}}</p>
-        <p class="desc" *ngIf="object.desc">{{object.desc}}</p>
-    </div>
+    <object_list_item
+        *ngFor="let object of objects"
+        [object]="object"
+        [selected]="selected_object && selected_object.id==object.id"
+        (selected_change)="select_object(object)"
+    ></object_list_item>
 
     <div class="photo_item" *ngIf="!list_finished">
         <button type="button" (click)="get_next_page(); $event.stopPropagation()" aria-label="Load more.">Load more...</button>
