@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 
 import {Ng2PageScrollModule} from 'ng2-page-scroll';
@@ -91,7 +91,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         LocalStorageModule.withConfig({
             prefix: 'spud',
             storageType: 'localStorage'
-        })
+        }),
+        ReactiveFormsModule,
     ],
     providers: [
         SpudService,

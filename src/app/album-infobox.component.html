@@ -1,18 +1,67 @@
-<table class="table">
+<table *ngIf="!edit" class="table">
+    <thead>
+    <tr>
+        <th>Actions</th>
+        <td>
+            <button *ngIf="permission.can_change" (click)="edit=true" class="btn btn-secondary" type="button">Edit
+            </button>
+        </td>
+    </tr>
+    </thead>
     <tbody>
-        <tr>
-            <th scope="row">Revised</th>
-            <td><basic_datetimezone [datetimezone]="object.revised"></basic_datetimezone></td>
-        </tr>
-        <tr>
-            <th scope="row">Sort</th>
-            <td>{{ object.sort_name }} {{ object.sort_order }}</td>
-        </tr>
-        <tr>
-            <th scope="row">Ascendants</th>
-            <td>
-                <object_array [list]="object.ascendants.slice().reverse()" [sep]="' / '"></object_array>
-            </td>
-        </tr>
+    <tr>
+        <th scope="row">Revised</th>
+        <td>
+            <basic_datetimezone [datetimezone]="object.revised"></basic_datetimezone>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row">Sort</th>
+        <td>{{ object.sort_name }} {{ object.sort_order }}</td>
+    </tr>
+    <tr>
+        <th scope="row">Ascendants</th>
+        <td>
+            <object_array [list]="object.ascendants.slice().reverse()" [sep]="' / '"></object_array>
+        </td>
+    </tr>
     </tbody>
 </table>
+
+<div *ngIf="edit">
+    <form [formGroup]="form_group" (ngSubmit)="submit()" novalidate>
+        <div class="form-group">
+            <label class="center-block">Title:
+                <input class="form-control" formControlName="title">
+                <div class="alert alert-danger" *ngIf="!form_group.controls['title'].valid && form_group.controls['title'].touched">You must supply a valid title.</div>
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="center-block">Revised:
+                <input class="form-control" formControlName="revised">
+                <div class="alert alert-danger" *ngIf="!form_group.controls['revised'].valid && form_group.controls['revised'].touched">You must select a valid date.</div>
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="center-block">Sort Name:
+                <input class="form-control" formControlName="sort_name">
+                <div class="alert alert-danger" *ngIf="!form_group.controls['sort_name'].valid && form_group.controls['sort_name'].touched">You must supply a valid sort name.</div>
+            </label>
+            <label class="center-block">Sort Order:
+                <input class="form-control" formControlName="sort_order">
+                <div class="alert alert-danger" *ngIf="!form_group.controls['sort_order'].valid && form_group.controls['sort_order'].touched">You must supply a valid sort order.</div>
+            </label>
+        </div>
+        <div style="margin-bottom: 1em">
+            <button type="submit"
+                    [disabled]="form_group.pristine || !form_group.valid" class="btn btn-success">Save
+            </button> &nbsp;
+            <button type="reset" (click)="revert()"
+                    [disabled]="form_group.pristine" class="btn btn-danger">Revert
+            </button> &nbsp;
+            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel
+            </button>
+        </div>
+
+    </form>
+</div>

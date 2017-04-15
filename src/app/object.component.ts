@@ -60,7 +60,7 @@ export class ObjectListComponent<GenObject extends BaseObject> implements OnDest
         }
         this.list = list;
         this.list_finished = false;
-        this.list_subscription = this.list.new_page.subscribe(
+        this.list_subscription = this.list.change.subscribe(
             (objects) => {
                 this.objects = objects;
                 this.ref.markForCheck();

@@ -21,7 +21,7 @@ import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 import { Permission, Session } from './session';
 import { BaseObject, BaseType } from './base';
 import { PhotoObject, PhotoType } from './photo';
-import { SpudService, ObjectList, IndexEntry } from './spud.service';
+import { SpudService, ObjectList, IndexEntry, BaseService } from './spud.service';
 
 export abstract class BaseListComponent<GenObject extends BaseObject>
         implements OnInit, OnDestroy {
@@ -30,8 +30,20 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
     protected session: Session = new Session();
     protected criteria: Map<string, string> = null;
 
+    protected _service: BaseService<GenObject>;
+    protected get service(): BaseService<GenObject> {
+        if (this._service == null) {
+            this._service = this.spud_service.get_service(this.type_obj);
+            this.object_subscription = this._service.change.subscribe(object => {
+                this.list.object_changed(object);
+            });
+        }
+        return this._service;
+    }
+
     private router_subscription: Subscription;
     private session_subscription: Subscription;
+    private object_subscription: Subscription;
 
     @Input() title: string;
 
@@ -60,7 +72,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
                 .subscribe((params: Params) => {
                     this.criteria = new Map<string, string>();
                     this.criteria.set('q', params['q']);
-                    this.list = this.spud_service.get_list(this.type_obj, this.criteria);
+                    this.list = this.service.get_list(this.criteria);
                     this.ref.markForCheck();
                 });
 
@@ -69,11 +81,12 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
         this.session_subscription = this.spud_service.session_change
             .subscribe(session => {
                 if (this.session !== session) {
-                    this.list = this.spud_service.get_list(this.type_obj, this.criteria);
+                    this.list = this.service.get_list(this.criteria);
                     this.selected_object = null;
                     this.ref.markForCheck();
                 }
             });
+        this.session = this.spud_service.session;
     };
 
     public select_object(object: GenObject): void {
@@ -88,6 +101,9 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
         if (this.session_subscription != null) {
             this.session_subscription.unsubscribe();
         }
+        if (this.object_subscription != null) {
+            this.object_subscription.unsubscribe();
+        }
     };
 
     get permission(): Permission {
@@ -101,12 +117,26 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     public abstract readonly type_obj: BaseType<GenObject>;
     protected session: Session = new Session();
 
+    protected _service: BaseService<GenObject>;
+    protected get service(): BaseService<GenObject> {
+        if (this._service == null) {
+            this._service = this.spud_service.get_service(this.type_obj);
+            this.change_subscription = this._service.change.subscribe(object => {
+               if (this.object.id === object.id) {
+                   this.object = object;
+                   this.ref.markForCheck();
+               }
+            });
+        }
+        return this._service;
+    }
+
     private router_subscription: Subscription;
     private session_subscription: Subscription;
     private list_subscription: Subscription;
+    private change_subscription: Subscription;
 
     public object: GenObject;
-    //noinspection JSUnusedGlobalSymbols
     @Input('object') set input_object(object: GenObject) {
         if (this.object !== object) {
             console.log('got input object', object);
@@ -124,7 +154,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         this.index = null;
         this.index_complete = false;
         this.error = null;
-        this.list_subscription = this.list.new_page.subscribe(
+        this.list_subscription = this.list.change.subscribe(
             (objects) => {
                 this.index = this.list.get_index(this.object.id);
                 this.ref.markForCheck();
@@ -187,7 +217,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             this.router_subscription = this.route.params
                 .switchMap((params: Params): Promise<GenObject> => {
                     const id: number = params['id'];
-                    return this.spud_service.get_object(this.type_obj, id);
+                    return this.service.get_object(id);
                 })
                 .subscribe(
                     loaded_object => this.loaded_object(loaded_object),
@@ -199,14 +229,16 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             .subscribe(session => {
                 if (this.session !== session && this.object != null) {
                     this.load_object(this.object.id);
+                    this.session = session;
                 }
             });
+        this.session = this.spud_service.session;
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (this.object != null && !this.object.is_full_object) {
             console.log('got changes, need to load', this.object);
-            this.spud_service.get_object(this.type_obj, this.object.id)
+            this.service.get_object(this.object.id)
                 .then(loaded_object => this.loaded_object(loaded_object))
                 .catch((message: string) => this.handle_error(message));
         } else {
@@ -217,7 +249,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     load_object(id: number) {
         console.log('loading with signal', id);
-        this.spud_service.get_object(this.type_obj, id)
+        this.service.get_object(id)
             .then(loaded_object => this.loaded_object(loaded_object))
             .catch((message: string) => this.handle_error(message));
     }
@@ -239,8 +271,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                     this.index = this.list.get_index(this.object.id);
                     this.ref.markForCheck();
                     if (this.index != null && this.index.next_id != null) {
-                        return this.spud_service.get_object(
-                            this.type_obj, this.index.next_id);
+                        return this.service.get_object(this.index.next_id);
                     }
                 })
                 .then(loaded_object => this.loaded_object(loaded_object))
@@ -260,7 +291,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         child_criteria.set('instance', String(object.id));
         child_criteria.set('mode', 'children');
 
-        this.child_list = this.spud_service.get_list(this.type_obj, child_criteria);
+        this.child_list = this.service.get_list(child_criteria);
         this.child_list.get_is_empty()
             .then(empty => {
                 this.child_list_empty = empty;
@@ -364,13 +395,21 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         if (this.router_subscription != null) {
             this.router_subscription.unsubscribe();
         }
-        this.session_subscription.unsubscribe();
+        if (this.session_subscription) {
+            this.session_subscription.unsubscribe();
+        }
         if (this.list_subscription != null) {
             this.list_subscription.unsubscribe();
+        }
+        if (this.change_subscription != null) {
+            this.change_subscription.unsubscribe();
         }
     }
 
     get permission(): Permission {
+        if (this.session.permissions == null) {
+            return new Permission();
+        }
         return this.session.permissions.get(this.type_obj.type_name);
     }
 }

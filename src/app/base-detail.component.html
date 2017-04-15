@@ -19,7 +19,7 @@
                     <a (click)="goto_photos()" class="btn btn-secondary" *ngIf="!photo_list_empty">Photos</a>
                     <a (click)="full_screen()" class="btn btn-secondary">Full Screen</a>
                 </p>
-                <album_infobox *ngIf="object.type_name==='albums'" [object]="object"></album_infobox>
+                <album_infobox *ngIf="object.type_name==='albums'" [object]="object" [permission]="permission"></album_infobox>
                 <category_infobox *ngIf="object.type_name==='categorys'" [object]="object"></category_infobox>
                 <person_infobox *ngIf="object.type_name==='persons'" [object]="object"></person_infobox>
                 <place_infobox *ngIf="object.type_name==='places'" [object]="object"></place_infobox>
