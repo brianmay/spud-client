@@ -4,11 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import {
     OnInit,
     Input,
-    Output,
-    EventEmitter,
-    OnChanges,
     OnDestroy,
-    SimpleChange,
     ViewChild,
     Inject,
     HostListener,
@@ -52,13 +48,11 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
     @Input() set list(list: ObjectList<GenObject>) {
         if (this._list !== list) {
             this._list = list;
-            this.selected_object = null;
         }
     }
     get list(): ObjectList<GenObject> {
         return this._list;
     }
-    public selected_object: GenObject;
 
     constructor(
         @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
@@ -82,17 +76,11 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
             .subscribe(session => {
                 if (this.session !== session) {
                     this.list = this.service.get_list(this.criteria);
-                    this.selected_object = null;
                     this.ref.markForCheck();
                 }
             });
         this.session = this.spud_service.session;
     };
-
-    public select_object(object: GenObject): void {
-        this.selected_object = object;
-        this.ref.markForCheck();
-    }
 
     ngOnDestroy(): void {
         if (this.router_subscription != null) {
@@ -112,7 +100,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
 }
 
 export abstract class BaseDetailComponent<GenObject extends BaseObject>
-        implements OnInit, OnChanges, OnDestroy {
+        implements OnInit, OnDestroy {
 
     public abstract readonly type_obj: BaseType<GenObject>;
     protected session: Session = new Session();
@@ -137,26 +125,26 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private change_subscription: Subscription;
 
     public object: GenObject;
-    @Input('object') set input_object(object: GenObject) {
-        if (this.object !== object) {
-            console.log('got input object', object);
-            this.object = object;
-        }
-    }
-
-    @Output() object_selected = new EventEmitter();
 
     @Input('list') set set_list(list: ObjectList<GenObject>) {
         if (this.list_subscription != null) {
             this.list_subscription.unsubscribe();
         }
         this.list = list;
-        this.index = null;
+        if (this.object != null) {
+            this.index = this.list.get_index(this.object.id);
+        } else {
+            this.index = null;
+        }
         this.index_complete = false;
         this.error = null;
         this.list_subscription = this.list.change.subscribe(
             (objects) => {
-                this.index = this.list.get_index(this.object.id);
+                if (this.object != null) {
+                    this.index = this.list.get_index(this.object.id);
+                } else {
+                    this.index = null;
+                }
                 this.ref.markForCheck();
             },
             (error) => this.handle_error(error),
@@ -178,10 +166,8 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     public child_list_empty = true;
     public photo_list_empty = true;
 
-    @ViewChild('details') details;
+    @ViewChild('tab') tab;
     @ViewChild('image') image;
-    @ViewChild('children') children;
-    @ViewChild('photos') photos;
 
     private is_fullscreen = false;
     @HostListener('document:fullscreenchange', ['$event.target']) fullScreen0(target) {
@@ -213,7 +199,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     ) {}
 
     ngOnInit(): void {
-        if (this.object == null) {
+        if (this.list == null && this.object == null) {
             this.router_subscription = this.route.params
                 .switchMap((params: Params): Promise<GenObject> => {
                     const id: number = params['id'];
@@ -235,8 +221,10 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         this.session = this.spud_service.session;
     }
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (this.object != null && !this.object.is_full_object) {
+    select_object(object: GenObject): void {
+        this.object = object;
+        this.tab.select('object');
+        if (object != null && !object.is_full_object) {
             console.log('got changes, need to load', this.object);
             this.service.get_object(this.object.id)
                 .then(loaded_object => this.loaded_object(loaded_object))
@@ -287,49 +275,52 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         this.child_list_empty = true;
         this.photo_list_empty = true;
 
-        const child_criteria = new Map<string, string>();
-        child_criteria.set('instance', String(object.id));
-        child_criteria.set('mode', 'children');
+        this.child_list = null;
+        this.photo_list = null;
 
-        this.child_list = this.service.get_list(child_criteria);
-        this.child_list.get_is_empty()
-            .then(empty => {
-                this.child_list_empty = empty;
-                this.ref.markForCheck();
-            })
-            .catch(error => {
-                this.child_list_empty = false;
-                this.ref.markForCheck();
-            });
+        if (object != null) {
+            const child_criteria = new Map<string, string>();
+            child_criteria.set('instance', String(object.id));
+            child_criteria.set('mode', 'children');
 
-        const photo_criteria: Map<string, string> = this.get_photo_criteria(object);
-        if (photo_criteria != null) {
-            this.photo_list = this.spud_service.get_list(new PhotoType(), photo_criteria);
-            this.photo_list.get_is_empty()
+            this.child_list = this.service.get_list(child_criteria);
+            this.child_list.get_is_empty()
                 .then(empty => {
-                    this.photo_list_empty = empty;
+                    this.child_list_empty = empty;
                     this.ref.markForCheck();
                 })
                 .catch(error => {
-                    this.photo_list_empty = false;
+                    this.child_list_empty = false;
                     this.ref.markForCheck();
                 });
+
+            const photo_criteria: Map<string, string> = this.get_photo_criteria(object);
+            if (photo_criteria != null) {
+                this.photo_list = this.spud_service.get_list(new PhotoType(), photo_criteria);
+                this.photo_list.get_is_empty()
+                    .then(empty => {
+                        this.photo_list_empty = empty;
+                        this.ref.markForCheck();
+                    })
+                    .catch(error => {
+                        this.photo_list_empty = false;
+                        this.ref.markForCheck();
+                    });
+            }
+
+            if (this.list != null) {
+                this.index = this.list.get_index(object.id);
+            } else {
+                this.index = null;
+            }
+
+            console.log('select object tab');
+            this.tab.select('object');
         } else {
-            this.photo_list = null;
+            console.log('select list tab');
+            this.tab.select('list');
         }
 
-        const pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({
-          document: null, scrollTarget: this.details.nativeElement, pageScrollOffset: 56 });
-        this.page_scroll_service.start(pageScrollInstance);
-
-        console.log('emit object_selected', object);
-        this.object_selected.emit(object);
-
-        if (this.list != null) {
-            this.index = this.list.get_index(object.id);
-        } else {
-            this.index = null;
-        }
         this.ref.markForCheck();
     }
 
@@ -364,18 +355,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     protected abstract get_photo_criteria(object: GenObject): Map<string, string>;
-
-    protected goto_children(): void {
-        const pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({
-          document: null, scrollTarget: this.children.nativeElement, pageScrollOffset: 56 });
-        this.page_scroll_service.start(pageScrollInstance);
-    }
-
-    protected goto_photos(): void {
-        const pageScrollInstance: PageScrollInstance = PageScrollInstance.newInstance({
-          document: null, scrollTarget: this.photos.nativeElement, pageScrollOffset: 56 });
-        this.page_scroll_service.start(pageScrollInstance);
-    }
 
     protected full_screen(): void {
         const fullscreenDiv = this.image.nativeElement;

@@ -1,14 +1,15 @@
-<div class="card">
+<!-- <div *ngIf="display === 'list'" class="card">
     <h2 class="card-header">{{title}}</h2>
     <div class="card-block">
-        <object_list [list]="list" [(selected_object)]="selected_object"></object_list>
+        <object_list [list]="list" [selected_object]="selected_object" (selected_objectChange)="select_object($event)"></object_list>
     </div>
-</div>
+</div> -->
 
-<div *ngIf="selected_object" >
-    <album_detail    *ngIf="selected_object.type_name==='albums'"    [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></album_detail>
-    <category_detail *ngIf="selected_object.type_name==='categorys'" [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></category_detail>
-    <person_detail   *ngIf="selected_object.type_name==='persons'"   [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></person_detail>
-    <place_detail    *ngIf="selected_object.type_name==='places'"    [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></place_detail>
-    <photo_detail    *ngIf="selected_object.type_name==='photos'"    [list]="list" [object]="selected_object" (object_selected)="select_object($event)"></photo_detail>
+<div>
+    <h1>{{title}}</h1>
+    <album_detail    *ngIf="type_obj.type_name==='albums'"    [list]="list"></album_detail>
+    <category_detail *ngIf="type_obj.type_name==='categorys'" [list]="list"></category_detail>
+    <person_detail   *ngIf="type_obj.type_name==='persons'"   [list]="list"></person_detail>
+    <place_detail    *ngIf="type_obj.type_name==='places'"    [list]="list"></place_detail>
+    <photo_detail    *ngIf="type_obj.type_name==='photos'"    [list]="list"></photo_detail>
 </div>
