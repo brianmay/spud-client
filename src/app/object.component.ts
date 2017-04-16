@@ -59,6 +59,7 @@ export class ObjectListComponent<GenObject extends BaseObject> implements OnDest
             this.list_subscription.unsubscribe();
         }
         this.list = list;
+        this.objects = list.get_objects();
         this.list_finished = false;
         this.list_subscription = this.list.change.subscribe(
             (objects) => {
@@ -74,7 +75,9 @@ export class ObjectListComponent<GenObject extends BaseObject> implements OnDest
                 this.ref.markForCheck();
             },
         );
-        this.get_next_page();
+        if (this.objects.size <= 0) {
+            this.get_next_page();
+        }
     }
     @Input() selected_object: GenObject;
     @Output() selected_objectChange = new EventEmitter();
