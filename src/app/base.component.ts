@@ -215,8 +215,8 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             .subscribe(session => {
                 if (this.session !== session && this.object != null) {
                     this.load_object(this.object.id);
-                    this.session = session;
                 }
+                this.session = session;
             });
         this.session = this.spud_service.session;
     }
