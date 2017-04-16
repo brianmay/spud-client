@@ -201,7 +201,7 @@ export class PersonObject extends BaseObject {
 }
 
 export class PersonType extends BaseType<PersonObject> {
-    constructor() { super('persons'); }
+    constructor() { super('persons', 'Person'); }
 
     object_from_streamable(streamable: s.Streamable, full_object: boolean): PersonObject {
         const obj = new PersonObject();

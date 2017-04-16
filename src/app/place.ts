@@ -67,7 +67,7 @@ export class PlaceObject extends BaseObject {
 }
 
 export class PlaceType extends BaseType<PlaceObject> {
-    constructor() { super('places'); }
+    constructor() { super('places', 'Place'); }
 
     object_from_streamable(streamable: s.Streamable, full_object: boolean): PlaceObject {
         const obj = new PlaceObject();

@@ -49,7 +49,7 @@ export class CategoryObject extends BaseObject {
 }
 
 export class CategoryType extends BaseType<CategoryObject> {
-    constructor() { super('categorys'); }
+    constructor() { super('categorys', 'Category'); }
 
     object_from_streamable(streamable: s.Streamable, full_object: boolean): CategoryObject {
         const obj = new CategoryObject();

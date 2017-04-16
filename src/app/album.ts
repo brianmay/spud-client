@@ -55,7 +55,7 @@ export class AlbumObject extends BaseObject {
 }
 
 export class AlbumType extends BaseType<AlbumObject> {
-    constructor() { super('albums'); }
+    constructor() { super('albums', 'Album'); }
 
     object_from_streamable(streamable: s.Streamable, full_object: boolean): AlbumObject {
         const obj = new AlbumObject();

@@ -193,7 +193,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
 }
 
 export class PhotoType extends BaseType<PhotoObject> {
-    constructor() { super('photos'); }
+    constructor() { super('photos', 'Photo'); }
 
     object_from_streamable(streamable: s.Streamable, full_object: boolean): PhotoObject {
         const obj = new PhotoObject();
