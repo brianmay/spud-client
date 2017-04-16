@@ -64,7 +64,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
         this.cover_photo = this;
 
         this.action = s.get_streamable_string(streamable, 'action');
-        const utc_offset: number = s.get_streamable_number(streamable, 'datetime_utc_offset');
+        const utc_offset: number = s.get_streamable_number(streamable, 'utc_offset');
         this.datetime = s.get_streamable_datetimezone(streamable, 'datetime', utc_offset);
         this.description = s.get_streamable_string(streamable, 'description');
         this.camera_make = s.get_streamable_string(streamable, 'camera_make');
@@ -148,7 +148,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
         const streamable: s.Streamable = super.get_streamable();
 
         streamable['action'] = this.action;
-        streamable['datetime_utc_offset'] = s.datetimezone_offset_to_streamable(this.datetime);
+        streamable['utc_offset'] = s.datetimezone_offset_to_streamable(this.datetime);
         streamable['datetime'] = s.datetimezone_datetime_to_streamable(this.datetime);
         streamable['description'] = this.description;
         streamable['camera_make'] = this.camera_make;
