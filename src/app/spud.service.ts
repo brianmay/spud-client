@@ -26,7 +26,7 @@ export class IndexEntry {
 }
 
 function error_to_string(error: any): string {
-    if (error.headers.get('Content-Type') === 'application/json') {
+    if (error.headers && error.headers.get('Content-Type') === 'application/json') {
         const json = error.json();
         console.error('An JSON error occurred', json.detail);
         return json.detail;
