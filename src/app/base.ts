@@ -43,6 +43,8 @@ export class BaseObject {
         streamable['title'] = this.title;
         if (this.cover_photo != null) {
             streamable['cover_photo_pk'] = this.cover_photo.id;
+        } else {
+            streamable['cover_photo_pk'] = null;
         }
         return streamable;
     }

@@ -8,9 +8,25 @@ import * as moment from 'moment';
 
 import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { AlbumObject, AlbumType } from './album';
+import { PhotoObject } from './photo';
 import { BaseService, SpudService } from './spud.service';
 import { Permission } from './session';
 
+function single_to_array<GenType> (item: GenType): GenType[] {
+    if (item) {
+        return [item];
+    } else {
+        return [];
+    }
+}
+
+function array_to_single<GenType> (array: GenType[]): GenType {
+    if (array.length > 0) {
+        return array[0];
+    } else {
+        return null;
+    }
+}
 
 @Component({
     selector: 'album_list',
@@ -104,8 +120,8 @@ export class AlbumInfoboxComponent implements OnChanges {
             revised: revised_str,
             sort_name: this.object.sort_name,
             sort_order: this.object.sort_order,
-            parent: [this.object.parent],
-            cover_photo: [this.object.cover_photo],
+            parent: single_to_array(this.object.parent),
+            cover_photo: single_to_array(this.object.cover_photo),
         });
     }
 
@@ -121,16 +137,8 @@ export class AlbumInfoboxComponent implements OnChanges {
         } else {
             new_object.revised = null;
         }
-        if (this.form_group.value.parent.length > 0) {
-            new_object.parent = this.form_group.value.parent[0];
-        } else {
-            new_object.parent = null;
-        }
-        if (this.form_group.value.cover_photo.length > 0) {
-            new_object.cover_photo = this.form_group.value.cover_photo[0];
-        } else {
-            new_object.cover_photo = null;
-        }
+        new_object.parent = array_to_single<AlbumObject>(this.form_group.value.parent);
+        new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
         this.service.set_object(new_object);
         this.edit = false;
     }
