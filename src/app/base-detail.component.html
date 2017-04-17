@@ -10,7 +10,7 @@
         </template>
     </ngb-tab>
 
-    <ngb-tab *ngIf="object" title="Selected" id="object">
+    <ngb-tab *ngIf="object" [title]="object.title" id="object">
         <template ngbTabContent>
             <div class="card-block">
                 <section class="text-center">
