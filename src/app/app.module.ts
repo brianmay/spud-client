@@ -46,6 +46,10 @@ import {
     PhotoLargeComponent
 } from './photo.component';
 
+import {
+    AlbumSelectComponent,
+} from './selectors.component';
+
 import {SpudService} from './spud.service';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -65,6 +69,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         AlbumListComponent,
         AlbumDetailComponent,
         AlbumInfoboxComponent,
+        AlbumSelectComponent,
         CategoryListComponent,
         CategoryDetailComponent,
         CategoryInfoboxComponent,

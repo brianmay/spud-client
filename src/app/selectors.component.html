@@ -1,0 +1,11 @@
+<span *ngFor="let object of objects; let i = index" >
+    {{ object.title }}
+    <button type="button" (click)="delete_item(i)" (blur)="on_blur()">X</button>
+</span>
+<input class="form-control" #search_box (keyup)="search(search_box.value)" (blur)="on_blur()" [(ngModel)]="search_text">
+<ul *ngIf="search_results?.size > 0">
+    <li *ngFor="let object of search_results" (click)="add_item(object)">
+        <photo_thumb [photo]="object.cover_photo"></photo_thumb>
+        {{object.title}}
+    </li>
+</ul>

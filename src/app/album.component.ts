@@ -58,6 +58,7 @@ export class AlbumDetailComponent extends BaseDetailComponent<AlbumObject> {
 @Component({
     selector: 'album_infobox',
     templateUrl: './album-infobox.component.html',
+    styleUrls: ['./base-infobox.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlbumInfoboxComponent implements OnChanges {
@@ -84,6 +85,7 @@ export class AlbumInfoboxComponent implements OnChanges {
             revised: ['', Validators.pattern('^([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}) [+-]?[0-9]{4}$')],
             sort_name: '',
             sort_order: '',
+            parent: null,
         });
         this.form_group.valueChanges.subscribe(() => this.ref.markForCheck());
     }
@@ -101,6 +103,7 @@ export class AlbumInfoboxComponent implements OnChanges {
             revised: revised_str,
             sort_name: this.object.sort_name,
             sort_order: this.object.sort_order,
+            parent: [this.object.parent],
         });
     }
 
@@ -116,6 +119,7 @@ export class AlbumInfoboxComponent implements OnChanges {
         } else {
             new_object.revised = null;
         }
+        new_object.parent = this.form_group.value.parent[0];
         this.service.set_object(new_object);
         this.edit = false;
     }
