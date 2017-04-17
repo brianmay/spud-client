@@ -94,9 +94,6 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
         }
     };
 
-    get permission(): Permission {
-        return this.session.permissions.get(this.type_obj.type_name);
-    }
 }
 
 export abstract class BaseDetailComponent<GenObject extends BaseObject>
