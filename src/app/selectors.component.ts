@@ -15,6 +15,7 @@ import {
 
 import { BaseObject, BaseType } from './base';
 import { AlbumObject, AlbumType } from './album';
+import { PhotoObject, PhotoType } from './photo';
 import { SpudService } from './spud.service';
 
 import { List } from 'immutable';
@@ -31,6 +32,7 @@ class BaseSelectComponent<GenObject extends BaseObject>
     public readonly type_obj: BaseType<GenObject>;
 
     @Input() multiple = false;
+    @Input() criteria: Map<string, string> = new Map();
     private objects: GenObject[];
 
     private search_text = '';
@@ -65,7 +67,7 @@ class BaseSelectComponent<GenObject extends BaseObject>
             .switchMap((term): Observable<List<GenObject>> => {
 
                 if (term) {
-                    const criteria = new Map<string, string>();
+                    const criteria = new Map<string, string>(this.criteria);
                     criteria.set('q', term);
                     // return the http search observable
                     const list = this.spud_service.get_list(this.type_obj, criteria);
@@ -138,4 +140,20 @@ class BaseSelectComponent<GenObject extends BaseObject>
 export class AlbumSelectComponent
         extends BaseSelectComponent<AlbumObject> {
     public readonly type_obj = new AlbumType();
+}
+
+@Component({
+    selector: 'photo-select',
+    templateUrl: './selectors.component.html',
+    styleUrls: ['./selectors.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [{
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PhotoSelectComponent),
+      multi: true,
+    }]
+})
+export class PhotoSelectComponent
+        extends BaseSelectComponent<PhotoObject> {
+    public readonly type_obj = new PhotoType();
 }

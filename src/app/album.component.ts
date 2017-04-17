@@ -86,6 +86,7 @@ export class AlbumInfoboxComponent implements OnChanges {
             sort_name: '',
             sort_order: '',
             parent: null,
+            cover_photo: null,
         });
         this.form_group.valueChanges.subscribe(() => this.ref.markForCheck());
     }
@@ -104,6 +105,7 @@ export class AlbumInfoboxComponent implements OnChanges {
             sort_name: this.object.sort_name,
             sort_order: this.object.sort_order,
             parent: [this.object.parent],
+            cover_photo: [this.object.cover_photo],
         });
     }
 
@@ -124,6 +126,11 @@ export class AlbumInfoboxComponent implements OnChanges {
         } else {
             new_object.parent = null;
         }
+        if (this.form_group.value.cover_photo.length > 0) {
+            new_object.cover_photo = this.form_group.value.cover_photo[0];
+        } else {
+            new_object.cover_photo = null;
+        }
         this.service.set_object(new_object);
         this.edit = false;
     }
@@ -133,5 +140,11 @@ export class AlbumInfoboxComponent implements OnChanges {
     }
     revert(): void {
         this.ngOnChanges();
+    }
+    get_cover_photo_criteria(): Map<string, string> {
+        const photo_criteria = new Map<string, string>();
+        photo_criteria.set('album', String(this.object.id));
+        photo_criteria.set('album_descendants', String(true));
+        return photo_criteria;
     }
 }

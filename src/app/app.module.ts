@@ -48,6 +48,7 @@ import {
 
 import {
     AlbumSelectComponent,
+    PhotoSelectComponent,
 } from './selectors.component';
 
 import {SpudService} from './spud.service';
@@ -85,6 +86,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         PhotoThumbComponent,
         PhotoMidComponent,
         PhotoLargeComponent,
+        PhotoSelectComponent,
     ],
     imports: [
         BrowserModule,
