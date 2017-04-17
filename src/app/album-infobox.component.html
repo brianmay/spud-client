@@ -30,27 +30,25 @@
 
 <div *ngIf="edit">
     <form [formGroup]="form_group" (ngSubmit)="submit()" novalidate>
-        <div class="form-group">
-            <label class="center-block">Title:
-                <input class="form-control" formControlName="title">
-                <div class="alert alert-danger" *ngIf="!form_group.controls['title'].valid && form_group.controls['title'].touched">You must supply a valid title.</div>
-            </label>
+        <div class="form-group" [class.has-warning]="!form_group.controls['title'].valid && form_group.controls['title'].touched">
+            <label class="form-control-label" for="title">Title:</label>
+            <input class="form-control" formControlName="title" id="title">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['title'].valid && form_group.controls['title'].touched">You must supply a valid title.</div>
         </div>
-        <div class="form-group">
-            <label class="center-block">Revised:
-                <input class="form-control" formControlName="revised">
-                <div class="alert alert-danger" *ngIf="!form_group.controls['revised'].valid && form_group.controls['revised'].touched">You must select a valid date.</div>
-            </label>
+        <div class="form-group" [class.has-warning]="!form_group.controls['revised'].valid && form_group.controls['revised'].touched">
+            <label class="form-control-label" for="revised">Revised:</label>
+            <input class="form-control" formControlName="revised" id="revised">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['revised'].valid && form_group.controls['revised'].touched">You must select a valid date.</div>
         </div>
-        <div class="form-group">
-            <label class="center-block">Sort Name:
-                <input class="form-control" formControlName="sort_name">
-                <div class="alert alert-danger" *ngIf="!form_group.controls['sort_name'].valid && form_group.controls['sort_name'].touched">You must supply a valid sort name.</div>
-            </label>
-            <label class="center-block">Sort Order:
-                <input class="form-control" formControlName="sort_order">
-                <div class="alert alert-danger" *ngIf="!form_group.controls['sort_order'].valid && form_group.controls['sort_order'].touched">You must supply a valid sort order.</div>
-            </label>
+        <div class="form-group" [class.has-warning]="!form_group.controls['sort_name'].valid && form_group.controls['sort_name'].touched">
+            <label class="form-control-label" for="sort_name">Sort Name:</label>
+            <input class="form-control" formControlName="sort_name" id="sort_name">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['sort_name'].valid && form_group.controls['sort_name'].touched">You must supply a valid sort name.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['sort_order'].valid && form_group.controls['sort_order'].touched">
+            <label class="form-control-label" for="sort_order">Sort Order:</label>
+            <input class="form-control" formControlName="sort_order" id="sort_order">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['sort_order'].valid && form_group.controls['sort_order'].touched">You must supply a valid sort order.</div>
         </div>
         <div style="margin-bottom: 1em">
             <button type="submit"

@@ -7,26 +7,26 @@
   </div>
   <div class="modal-body">
     <form #login_form="ngForm">
-      <div class="form-group">
-        <label for="username">Name</label>
+      <div class="form-group" [class.has-warning]="!username.valid && username.touched">
+        <label class="form-control-label" for="username">Name</label>
         <input type="text" class="form-control" id="username"
                required
                [(ngModel)]="unauth_username" name="username"
                #username="ngModel">
-        <div [hidden]="username.valid || username.pristine"
-             class="alert alert-danger">
+        <div *ngIf="!username.valid && username.touched"
+             class="form-control-feedback">
           Name is required
         </div>
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
+      <div class="form-group" [class.has-warning]="!password.valid && password.touched">
+        <label class="form-control-label" for="password">Password</label>
         <input type="password" class="form-control" id="password"
                required
                [(ngModel)]="unauth_password" name="password"
                (keyup.enter)="login_form.form.valid && c()"
                #password="ngModel">
-        <div [hidden]="password.valid || password.pristine"
-             class="alert alert-danger">
+        <div *ngIf="!password.valid && password.touched"
+             class="form-control-feedback">
           Password is required
         </div>
       </div>
