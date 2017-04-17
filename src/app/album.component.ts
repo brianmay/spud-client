@@ -119,7 +119,11 @@ export class AlbumInfoboxComponent implements OnChanges {
         } else {
             new_object.revised = null;
         }
-        new_object.parent = this.form_group.value.parent[0];
+        if (this.form_group.value.parent.length > 0) {
+            new_object.parent = this.form_group.value.parent[0];
+        } else {
+            new_object.parent = null;
+        }
         this.service.set_object(new_object);
         this.edit = false;
     }
