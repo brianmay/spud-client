@@ -23,36 +23,20 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
         implements OnInit, OnDestroy {
 
     public readonly type_obj: BaseType<GenObject>;
-    protected session: Session = new Session();
     protected criteria: Map<string, string> = null;
 
     protected _service: BaseService<GenObject>;
     protected get service(): BaseService<GenObject> {
         if (this._service == null) {
             this._service = this.spud_service.get_service(this.type_obj);
-            this.object_subscription = this._service.change.subscribe(object => {
-                this.list.object_changed(object);
-            });
         }
         return this._service;
     }
 
     private router_subscription: Subscription;
-    private session_subscription: Subscription;
-    private object_subscription: Subscription;
 
     @Input() title: string;
-
-    private _list: ObjectList<GenObject>;
-
-    @Input() set list(list: ObjectList<GenObject>) {
-        if (this._list !== list) {
-            this._list = list;
-        }
-    }
-    get list(): ObjectList<GenObject> {
-        return this._list;
-    }
+    @Input() list: ObjectList<GenObject>;
 
     constructor(
         @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
@@ -69,28 +53,12 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
                     this.list = this.service.get_list(this.criteria);
                     this.ref.markForCheck();
                 });
-
         }
-
-        this.session_subscription = this.spud_service.session_change
-            .subscribe(session => {
-                if (this.session !== session) {
-                    this.list = this.service.get_list(this.criteria);
-                    this.ref.markForCheck();
-                }
-            });
-        this.session = this.spud_service.session;
     };
 
     ngOnDestroy(): void {
         if (this.router_subscription != null) {
             this.router_subscription.unsubscribe();
-        }
-        if (this.session_subscription != null) {
-            this.session_subscription.unsubscribe();
-        }
-        if (this.object_subscription != null) {
-            this.object_subscription.unsubscribe();
         }
     };
 
@@ -107,8 +75,22 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         if (this._service == null) {
             this._service = this.spud_service.get_service(this.type_obj);
             this.change_subscription = this._service.change.subscribe(object => {
-               if (this.object.id === object.id) {
+               if (this.object != null && this.object.id === object.id) {
                    this.object = object;
+                   this.ref.markForCheck();
+               }
+               if (this.list != null) {
+                   this.list.object_changed(object);
+                   this.ref.markForCheck();
+               }
+            });
+            this.delete_subscription = this._service.delete.subscribe(object => {
+               if (this.object != null && this.object.id === object.id) {
+                   this.object = null;
+                   this.ref.markForCheck();
+               }
+               if (this.list != null) {
+                   this.list.object_deleted(object);
                    this.ref.markForCheck();
                }
             });
@@ -120,25 +102,30 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private session_subscription: Subscription;
     private list_subscription: Subscription;
     private change_subscription: Subscription;
+    private delete_subscription: Subscription;
 
-    public object: GenObject;
+    public _object: GenObject;
+    get object(): GenObject {
+        return this._object;
+    }
 
-    @Input('list') set set_list(list: ObjectList<GenObject>) {
+    private _list: ObjectList<GenObject>;
+    @Input('list') set list(list: ObjectList<GenObject>) {
         if (this.list_subscription != null) {
             this.list_subscription.unsubscribe();
         }
-        this.list = list;
+        this._list = list;
         if (this.object != null) {
-            this.index = this.list.get_index(this.object.id);
+            this.index = list.get_index(this.object.id);
         } else {
             this.index = null;
         }
         this.index_complete = false;
         this.error = null;
-        this.list_subscription = this.list.change.subscribe(
+        this.list_subscription = list.change.subscribe(
             (objects) => {
                 if (this.object != null) {
-                    this.index = this.list.get_index(this.object.id);
+                    this.index = list.get_index(this.object.id);
                 } else {
                     this.index = null;
                 }
@@ -151,11 +138,14 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             }
         );
     }
+    get list() {
+        return this._list;
+    }
 
-    private list: ObjectList<GenObject>;
     public index: IndexEntry;
     private index_complete = false;
     public error: string;
+    public popup_error: string;
 
     private child_list: ObjectList<GenObject>;
     private photo_list: ObjectList<PhotoObject>;
@@ -165,6 +155,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     @ViewChild('tab') tab;
     @ViewChild('image') image;
+    @ViewChild('error_element') error_element;
 
     private is_fullscreen = false;
     @HostListener('document:fullscreenchange', ['$event.target']) fullScreen0(target) {
@@ -203,7 +194,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                     return this.service.get_object(id);
                 })
                 .subscribe(
-                    loaded_object => this.loaded_object(loaded_object),
+                    loaded_object => this.object = loaded_object,
                     message => this.handle_error(message),
                 );
         }
@@ -213,6 +204,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                 if (this.session !== session && this.object != null) {
                     this.load_object(this.object.id);
                 }
+                // FIXME: reload list here
                 this.session = session;
             });
         this.session = this.spud_service.session;
@@ -224,18 +216,17 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         if (object != null && !object.is_full_object) {
             console.log('got changes, need to load', this.object);
             this.service.get_object(this.object.id)
-                .then(loaded_object => this.loaded_object(loaded_object))
+                .then(loaded_object => this.object = loaded_object)
                 .catch((message: string) => this.handle_error(message));
         } else {
             console.log('got changes, no need to load', this.object);
-            this.loaded_object(this.object);
         }
     }
 
     load_object(id: number) {
         console.log('loading with signal', id);
         this.service.get_object(id)
-            .then(loaded_object => this.loaded_object(loaded_object))
+            .then(loaded_object => this.object = loaded_object)
             .catch((message: string) => this.handle_error(message));
     }
 
@@ -259,14 +250,14 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                         return this.service.get_object(this.index.next_id);
                     }
                 })
-                .then(loaded_object => this.loaded_object(loaded_object))
+                .then(loaded_object => this.object = loaded_object)
                 .catch((message: string) => this.handle_error(message));
         }
     }
 
-    private loaded_object(object: GenObject): void {
+    set object(object: GenObject) {
         console.log('loaded', object);
-        this.object = object;
+        this._object = object;
         this.error = null;
 
         this.child_list_empty = true;
@@ -322,7 +313,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     private handle_error(message: string): void {
-        this.object = null;
         this.error = message;
         this.ref.markForCheck();
     }
@@ -380,6 +370,9 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         if (this.change_subscription != null) {
             this.change_subscription.unsubscribe();
         }
+        if (this.delete_subscription != null) {
+            this.delete_subscription.unsubscribe();
+        }
     }
 
     get permission(): Permission {
@@ -387,5 +380,32 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             return new Permission();
         }
         return this.session.permissions.get(this.type_obj.type_name);
+    }
+
+    create_object(): void {
+        const new_object: GenObject = this.type_obj.new_object(this.object);
+        this.service.create_object(new_object)
+            .then(object => {
+                this.object = object;
+                this.ref.markForCheck();
+            })
+            .catch(error => {
+                this.open_error(error);
+                this.ref.markForCheck();
+            });
+    }
+
+    delete_object(): void {
+        this.service.delete_object(this.object)
+            .catch(error => {
+                this.open_error(error);
+                this.ref.markForCheck();
+            });
+    }
+
+    private open_error(error: string): void {
+        this.popup_error = error;
+        this.error_element.show();
+        this.ref.markForCheck();
     }
 }

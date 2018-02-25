@@ -1,4 +1,12 @@
-import { Component, Input, Inject, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
+import {
+    Component,
+    Input,
+    Inject,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    OnChanges,
+    ViewChild
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -83,8 +91,11 @@ export class AlbumInfoboxComponent implements OnChanges {
 
     edit = false;
     form_group: FormGroup;
+    popup_error: string;
 
     private service: BaseService<AlbumObject>;
+
+    @ViewChild('error_element') error_element;
 
     constructor(
             private readonly spud_service: SpudService,
@@ -139,8 +150,15 @@ export class AlbumInfoboxComponent implements OnChanges {
         }
         new_object.parent = array_to_single<AlbumObject>(this.form_group.value.parent);
         new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
-        this.service.set_object(new_object);
-        this.edit = false;
+        this.service.set_object(new_object)
+            .then(object => {
+                this.edit = false;
+                this.ref.markForCheck();
+            })
+            .catch(error => {
+                console.log(error);
+                this.open_error(error);
+            });
     }
     cancel(): void {
         this.ngOnChanges();
@@ -154,5 +172,11 @@ export class AlbumInfoboxComponent implements OnChanges {
         photo_criteria.set('album', String(this.object.id));
         photo_criteria.set('album_descendants', String(true));
         return photo_criteria;
+    }
+
+    private open_error(error: string): void {
+        this.popup_error = error;
+        this.error_element.show();
+        this.ref.markForCheck();
     }
 }

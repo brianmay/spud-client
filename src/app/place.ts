@@ -74,4 +74,11 @@ export class PlaceType extends BaseType<PlaceObject> {
         obj.set_streamable(streamable, full_object);
         return obj;
     }
+
+    new_object(parent: PlaceObject): PlaceObject {
+        const obj = new PlaceObject();
+        obj.title = 'New place';
+        obj.parent = parent;
+        return obj;
+    }
 }

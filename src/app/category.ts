@@ -56,4 +56,11 @@ export class CategoryType extends BaseType<CategoryObject> {
         obj.set_streamable(streamable, full_object);
         return obj;
     }
+
+    new_object(parent: CategoryObject): CategoryObject {
+        const obj = new CategoryObject();
+        obj.title = 'New category';
+        obj.parent = parent;
+        return obj;
+    }
 }

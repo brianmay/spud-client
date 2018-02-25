@@ -5,6 +5,7 @@ import {HttpModule} from '@angular/http';
 
 import {Ng2PageScrollModule} from 'ng2-page-scroll';
 import {LocalStorageModule} from 'angular-2-local-storage';
+import {Ng2DatetimePickerModule} from 'ng2-datetime-picker';
 
 import {AppComponent} from './app.component';
 import {NavbarComponent} from './navbar.component';
@@ -51,12 +52,13 @@ import {
     PhotoSelectComponent,
 } from './selectors.component';
 
+import { ErrorComponent } from './error.component';
+
 import {SpudService} from './spud.service';
 
 import {AppRoutingModule} from './app-routing.module';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
 
 @NgModule({
     declarations: [
@@ -74,6 +76,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         CategoryListComponent,
         CategoryDetailComponent,
         CategoryInfoboxComponent,
+        ErrorComponent,
         PlaceListComponent,
         PlaceDetailComponent,
         PlaceInfoboxComponent,
@@ -100,6 +103,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
             storageType: 'localStorage'
         }),
         ReactiveFormsModule,
+        Ng2DatetimePickerModule,
     ],
     providers: [
         SpudService,

@@ -200,4 +200,10 @@ export class PhotoType extends BaseType<PhotoObject> {
         obj.set_streamable(streamable, full_object);
         return obj;
     }
+
+    new_object(parent: PhotoObject): PhotoObject {
+        const obj = new PhotoObject();
+        obj.title = 'New photo';
+        return obj;
+    }
 }

@@ -1,3 +1,5 @@
+<popup-error #error_element>{{ popup_error }}</popup-error>
+
 <table *ngIf="!edit" class="table">
     <thead>
     <tr>
@@ -9,6 +11,10 @@
     </tr>
     </thead>
     <tbody>
+    <tr>
+        <th scope="row">ID</th>
+        <td>{{ object.id }}</td>
+    </tr>
     <tr>
         <th scope="row">Revised</th>
         <td>

@@ -62,4 +62,11 @@ export class AlbumType extends BaseType<AlbumObject> {
         obj.set_streamable(streamable, full_object);
         return obj;
     }
+
+    new_object(parent: AlbumObject): AlbumObject {
+        const obj = new AlbumObject();
+        obj.title = 'New album';
+        obj.parent = parent;
+        return obj;
+    }
 }

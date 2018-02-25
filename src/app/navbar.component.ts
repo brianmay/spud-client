@@ -24,11 +24,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private router_subscription: Subscription;
     private session_subscription: Subscription;
 
-    @ViewChild('error_template') error_template;
+    @ViewChild('error_element') error_element;
 
     constructor(
         @Inject(ActivatedRoute) private readonly route: ActivatedRoute,
-        @Inject(NgbModal) private modalService: NgbModal,
+        @Inject(NgbModal) private modal_service: NgbModal,
         @Inject(SpudService) private spud_service: SpudService,
         @Inject(LocalStorageService) private local_storage_service: LocalStorageService,
         @Inject(ChangeDetectorRef) protected readonly ref: ChangeDetectorRef,
@@ -62,11 +62,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     private open_error(error: string): void {
         this.error = error;
-        this.modalService.open(this.error_template);
+        this.error_element.show();
+        this.ref.markForCheck();
     }
 
     public login(template): void {
-        this.modalService.open(template).result.then(result => {
+        this.modal_service.open(template).result.then(result => {
                 const promise = this.spud_service.login(this.unauth_username, this.unauth_password);
                 this.unauth_password = null;
                 return promise;

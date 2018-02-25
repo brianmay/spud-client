@@ -208,4 +208,16 @@ export class PersonType extends BaseType<PersonObject> {
         obj.set_streamable(streamable, full_object);
         return obj;
     }
+
+    new_object(parent: PersonObject): PersonObject {
+        const obj = new PersonObject();
+        obj.title = 'New person';
+        if (obj.sex === '1') {
+            obj.father = parent;
+        }
+        if (obj.sex === '2') {
+            obj.mother = parent;
+        }
+        return obj;
+    }
 }

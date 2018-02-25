@@ -59,4 +59,6 @@ export abstract class BaseType<GenObject extends BaseObject> {
         readonly type_name: string,
         readonly type_verbose: string) {}
     abstract object_from_streamable(streamable: s.Streamable, full_object: boolean): GenObject;
+
+    abstract new_object(parent: GenObject): GenObject;
 }

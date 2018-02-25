@@ -159,6 +159,20 @@ export class ObjectList<GenObject extends BaseObject> {
             this.change_source.next(this.objects);
         }
     }
+
+    object_deleted(object: GenObject): void {
+        const index = this.get_index(object.id);
+        if (index != null) {
+            this.objects = this.objects.delete(index.this_i);
+            // deleting item will invalidate index; reindex
+            for (let i = 0; i < this.objects.size; i++) {
+                const tmp_object = this.objects.get(i);
+                const tmp_index = this.get_index(tmp_object.id);
+                tmp_index.this_i = i;
+            }
+            this.change_source.next(this.objects);
+        }
+    }
 }
 
 export class BaseService<GenObject extends BaseObject> {
@@ -166,7 +180,7 @@ export class BaseService<GenObject extends BaseObject> {
     readonly change = this.change_source.asObservable();
 
     private delete_source = new Subject<GenObject>();
-    readonly delete = this.change_source.asObservable();
+    readonly delete = this.delete_source.asObservable();
 
     constructor(
         private readonly ssp: SpudServicePrivate,
@@ -189,6 +203,22 @@ export class BaseService<GenObject extends BaseObject> {
             });
     }
 
+    create_object(object: GenObject): Promise<GenObject> {
+        const http = this.ssp.http;
+        const options = this.ssp.get_options();
+        const streamable: s.Streamable = object.get_streamable();
+
+        return http.post(api_url + this.type_obj.type_name + '/', streamable, options)
+            .toPromise()
+            .then(response => {
+                const new_object = this.type_obj.object_from_streamable(response.json(), true);
+                return new_object;
+            })
+            .catch(error => {
+                return Promise.reject(error_to_string(error));
+            });
+    }
+
     set_object(object: GenObject): Promise<GenObject> {
         const http = this.ssp.http;
         const options = this.ssp.get_options();
@@ -201,6 +231,20 @@ export class BaseService<GenObject extends BaseObject> {
                 const new_object = this.type_obj.object_from_streamable(response.json(), true);
                 this.change_source.next(new_object);
                 return new_object;
+            })
+            .catch(error => {
+                return Promise.reject(error_to_string(error));
+            });
+    }
+
+    delete_object(object: GenObject): Promise<void> {
+        const http = this.ssp.http;
+        const options = this.ssp.get_options();
+
+        return http.delete(api_url + this.type_obj.type_name + '/' + object.id + '/', options)
+            .toPromise()
+            .then(response => {
+                this.delete_source.next(object);
             })
             .catch(error => {
                 return Promise.reject(error_to_string(error));
