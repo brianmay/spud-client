@@ -30,7 +30,7 @@
                         <button type="button" (click)="delete_object()" class="btn btn-secondary" *ngIf="permission.can_delete">Delete</button>
                     </p>
                     <album_infobox *ngIf="type_obj.type_name==='albums'" [object]="object" [permission]="permission"></album_infobox>
-                    <category_infobox *ngIf="type_obj.type_name==='categorys'" [object]="object"></category_infobox>
+                    <category_infobox *ngIf="type_obj.type_name==='categorys'" [object]="object" [permission]="permission"></category_infobox>
                     <person_infobox *ngIf="type_obj.type_name==='persons'" [object]="object"></person_infobox>
                     <place_infobox *ngIf="type_obj.type_name==='places'" [object]="object"></place_infobox>
                     <photo_infobox *ngIf="type_obj.type_name==='photos'" [object]="object"></photo_infobox>

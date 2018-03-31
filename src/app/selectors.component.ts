@@ -15,6 +15,7 @@ import {
 
 import { BaseObject, BaseType } from './base';
 import { AlbumObject, AlbumType } from './album';
+import { CategoryObject, CategoryType } from './category';
 import { PhotoObject, PhotoType } from './photo';
 import { SpudService } from './spud.service';
 
@@ -140,6 +141,22 @@ class BaseSelectComponent<GenObject extends BaseObject>
 export class AlbumSelectComponent
         extends BaseSelectComponent<AlbumObject> {
     public readonly type_obj = new AlbumType();
+}
+
+@Component({
+    selector: 'category-select',
+    templateUrl: './selectors.component.html',
+    styleUrls: ['./selectors.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [{
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CategorySelectComponent),
+      multi: true,
+    }]
+})
+export class CategorySelectComponent
+        extends BaseSelectComponent<CategoryObject> {
+    public readonly type_obj = new CategoryType();
 }
 
 @Component({

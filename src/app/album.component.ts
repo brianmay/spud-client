@@ -18,22 +18,7 @@ import { AlbumObject, AlbumType } from './album';
 import { PhotoObject } from './photo';
 import { BaseService, SpudService } from './spud.service';
 import { Permission } from './session';
-
-function single_to_array<GenType> (item: GenType): GenType[] {
-    if (item) {
-        return [item];
-    } else {
-        return [];
-    }
-}
-
-function array_to_single<GenType> (array: GenType[]): GenType {
-    if (array.length > 0) {
-        return array[0];
-    } else {
-        return null;
-    }
-}
+import { array_to_single, single_to_array } from'./utils';
 
 @Component({
     selector: 'album_list',
