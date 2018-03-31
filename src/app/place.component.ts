@@ -1,6 +1,5 @@
 import { Component, Input, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PageScrollService } from 'ng2-page-scroll';
 
 import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { PlaceObject, PlaceType } from './place';
@@ -35,10 +34,9 @@ export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
     constructor(
         @Inject(ActivatedRoute) route: ActivatedRoute,
         @Inject(SpudService) spud_service: SpudService,
-        @Inject(PageScrollService) page_scroll_service: PageScrollService,
         @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
     ) {
-        super(route, spud_service, page_scroll_service, ref);
+        super(route, spud_service, ref);
     }
 
     protected get_photo_criteria(object: PlaceObject): Map<string, string> {

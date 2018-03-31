@@ -12,8 +12,6 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
-
 import { Permission, Session } from './session';
 import { BaseObject, BaseType } from './base';
 import { PhotoObject, PhotoType } from './photo';
@@ -68,6 +66,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         implements OnInit, OnDestroy {
 
     public abstract readonly type_obj: BaseType<GenObject>;
+    public active_tab = 'list';
     protected session: Session = new Session();
 
     protected _service: BaseService<GenObject>;
@@ -137,6 +136,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                 this.ref.markForCheck();
             }
         );
+        this.select_list_tab();
     }
     get list() {
         return this._list;
@@ -159,22 +159,18 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     private is_fullscreen = false;
     @HostListener('document:fullscreenchange', ['$event.target']) fullScreen0(target) {
-        console.log('meow0', target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.fullscreenElement != null;
         this.ref.markForCheck();
     }
     @HostListener('document:mozfullscreenchange', ['$event.target']) fullScreen1(target) {
-        console.log('meow1', target, target.mozFullScreenElement);
         this.is_fullscreen = target.mozFullScreenElement != null;
         this.ref.markForCheck();
     }
     @HostListener('document:webkitfullscreenchange', ['$event.target']) fullScreen2(target) {
-        console.log('meow2', target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.webkitFullscreenElement != null;
         this.ref.markForCheck();
     }
     @HostListener('document:msfullscreenchange', ['$event.target']) fullScreen3(target) {
-        console.log('meow3', target, target.ownerDocument);
         this.is_fullscreen = target.ownerDocument.msFullscreenElement != null;
         this.ref.markForCheck();
     }
@@ -182,7 +178,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     constructor(
         @Inject(ActivatedRoute) protected readonly route: ActivatedRoute,
         @Inject(SpudService) protected readonly spud_service: SpudService,
-        @Inject(PageScrollService) protected readonly page_scroll_service: PageScrollService,
         @Inject(ChangeDetectorRef) protected readonly ref: ChangeDetectorRef,
     ) {}
 
@@ -210,9 +205,25 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         this.session = this.spud_service.session;
     }
 
+    select_list_tab(): void {
+        this.active_tab='list';
+    }
+
+    select_object_tab(): void {
+        this.active_tab='object';
+    }
+
+    select_photos_tab(): void {
+        this.active_tab='photos';
+    }
+
+    select_children_tab(): void {
+        this.active_tab='children';
+    }
+
     select_object(object: GenObject): void {
         this.object = object;
-        this.tab.select('object');
+        // this.select_object_tab();
         if (object != null && !object.is_full_object) {
             console.log('got changes, need to load', this.object);
             this.service.get_object(this.object.id)
@@ -303,10 +314,10 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
             }
 
             console.log('select object tab');
-            this.tab.select('object');
+            this.select_object_tab();
         } else {
             console.log('select list tab');
-            this.tab.select('list');
+            this.select_list_tab()
         }
 
         this.ref.markForCheck();

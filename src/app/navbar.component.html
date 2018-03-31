@@ -39,11 +39,11 @@
 
 <popup-error #error_element>{{ error }}</popup-error>
 
-<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="is_collapsed = !is_collapsed" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand" href="#">SPUD</a>
+  <button class="navbar-toggler collapsed" type="button" (click)="is_collapsed = !is_collapsed" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <a class="navbar-brand" href="#">SPUD</a>
   <div class="navbar-collapse" [ngbCollapse]="is_collapsed" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active">
@@ -58,17 +58,19 @@
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/places">Places</a>
       </li>
-      <li class="nav-item dropdown" ngbDropdown>
-        <span class="nav-link dropdown-toggle" ngbDropdownToggle>
+      <li class="nav-item dropdown" dropdown>
+        <span class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" dropdownToggle>
             {{ session.full_name }}
         </span>
-        <div *ngIf="!session.logged_in" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" (click)="login(login_template)">Login</a>
-          <a class="dropdown-item" (click)="check_session()">Buy Fish &amp; chips</a>
-        </div>
-        <div *ngIf="session.logged_in" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" (click)="logout()">Logout</a>
-          <a class="dropdown-item" (click)="check_session()">Buy Fish &amp; chips</a>
+        <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <ng-template [ngIf]="session.logged_in" [ngIfElse]="loggedOut">
+              <a class="dropdown-item" (click)="logout()">Logout</a>
+              <a class="dropdown-item" (click)="check_session()">Buy Fish &amp; chips</a>
+          </ng-template>
+          <ng-template #loggedOut>
+              <a class="dropdown-item" (click)="login(login_template)">Login</a>
+              <a class="dropdown-item" (click)="check_session()">Buy Fish &amp; chips</a>
+          </ng-template>
         </div>
       </li>
     </ul>

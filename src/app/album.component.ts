@@ -11,7 +11,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { cloneDeep } from 'lodash';
-import { PageScrollService } from 'ng2-page-scroll';
 import * as moment from 'moment';
 
 import { BaseListComponent, BaseDetailComponent } from './base.component';
@@ -65,10 +64,9 @@ export class AlbumDetailComponent extends BaseDetailComponent<AlbumObject> {
     constructor(
         @Inject(ActivatedRoute) route: ActivatedRoute,
         @Inject(SpudService) spud_service: SpudService,
-        @Inject(PageScrollService) page_scroll_service: PageScrollService,
         @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
     ) {
-        super(route, spud_service, page_scroll_service, ref);
+        super(route, spud_service, ref);
     }
 
     protected get_photo_criteria(object: AlbumObject): Map<string, string> {

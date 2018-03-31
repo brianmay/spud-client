@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 
-import {Ng2PageScrollModule} from 'ng2-page-scroll';
 import {LocalStorageModule} from 'angular-2-local-storage';
 import {Ng2DatetimePickerModule} from 'ng2-datetime-picker';
 
@@ -59,6 +58,8 @@ import {SpudService} from './spud.service';
 import {AppRoutingModule} from './app-routing.module';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
     declarations: [
@@ -96,8 +97,9 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         FormsModule,
         HttpModule,
         NgbModule.forRoot(),
+        BsDropdownModule.forRoot(),
+        TabsModule.forRoot(),
         AppRoutingModule,
-        Ng2PageScrollModule.forRoot(),
         LocalStorageModule.withConfig({
             prefix: 'spud',
             storageType: 'localStorage'
