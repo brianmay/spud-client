@@ -37,6 +37,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
     aperture: string;
     iso_equiv: string;
     metering_mode: string;
+    level: string;
 
     albums: Array<AlbumObject>;
     categorys: Array<CategoryObject>;
@@ -76,6 +77,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
         this.iso_equiv = s.get_streamable_string(streamable, 'iso_equiv');
         this.metering_mode = s.get_streamable_string(streamable, 'metering_mode');
         this.orig_url = s.get_streamable_string(streamable, 'orig_url');
+        this.level = s.get_streamable_string(streamable, 'level');
 
         const streamable_albums = s.get_streamable_array(streamable, 'albums');
         this.albums = [];
@@ -159,6 +161,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
         streamable['aperture'] = this.aperture;
         streamable['iso_equiv'] = this.iso_equiv;
         streamable['metering_mode'] = this.metering_mode;
+        streamable['level'] = this.level;
 
         const streamable_albums: s.Streamable = [];
         for (let i = 0; i < this.albums.length; i++) {

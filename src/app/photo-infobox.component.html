@@ -1,8 +1,23 @@
-<table class="table">
+<popup-error #error_element>{{ popup_error }}</popup-error>
+
+<table *ngIf="!edit" class="table">
+    <thead>
+        <tr>
+            <th>Actions</th>
+            <td>
+                <button *ngIf="permission.can_change" (click)="edit=true" class="btn btn-secondary" type="button">Edit
+                </button>
+            </td>
+        </tr>
+    </thead>
     <tbody>
         <tr>
             <th scope="row">Action</th>
             <td>{{ object.action }}</td>
+        </tr>
+        <tr>
+            <th scope="row">ID</th>
+            <td>{{ object.id }}</td>
         </tr>
         <tr>
             <th scope="row">Datetime</th>
@@ -60,3 +75,28 @@
         </tr>
     </tbody>
 </table>
+
+<div *ngIf="edit">
+    <form [formGroup]="form_group" (ngSubmit)="submit()" novalidate>
+        <div class="form-group" [class.has-warning]="!form_group.controls['title'].valid && form_group.controls['title'].touched">
+            <label class="form-control-label" for="title">Title:</label>
+            <input class="form-control" formControlName="title" id="title">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['title'].valid && form_group.controls['title'].touched">You must supply a valid title.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['description'].valid && form_group.controls['description'].touched">
+            <label class="form-control-label" for="description">Description:</label>
+            <textarea class="form-control" formControlName="description" id="description"></textarea>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['description'].valid && form_group.controls['description'].touched">You must supply a valid description.</div>
+        </div>
+        <div style="margin-bottom: 1em">
+            <button type="submit"
+                    [disabled]="form_group.pristine || !form_group.valid" class="btn btn-success">Save
+            </button> &nbsp;
+            <button type="reset" (click)="revert()"
+                    [disabled]="form_group.pristine" class="btn btn-danger">Revert
+            </button> &nbsp;
+            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel
+            </button>
+        </div>
+    </form>
+</div>

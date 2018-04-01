@@ -21,7 +21,7 @@
                         <photo_large *ngIf="is_fullscreen" [photo]="object.cover_photo"></photo_large>
                         <button type="button" class="btn btn-secondary btn-next" *ngIf="has_next_page()" (click)="load_next_object()">&gt;&gt;</button>
                     </div>
-                    <p class="lead text-muted">{{object.description}}</p>
+                    <markdown>{{object.description}}</markdown>
                     <p>
                         <button type="button" (click)="select_children_tab()" class="btn btn-secondary" *ngIf="!child_list_empty">Children</button>
                         <button type="button" (click)="select_photos_tab()" class="btn btn-secondary" *ngIf="!photo_list_empty">Photos</button>
@@ -33,7 +33,7 @@
                     <category_infobox *ngIf="type_obj.type_name==='categorys'" [object]="object" [permission]="permission"></category_infobox>
                     <person_infobox *ngIf="type_obj.type_name==='persons'" [object]="object" [permission]="permission"></person_infobox>
                     <place_infobox *ngIf="type_obj.type_name==='places'" [object]="object" [permission]="permission"></place_infobox>
-                    <photo_infobox *ngIf="type_obj.type_name==='photos'" [object]="object"></photo_infobox>
+                    <photo_infobox *ngIf="type_obj.type_name==='photos'" [object]="object"[permission]="permission"></photo_infobox>
                 </div>
             </section>
         </div>
