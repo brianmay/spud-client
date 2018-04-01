@@ -1,97 +1,105 @@
-<table class="table">
-    <tbody>
+<popup-error #error_element>{{ popup_error }}</popup-error>
 
+<table *ngIf="!edit" class="table">
+    <thead>
         <tr>
-            <th scope="row">Full Name</th>
-            <td>{{object.first_name}} {{object.middle_name}} {{object.last_name}}</td>
+            <th>Actions</th>
+            <td>
+                <button *ngIf="permission.can_change" (click)="edit=true" class="btn btn-secondary" type="button">Edit
+                </button>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">ID</th>
+            <td>{{ object.id }}</td>
         </tr>
         <tr>
+            <th scope="row">Full Name</th>
+            <td>{{object.title}}</td>
+        </tr>
+        <tr *ngIf="object.called">
             <th scope="row">Called</th>
             <td>{{object.called}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="object.sex">
             <th scope="row">Sex</th>
             <td>{{object.sex}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="object.email">
             <th scope="row">E-Mail</th>
             <td>{{object.email}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="object.dob">
             <th scope="row">Date of Birth</th>
             <td>{{object.dob}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="object.dod">
             <th scope="row">Date of Death</th>
             <td>{{object.dod}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="object.notes">
             <th scope="row">Notes</th>
             <td>{{ object.notes }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="object.work">
             <th scope="row">Work</th>
             <td><object_link [object]="object.work"></object_link></td>
         </tr>
-        <tr>
+        <tr *ngIf="object.home">
             <th scope="row">Home</th>
             <td><object_link [object]="object.home"></object_link></td>
         </tr>
-        <tr>
+        <tr *ngIf="object.mother">
             <th scope="row">Mother</th>
             <td><object_link [object]="object.mother"></object_link></td>
         </tr>
-        <tr>
+        <tr *ngIf="object.father">
             <th scope="row">Father</th>
             <td><object_link [object]="object.father"></object_link></td>
         </tr>
-        <tr>
+        <tr *ngIf="object.spouse">
             <th scope="row">Spouse</th>
             <td><object_link [object]="object.spouse"></object_link></td>
         </tr>
-        <tr>
+        <tr *ngIf="object.grandparents.length">
             <th scope="row">Grandparents</th>
             <td>
                 <object_array [list]="object.grandparents"></object_array>
             </td>
         </tr>
-        <tr>
+        <tr *ngIf="object.uncles_aunts.length">
             <th scope="row">Uncles/Aunts</th>
             <td>
                 <object_array [list]="object.uncles_aunts"></object_array>
             </td>
         </tr>
-        <tr>
-            <th scope="row">Parents</th>
-            <td>
-                <object_array [list]="object.parents"></object_array>
-            </td>
-        </tr>
-        <tr>
+        <tr *ngIf="object.siblings.length">
             <th scope="row">Siblings</th>
             <td>
                 <object_array [list]="object.siblings"></object_array>
             </td>
         </tr>
-        <tr>
+        <tr *ngIf="object.cousins.length">
             <th scope="row">Cousins</th>
             <td>
                 <object_array [list]="object.cousins"></object_array>
             </td>
         </tr>
-        <tr>
+        <tr *ngIf="object.children.length">
             <th scope="row">Children</th>
             <td>
                 <object_array [list]="object.children"></object_array>
             </td>
         </tr>
-        <tr>
+        <tr *ngIf="object.nephews_nieces.length">
             <th scope="row">Nephews/Nieces</th>
             <td>
                 <object_array [list]="object.nephews_nieces"></object_array>
             </td>
         </tr>
-        <tr>
+        <tr *ngIf="object.grandchildren.length">
             <th scope="row">Grandchildren</th>
             <td>
                 <object_array [list]="object.grandchildren"></object_array>
@@ -99,3 +107,93 @@
         </tr>
     </tbody>
 </table>
+
+<div *ngIf="edit">
+    <form [formGroup]="form_group" (ngSubmit)="submit()" novalidate>
+        <div class="form-group" [class.has-warning]="!form_group.controls['cover_photo'].valid && form_group.controls['cover_photo'].touched">
+            <label class="form-control-label" for="cover_photo">Cover Photo:</label>
+            <photo-select class="form-control" formControlName="cover_photo" id="cover_photo" [criteria]="get_cover_photo_criteria()"></photo-select>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['cover_photo'].valid && form_group.controls['cover_photo'].touched">You must select a valid mother.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['first_name'].valid && form_group.controls['first_name'].touched">
+            <label class="form-control-label" for="first_name">First Name:</label>
+            <input class="form-control" formControlName="first_name" id="first_name">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['first_name'].valid && form_group.controls['first_name'].touched">You must supply a valid first name.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['middle_name'].valid && form_group.controls['middle_name'].touched">
+            <label class="form-control-label" for="middle_name">Middle Name:</label>
+            <input class="form-control" formControlName="middle_name" id="middle_name">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['middle_name'].valid && form_group.controls['middle_name'].touched">You must supply a valid middle name.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['last_name'].valid && form_group.controls['last_name'].touched">
+            <label class="form-control-label" for="last_name">Last Name:</label>
+            <input class="form-control" formControlName="last_name" id="last_name">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['last_name'].valid && form_group.controls['last_name'].touched">You must supply a valid last name.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['called'].valid && form_group.controls['called'].touched">
+            <label class="form-control-label" for="called">Called:</label>
+            <input class="form-control" formControlName="called" id="called">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['called'].valid && form_group.controls['called'].touched">You must supply a valid called.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['sex'].valid && form_group.controls['sex'].touched">
+            <label class="form-control-label" for="sex">Sex:</label>
+            <input class="form-control" formControlName="sex" id="sex">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['sex'].valid && form_group.controls['sex'].touched">You must supply a valid sex.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['email'].valid && form_group.controls['email'].touched">
+            <label class="form-control-label" for="email">E-Mail:</label>
+            <input class="form-control" formControlName="email" id="email">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['email'].valid && form_group.controls['email'].touched">You must supply a valid e-mail.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['dob'].valid && form_group.controls['dob'].touched">
+            <label class="form-control-label" for="dob">Date of Birth:</label>
+            <input class="form-control" formControlName="dob" id="dob">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['dob'].valid && form_group.controls['dob'].touched">You must supply a valid date of birth.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['dod'].valid && form_group.controls['dod'].touched">
+            <label class="form-control-label" for="dod">Date Of Death:</label>
+            <input class="form-control" formControlName="dod" id="dod">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['dod'].valid && form_group.controls['dod'].touched">You must supply a date of death.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['notes'].valid && form_group.controls['notes'].touched">
+            <label class="form-control-label" for="notes">Notes:</label>
+            <input class="form-control" formControlName="notes" id="notes">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['notes'].valid && form_group.controls['notes'].touched">You must supply a valid notes.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['mother'].valid && form_group.controls['mother'].touched">
+            <label class="form-control-label" for="mother">Mother:</label>
+            <person-select class="form-control" formControlName="mother" id="mother"></person-select>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['mother'].valid && form_group.controls['mother'].touched">You must select a valid mother.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['father'].valid && form_group.controls['father'].touched">
+            <label class="form-control-label" for="father">Father:</label>
+            <person-select class="form-control" formControlName="father" id="father"></person-select>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['father'].valid && form_group.controls['father'].touched">You must select a valid father.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['spouse'].valid && form_group.controls['spouse'].touched">
+            <label class="form-control-label" for="spouse">Spouse:</label>
+            <person-select class="form-control" formControlName="spouse" id="spouse"></person-select>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['spouse'].valid && form_group.controls['spouse'].touched">You must select a valid father.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['work'].valid && form_group.controls['work'].touched">
+            <label class="form-control-label" for="work">Work:</label>
+            <place-select class="form-control" formControlName="work" id="work"></place-select>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['work'].valid && form_group.controls['work'].touched">You must select a valid work.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['home'].valid && form_group.controls['home'].touched">
+            <label class="form-control-label" for="home">Home:</label>
+            <place-select class="form-control" formControlName="home" id="home"></place-select>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['home'].valid && form_group.controls['home'].touched">You must select a valid home.</div>
+        </div>
+        <div style="margin-bottom: 1em">
+            <button type="submit"
+                    [disabled]="form_group.pristine || !form_group.valid" class="btn btn-success">Save
+            </button> &nbsp;
+            <button type="reset" (click)="revert()"
+                    [disabled]="form_group.pristine" class="btn btn-danger">Revert
+            </button> &nbsp;
+            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel
+            </button>
+        </div>
+    </form>
+</div>

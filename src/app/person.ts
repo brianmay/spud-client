@@ -68,7 +68,7 @@ export class PersonObject extends BaseObject {
         const streamable_father = s.get_streamable_item(streamable, 'father');
         if (streamable_father != null) {
             this.father = new PersonObject();
-            this.father.set_streamable(streamable_mother, false);
+            this.father.set_streamable(streamable_father, false);
         } else {
             this.father = null;
         }
@@ -76,7 +76,7 @@ export class PersonObject extends BaseObject {
         const streamable_spouse = s.get_streamable_item(streamable, 'spouse');
         if (streamable_spouse != null) {
             this.spouse = new PersonObject();
-            this.spouse.set_streamable(streamable_mother, false);
+            this.spouse.set_streamable(streamable_spouse, false);
         } else {
             this.spouse = null;
         }
