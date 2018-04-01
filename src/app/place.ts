@@ -64,6 +64,28 @@ export class PlaceObject extends BaseObject {
         }
         return streamable;
     }
+
+    get printable_address(): Array<string> {
+        let result = Array<string>();
+        if (this.address) {
+            result.push(this.address);
+        }
+        if (this.address2) {
+            result.push(this.address2);
+        }
+        if (this.state) {
+            result.push(this.state);
+        }
+        if (this.country && this.postcode) {
+            result.push(this.country + " " + this.postcode);
+        } else if (this.country) {
+            result.push(this.country);
+        }  else if (this.postcode) {
+            result.push(this.postcode);
+        }
+
+        return result;
+    }
 }
 
 export class PlaceType extends BaseType<PlaceObject> {

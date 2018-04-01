@@ -1,28 +1,27 @@
-<table class="table">
+<popup-error #error_element>{{ popup_error }}</popup-error>
+
+<table *ngIf="!edit" class="table">
+    <thead>
+    <tr>
+        <th>Actions</th>
+        <td>
+            <button *ngIf="permission.can_change" (click)="edit=true" class="btn btn-secondary" type="button">Edit
+            </button>
+        </td>
+    </tr>
+    </thead>
     <tbody>
         <tr>
+            <th scope="row">ID</th>
+            <td>{{ object.id }}</td>
+        </tr>
+        <tr>
             <th scope="row">Address</th>
-            <td>{{object.address}},<br/>{{object.address2}}</td>
-        </tr>
-        <tr>
-            <th scope="row">City</th>
-            <td>{{object.city}}</td>
-        </tr>
-        <tr>
-            <th scope="row">State</th>
-            <td>{{object.state}}</td>
-        </tr>
-        <tr>
-            <th scope="row">Country</th>
-            <td>{{object.country}}</td>
-        </tr>
-        <tr>
-            <th scope="row">Postcode</th>
-            <td>{{object.postcode}}</td>
-        </tr>
-        <tr>
-            <th scope="row">URL</th>
-            <td><a href="{{object.url}}">{{object.urldesc}}</a></td>
+            <td>
+                <div *ngFor="let line of object.printable_address">
+                    {{line}}<br>
+                </div>
+            </td>
         </tr>
         <tr>
             <th scope="row">Notes</th>
@@ -36,3 +35,78 @@
         </tr>
     </tbody>
 </table>
+
+<div *ngIf="edit">
+    <form [formGroup]="form_group" (ngSubmit)="submit()" novalidate>
+        <div class="form-group" [class.has-warning]="!form_group.controls['title'].valid && form_group.controls['title'].touched">
+            <label class="form-control-label" for="title">Title:</label>
+            <input class="form-control" formControlName="title" id="title">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['title'].valid && form_group.controls['title'].touched">You must supply a valid title.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['cover_photo'].valid && form_group.controls['cover_photo'].touched">
+            <label class="form-control-label" for="cover_photo">Cover Photo:</label>
+            <photo-select class="form-control" formControlName="cover_photo" id="cover_photo" [criteria]="get_cover_photo_criteria()"></photo-select>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['cover_photo'].valid && form_group.controls['cover_photo'].touched">You must select a valid parent.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['parent'].valid && form_group.controls['parent'].touched">
+            <label class="form-control-label" for="parent">Parent:</label>
+            <category-select class="form-control" formControlName="parent" id="parent"></category-select>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['parent'].valid && form_group.controls['parent'].touched">You must select a valid parent.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['address'].valid && form_group.controls['address'].touched">
+            <label class="form-control-label" for="address">Address:</label>
+            <input class="form-control" formControlName="address" id="address">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['address'].valid && form_group.controls['address'].touched">You must supply a valid address.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['address2'].valid && form_group.controls['address2'].touched">
+            <label class="form-control-label" for="address2">Address line 2:</label>
+            <input class="form-control" formControlName="address2" id="address2">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['address2'].valid && form_group.controls['address2'].touched">You must supply a valid address2.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['city'].valid && form_group.controls['city'].touched">
+            <label class="form-control-label" for="city">City:</label>
+            <input class="form-control" formControlName="city" id="city">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['title'].valid && form_group.controls['title'].touched">You must supply a valid title.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['state'].valid && form_group.controls['state'].touched">
+            <label class="form-control-label" for="state">State:</label>
+            <input class="form-control" formControlName="state" id="state">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['state'].valid && form_group.controls['state'].touched">You must supply a valid state.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['country'].valid && form_group.controls['country'].touched">
+            <label class="form-control-label" for="country">Country:</label>
+            <input class="form-control" formControlName="country" id="country">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['country'].valid && form_group.controls['country'].touched">You must supply a valid country.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['postcode'].valid && form_group.controls['postcode'].touched">
+            <label class="form-control-label" for="postcode">Postcode:</label>
+            <input class="form-control" formControlName="postcode" id="postcode">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['postcode'].valid && form_group.controls['postcode'].touched">You must supply a valid postcode.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['url'].valid && form_group.controls['url'].touched">
+            <label class="form-control-label" for="url">Url:</label>
+            <input class="form-control" formControlName="url" id="url">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['url'].valid && form_group.controls['url'].touched">You must supply a valid url.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['urldesc'].valid && form_group.controls['urldesc'].touched">
+            <label class="form-control-label" for="urldesc">Url Desc:</label>
+            <input class="form-control" formControlName="urldesc" id="urldesc">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['urldesc'].valid && form_group.controls['urldesc'].touched">You must supply a valid urldesc.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['notes'].valid && form_group.controls['notes'].touched">
+            <label class="form-control-label" for="notes">Notes:</label>
+            <input class="form-control" formControlName="notes" id="notes">
+            <div class="form-control-feedback" *ngIf="!form_group.controls['notes'].valid && form_group.controls['notes'].touched">You must supply a valid notes.</div>
+        </div>
+        <div style="margin-bottom: 1em">
+            <button type="submit"
+                    [disabled]="form_group.pristine || !form_group.valid" class="btn btn-success">Save
+            </button> &nbsp;
+            <button type="reset" (click)="revert()"
+                    [disabled]="form_group.pristine" class="btn btn-danger">Revert
+            </button> &nbsp;
+            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel
+            </button>
+        </div>
+    </form>
+</div>

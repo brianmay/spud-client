@@ -49,6 +49,8 @@ import {
 import {
     AlbumSelectComponent,
     CategorySelectComponent,
+    PersonSelectComponent,
+    PlaceSelectComponent,
     PhotoSelectComponent,
 } from './selectors.component';
 
@@ -80,12 +82,14 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
         CategoryInfoboxComponent,
         CategorySelectComponent,
         ErrorComponent,
-        PlaceListComponent,
-        PlaceDetailComponent,
-        PlaceInfoboxComponent,
         PersonListComponent,
         PersonDetailComponent,
         PersonInfoboxComponent,
+        PersonSelectComponent,
+        PlaceListComponent,
+        PlaceDetailComponent,
+        PlaceInfoboxComponent,
+        PlaceSelectComponent,
         PhotoListComponent,
         PhotoDetailComponent,
         PhotoInfoboxComponent,

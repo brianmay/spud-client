@@ -16,6 +16,8 @@ import {
 import { BaseObject, BaseType } from './base';
 import { AlbumObject, AlbumType } from './album';
 import { CategoryObject, CategoryType } from './category';
+import { PersonObject, PersonType } from './person';
+import { PlaceObject, PlaceType } from './place';
 import { PhotoObject, PhotoType } from './photo';
 import { SpudService } from './spud.service';
 
@@ -157,6 +159,38 @@ export class AlbumSelectComponent
 export class CategorySelectComponent
         extends BaseSelectComponent<CategoryObject> {
     public readonly type_obj = new CategoryType();
+}
+
+@Component({
+    selector: 'person-select',
+    templateUrl: './selectors.component.html',
+    styleUrls: ['./selectors.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [{
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PersonSelectComponent),
+      multi: true,
+    }]
+})
+export class PersonSelectComponent
+        extends BaseSelectComponent<PersonObject> {
+    public readonly type_obj = new PersonType();
+}
+
+@Component({
+    selector: 'place-select',
+    templateUrl: './selectors.component.html',
+    styleUrls: ['./selectors.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [{
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PlaceSelectComponent),
+      multi: true,
+    }]
+})
+export class PlaceSelectComponent
+        extends BaseSelectComponent<PlaceObject> {
+    public readonly type_obj = new PlaceType();
 }
 
 @Component({
