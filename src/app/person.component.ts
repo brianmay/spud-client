@@ -86,6 +86,8 @@ export class PersonInfoboxComponent implements OnChanges {
             middle_name: null,
             last_name: null,
             called: null,
+            description: null,
+            cover_photo: null,
             sex: null,
             email: null,
             dob: ['', Validators.pattern('^([0-9]{4}-[0-9]{2}-[0-9]{2})$')],
@@ -96,7 +98,6 @@ export class PersonInfoboxComponent implements OnChanges {
             spouse: null,
             work: null,
             home: null,
-            cover_photo: null,
         });
         this.form_group.valueChanges.subscribe(() => this.ref.markForCheck());
     }
@@ -107,6 +108,8 @@ export class PersonInfoboxComponent implements OnChanges {
             middle_name: this.object.middle_name,
             last_name: this.object.last_name,
             called: this.object.called,
+            description: this.object.description,
+            cover_photo: single_to_array(this.object.cover_photo),
             sex: this.object.sex,
             email: this.object.email,
             dob: this.object.dob,
@@ -117,7 +120,6 @@ export class PersonInfoboxComponent implements OnChanges {
             spouse: single_to_array(this.object.spouse),
             work: single_to_array(this.object.work),
             home: single_to_array(this.object.home),
-            cover_photo: single_to_array(this.object.cover_photo),
         });
     }
 
@@ -127,6 +129,8 @@ export class PersonInfoboxComponent implements OnChanges {
         new_object.middle_name = this.form_group.value.middle_name;
         new_object.last_name = this.form_group.value.last_name;
         new_object.called = this.form_group.value.called;
+        new_object.description = this.form_group.value.description;
+        new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
         new_object.sex = this.form_group.value.sex;
         new_object.email = this.form_group.value.email;
         if (this.form_group.value.dob) {
@@ -145,7 +149,6 @@ export class PersonInfoboxComponent implements OnChanges {
         new_object.spouse = array_to_single<PersonObject>(this.form_group.value.spouse);
         new_object.work = array_to_single<PlaceObject>(this.form_group.value.work);
         new_object.home = array_to_single<PlaceObject>(this.form_group.value.home);
-        new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
         this.service.set_object(new_object)
             .then(object => {
                 this.edit = false;

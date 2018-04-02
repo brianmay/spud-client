@@ -82,6 +82,7 @@ export class PlaceInfoboxComponent implements OnChanges {
     private create_form(): void {
         this.form_group = this.fb.group({
             title: ['', Validators.required ],
+            description: null,
             parent: null,
             cover_photo: null,
             address: null,
@@ -100,6 +101,7 @@ export class PlaceInfoboxComponent implements OnChanges {
     ngOnChanges() {
         this.form_group.reset({
             title: this.object.title,
+            description: this.object.description,
             parent: single_to_array(this.object.parent),
             cover_photo: single_to_array(this.object.cover_photo),
             address: this.object.address,
@@ -117,6 +119,7 @@ export class PlaceInfoboxComponent implements OnChanges {
     submit(): void {
         const new_object: PlaceObject = cloneDeep(this.object);
         new_object.title = this.form_group.value.title;
+        new_object.description = this.form_group.value.description;
         new_object.parent = array_to_single<PlaceObject>(this.form_group.value.parent);
         new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
         new_object.address = this.form_group.value.address;

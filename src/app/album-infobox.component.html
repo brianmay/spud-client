@@ -41,6 +41,11 @@
             <input class="form-control" formControlName="title" id="title">
             <div class="form-control-feedback" *ngIf="!form_group.controls['title'].valid && form_group.controls['title'].touched">You must supply a valid title.</div>
         </div>
+        <div class="form-group" [class.has-warning]="!form_group.controls['description'].valid && form_group.controls['description'].touched">
+            <label class="form-control-label" for="description">Description:</label>
+            <textarea class="form-control" formControlName="description" id="description"></textarea>
+            <div class="form-control-feedback" *ngIf="!form_group.controls['description'].valid && form_group.controls['description'].touched">You must supply a valid description.</div>
+        </div>  
         <div class="form-group" [class.has-warning]="!form_group.controls['cover_photo'].valid && form_group.controls['cover_photo'].touched">
             <label class="form-control-label" for="cover_photo">Cover Photo:</label>
             <photo-select class="form-control" formControlName="cover_photo" id="cover_photo" [criteria]="get_cover_photo_criteria()"></photo-select>

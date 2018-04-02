@@ -92,11 +92,12 @@ export class AlbumInfoboxComponent implements OnChanges {
     private create_form(): void {
         this.form_group = this.fb.group({
             title: ['', Validators.required ],
+            description: null,
+            cover_photo: null,
             revised: ['', Validators.pattern('^([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}) [+-]?[0-9]{4}$')],
             sort_name: '',
             sort_order: '',
             parent: null,
-            cover_photo: null,
         });
         this.form_group.valueChanges.subscribe(() => this.ref.markForCheck());
     }
@@ -111,17 +112,20 @@ export class AlbumInfoboxComponent implements OnChanges {
         }
         this.form_group.reset({
             title: this.object.title,
+            description: this.object.description,
+            cover_photo: single_to_array(this.object.cover_photo),
             revised: revised_str,
             sort_name: this.object.sort_name,
             sort_order: this.object.sort_order,
             parent: single_to_array(this.object.parent),
-            cover_photo: single_to_array(this.object.cover_photo),
         });
     }
 
     submit(): void {
         const new_object: AlbumObject = cloneDeep(this.object);
         new_object.title = this.form_group.value.title;
+        new_object.description = this.form_group.value.description;
+        new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
         new_object.sort_name = this.form_group.value.sort_name;
         new_object.sort_order = this.form_group.value.sort_order;
         if (this.form_group.value.revised) {
@@ -132,7 +136,6 @@ export class AlbumInfoboxComponent implements OnChanges {
             new_object.revised = null;
         }
         new_object.parent = array_to_single<AlbumObject>(this.form_group.value.parent);
-        new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
         this.service.set_object(new_object)
             .then(object => {
                 this.edit = false;

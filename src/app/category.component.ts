@@ -82,10 +82,11 @@ export class CategoryInfoboxComponent implements OnChanges {
     private create_form(): void {
         this.form_group = this.fb.group({
             title: ['', Validators.required ],
+            description: null,
+            cover_photo: null,
             sort_name: '',
             sort_order: '',
             parent: null,
-            cover_photo: null,
         });
         this.form_group.valueChanges.subscribe(() => this.ref.markForCheck());
     }
@@ -93,20 +94,22 @@ export class CategoryInfoboxComponent implements OnChanges {
     ngOnChanges() {
         this.form_group.reset({
             title: this.object.title,
+            description: this.object.description,
+            cover_photo: single_to_array(this.object.cover_photo),
             sort_name: this.object.sort_name,
             sort_order: this.object.sort_order,
             parent: single_to_array(this.object.parent),
-            cover_photo: single_to_array(this.object.cover_photo),
         });
     }
 
     submit(): void {
         const new_object: CategoryObject = cloneDeep(this.object);
         new_object.title = this.form_group.value.title;
+        new_object.description = this.form_group.value.description;
+        new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
         new_object.sort_name = this.form_group.value.sort_name;
         new_object.sort_order = this.form_group.value.sort_order;
         new_object.parent = array_to_single<CategoryObject>(this.form_group.value.parent);
-        new_object.cover_photo = array_to_single<PhotoObject>(this.form_group.value.cover_photo);
         this.service.set_object(new_object)
             .then(object => {
                 this.edit = false;

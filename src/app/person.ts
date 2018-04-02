@@ -7,6 +7,7 @@ export class PersonObject extends BaseObject {
     middle_name: string;
     last_name: string;
     called: string;
+    description: string;
     sex: string;
     email: string;
     dob: string;
@@ -34,6 +35,7 @@ export class PersonObject extends BaseObject {
         this.first_name = s.get_streamable_string(streamable, 'first_name');
         this.middle_name = s.get_streamable_string(streamable, 'middle_name');
         this.last_name = s.get_streamable_string(streamable, 'last_name');
+        this.description = s.get_streamable_string(streamable, 'description');
         this.called = s.get_streamable_string(streamable, 'called');
         this.sex = s.get_streamable_string(streamable, 'sex');
         this.email = s.get_streamable_string(streamable, 'email');
@@ -160,6 +162,7 @@ export class PersonObject extends BaseObject {
         streamable['middle_name'] = this.middle_name;
         streamable['last_name'] = this.last_name;
         streamable['called'] = this.called;
+        streamable['description'] = this.description;
         streamable['sex'] = this.sex;
         streamable['email'] = this.email;
         streamable['dob'] = this.dob;

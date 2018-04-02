@@ -2,6 +2,7 @@ import * as s from './streamable';
 import { BaseObject, BaseType } from './base';
 
 export class PlaceObject extends BaseObject {
+    description: string;
     address: string;
     address2: string;
     city: string;
@@ -19,6 +20,7 @@ export class PlaceObject extends BaseObject {
     set_streamable(streamable: s.Streamable, full_object: boolean) {
         super.set_streamable(streamable, full_object);
 
+        this.description = s.get_streamable_string(streamable, 'description');
         this.address = s.get_streamable_string(streamable, 'address');
         this.address2 = s.get_streamable_string(streamable, 'address2');
         this.city = s.get_streamable_string(streamable, 'city');
@@ -48,6 +50,7 @@ export class PlaceObject extends BaseObject {
 
     get_streamable(): s.Streamable {
         const streamable: s.Streamable = super.get_streamable();
+        streamable['description'] = this.description;
         streamable['address'] = this.address;
         streamable['address2'] = this.address2;
         streamable['city'] = this.city;
