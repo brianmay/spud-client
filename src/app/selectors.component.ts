@@ -36,11 +36,11 @@ class BaseSelectComponent<GenObject extends BaseObject>
 
     @Input() multiple = false;
     @Input() criteria: Map<string, string> = new Map();
-    private objects: GenObject[];
+    public objects: GenObject[];
 
-    private search_text = '';
+    public search_text = '';
     private search_terms = new Subject<string>();
-    private search_results: List<GenObject>;
+    public search_results: List<GenObject>;
     private search_subscription: Subscription;
     private propagateChange = (_: GenObject[]) => {};
 
@@ -206,5 +206,6 @@ export class PlaceSelectComponent
 })
 export class PhotoSelectComponent
         extends BaseSelectComponent<PhotoObject> {
+    @Input() criteria: Map<string, string> = new Map();
     public readonly type_obj = new PhotoType();
 }
