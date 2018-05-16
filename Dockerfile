@@ -1,5 +1,6 @@
 # Stage 0, based on Node.js, to build and compile Angular
 FROM node:9.11 as node
+LABEL maintainer="Brian May <brian@linuxpenguins.xyz>"
 WORKDIR /app
 COPY package.json /app/
 RUN npm install
