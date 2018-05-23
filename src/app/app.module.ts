@@ -5,7 +5,7 @@ import {HttpModule} from '@angular/http';
 
 import {LocalStorageModule} from 'angular-2-local-storage';
 import {Ng2DatetimePickerModule} from 'ng2-datetime-picker';
-import { MarkdownModule } from 'ngx-md';
+import {NgxMdModule} from 'ngx-md';
 
 import {AppComponent} from './app.component';
 import {NavbarComponent} from './navbar.component';
@@ -113,7 +113,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
         }),
         ReactiveFormsModule,
         Ng2DatetimePickerModule,
-        MarkdownModule.forRoot(),
+        NgxMdModule.forRoot(),
     ],
     providers: [
         SpudService,
