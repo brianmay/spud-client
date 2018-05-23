@@ -32,8 +32,8 @@ export class Session {
         const permissions = s.get_streamable_string_array(streamable, 'perms');
         for (const obj_type in permissions) {
             if (permissions.hasOwnProperty(obj_type)) {
-                let obj_type_permissions = permissions[obj_type];
-                let permission = new Permission();
+                const obj_type_permissions = permissions[obj_type];
+                const permission = new Permission();
                 permission.can_create = s.get_streamable_boolean(obj_type_permissions, 'can_create');
                 permission.can_change = s.get_streamable_boolean(obj_type_permissions, 'can_change');
                 permission.can_delete = s.get_streamable_boolean(obj_type_permissions, 'can_delete');

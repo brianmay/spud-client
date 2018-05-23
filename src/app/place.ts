@@ -69,7 +69,7 @@ export class PlaceObject extends BaseObject {
     }
 
     get printable_address(): Array<string> {
-        let result = Array<string>();
+        const result = Array<string>();
         if (this.address) {
             result.push(this.address);
         }
@@ -80,7 +80,7 @@ export class PlaceObject extends BaseObject {
             result.push(this.state);
         }
         if (this.country && this.postcode) {
-            result.push(this.country + " " + this.postcode);
+            result.push(this.country + ' ' + this.postcode);
         } else if (this.country) {
             result.push(this.country);
         }  else if (this.postcode) {

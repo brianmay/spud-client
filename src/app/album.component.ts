@@ -18,7 +18,7 @@ import { AlbumObject, AlbumType } from './album';
 import { PhotoObject } from './photo';
 import { BaseService, SpudService } from './spud.service';
 import { Permission } from './session';
-import { array_to_single, single_to_array } from'./utils';
+import { array_to_single, single_to_array } from './utils';
 
 @Component({
     selector: 'album_list',

@@ -3,6 +3,20 @@ import { TestBed, async } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
 
+@Component({
+    selector: 'app-navbar',
+    template: '',
+})
+export class MockNavbarComponent {
+}
+
+@Component({
+    selector: 'router-outlet',
+    template: '',
+})
+export class MockRouterOutletComponent {
+}
+
 describe('AppComponent', () => {
     beforeEach(async(() => {
       //noinspection JSIgnoredPromiseFromCall
@@ -27,17 +41,3 @@ describe('AppComponent', () => {
       expect(app.title).toEqual('Spud Client');
     }));
 });
-
-@Component({
-    selector: 'app-navbar',
-    template: '',
-})
-export class MockNavbarComponent {
-}
-
-@Component({
-    selector: 'router-outlet',
-    template: '',
-})
-export class MockRouterOutletComponent {
-}

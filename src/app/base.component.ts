@@ -206,19 +206,19 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     select_list_tab(): void {
-        this.active_tab='list';
+        this.active_tab = 'list';
     }
 
     select_object_tab(): void {
-        this.active_tab='object';
+        this.active_tab = 'object';
     }
 
     select_photos_tab(): void {
-        this.active_tab='photos';
+        this.active_tab = 'photos';
     }
 
     select_children_tab(): void {
-        this.active_tab='children';
+        this.active_tab = 'children';
     }
 
     select_object(object: GenObject): void {

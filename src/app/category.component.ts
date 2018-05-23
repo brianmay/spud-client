@@ -8,7 +8,7 @@ import {BaseService, SpudService} from './spud.service';
 import {PhotoObject} from './photo';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from './session';
-import { array_to_single, single_to_array } from'./utils';
+import { array_to_single, single_to_array } from './utils';
 
 @Component({
     selector: 'category_list',
