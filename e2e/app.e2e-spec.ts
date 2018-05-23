@@ -7,8 +7,8 @@ describe('spud-client App', () => {
     page = new SpudClientPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display message saying app works', async () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(await page.getParagraphText()).toBe('Album List');
   });
 });
