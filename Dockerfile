@@ -3,7 +3,7 @@ FROM node:9.11 as node
 LABEL maintainer="Brian May <brian@linuxpenguins.xyz>"
 WORKDIR /app
 COPY package.json yarn.lock /app/
-RUN yarn install
+RUN yarn install --no-progress
 COPY ./ /app/
 ARG ng_arg="--prod --build-optimizer"
 RUN ./node_modules/.bin/ng build $ng_arg

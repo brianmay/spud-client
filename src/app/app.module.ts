@@ -107,7 +107,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
         BsDropdownModule.forRoot(),
         TabsModule.forRoot(),
         AppRoutingModule,
-        LocalStorageModule.withConfig({
+        LocalStorageModule.forRoot({
             prefix: 'spud',
             storageType: 'localStorage'
         }),
