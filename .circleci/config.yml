@@ -6,14 +6,16 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
+          name: Restore Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
       - run: |
           yarn global add angular-cli
           yarn install
       - save_cache:
-          key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - "node_modules"
+            - ~/.cache/yarn
       - run: yarn ng build --prod --aot --no-progress
       - run: yarn test --watch false --no-progress
 
