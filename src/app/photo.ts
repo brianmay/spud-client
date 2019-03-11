@@ -209,4 +209,8 @@ export class PhotoType extends BaseType<PhotoObject> {
         obj.title = 'New photo';
         return obj;
     }
+
+    get_photo_criteria(object: PhotoObject): Map<string, string> {
+        return null;
+    }
 }

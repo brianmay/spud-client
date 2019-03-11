@@ -25,10 +25,6 @@ export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
     ) {
         super(route, spud_service, ref);
     }
-
-    protected get_photo_criteria(object: PhotoObject): Map<string, string> {
-        return null;
-    }
 }
 
 @Component({

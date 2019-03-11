@@ -25,13 +25,6 @@ export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
     ) {
         super(route, spud_service, ref);
     }
-
-    protected get_photo_criteria(object: PlaceObject): Map<string, string> {
-        const photo_criteria = new Map<string, string>();
-        photo_criteria.set('place', String(object.id));
-        photo_criteria.set('place_descendants', String(true));
-        return photo_criteria;
-    }
 }
 
 @Component({

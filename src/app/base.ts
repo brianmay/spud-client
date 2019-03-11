@@ -1,4 +1,5 @@
 import * as s from './streamable';
+import {AlbumObject} from './album';
 
 // We can't do this as it creates an import loop.
 // import { PhotoObject } from './photo'
@@ -61,4 +62,5 @@ export abstract class BaseType<GenObject extends BaseObject> {
     abstract object_from_streamable(streamable: s.Streamable, full_object: boolean): GenObject;
 
     abstract new_object(parent: GenObject): GenObject;
+    abstract get_photo_criteria(object: GenObject): Map<string, string>;
 }

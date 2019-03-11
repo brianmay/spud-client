@@ -18,6 +18,7 @@ import { Permission, Session } from './session';
 import { BaseObject, BaseType } from './base';
 import { PhotoObject, PhotoType } from './photo';
 import { SpudService, ObjectList, IndexEntry, BaseService } from './spud.service';
+import {AlbumObject} from './album';
 
 @Component({
     selector: 'base_list',
@@ -372,7 +373,9 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         }
     }
 
-    protected abstract get_photo_criteria(object: GenObject): Map<string, string>;
+    protected get_photo_criteria(object: GenObject): Map<string, string> {
+        return this.type_obj.get_photo_criteria(object);
+    }
 
     protected full_screen(): void {
         const fullscreenDiv = this.image.nativeElement;

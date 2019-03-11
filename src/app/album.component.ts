@@ -35,13 +35,6 @@ export class AlbumDetailComponent extends BaseDetailComponent<AlbumObject> {
     ) {
         super(route, spud_service, ref);
     }
-
-    protected get_photo_criteria(object: AlbumObject): Map<string, string> {
-        const photo_criteria = new Map<string, string>();
-        photo_criteria.set('album', String(object.id));
-        photo_criteria.set('album_descendants', String(true));
-        return photo_criteria;
-    }
 }
 
 @Component({

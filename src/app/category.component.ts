@@ -25,13 +25,6 @@ export class CategoryDetailComponent extends BaseDetailComponent<CategoryObject>
     ) {
         super(route, spud_service, ref);
     }
-
-    protected get_photo_criteria(object: CategoryObject): Map<string, string> {
-        const photo_criteria = new Map<string, string>();
-        photo_criteria.set('category', String(object.id));
-        photo_criteria.set('category_descendants', String(true));
-        return photo_criteria;
-    }
 }
 
 @Component({

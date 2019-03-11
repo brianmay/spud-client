@@ -63,4 +63,11 @@ export class CategoryType extends BaseType<CategoryObject> {
         obj.parent = parent;
         return obj;
     }
+
+    get_photo_criteria(object: CategoryObject): Map<string, string> {
+        const photo_criteria = new Map<string, string>();
+        photo_criteria.set('category', String(object.id));
+        photo_criteria.set('category_descendants', String(true));
+        return photo_criteria;
+    }
 }

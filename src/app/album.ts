@@ -69,4 +69,11 @@ export class AlbumType extends BaseType<AlbumObject> {
         obj.parent = parent;
         return obj;
     }
+
+    get_photo_criteria(object: AlbumObject): Map<string, string> {
+        const photo_criteria = new Map<string, string>();
+        photo_criteria.set('album', String(object.id));
+        photo_criteria.set('album_descendants', String(true));
+        return photo_criteria;
+    }
 }
