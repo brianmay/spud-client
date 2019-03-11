@@ -1,5 +1,4 @@
 <div>
-    <h1>{{title}}</h1>
     <album_detail    *ngIf="type_obj.type_name==='albums'"    [list]="list"></album_detail>
     <category_detail *ngIf="type_obj.type_name==='categorys'" [list]="list"></category_detail>
     <person_detail   *ngIf="type_obj.type_name==='persons'"   [list]="list"></person_detail>

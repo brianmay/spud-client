@@ -7,6 +7,7 @@
         [object]="object"
         [selected]="selected_object && selected_object.id==object.id"
         (selected_change)="select_object(object)"
+        (activated_change)="activate_object(object)"
     ></object_list_item>
 
     <div class="photo_item" *ngIf="!list_finished">

@@ -46,6 +46,11 @@ export class ObjectListItemComponent<GenObject extends BaseObject> {
     public select_object() {
         this.selected_change.emit(true);
     }
+
+    @Output() activated_change = new EventEmitter();
+    public activate_object() {
+        this.activated_change.emit(true);
+    }
 }
 
 @Component({
@@ -79,8 +84,6 @@ export class ObjectListComponent<GenObject extends BaseObject> implements OnDest
             this.get_next_page();
         }
     }
-    @Input() selected_object: GenObject;
-    @Output() selected_objectChange = new EventEmitter();
 
     public objects: List<GenObject>;
     private list: ObjectList<GenObject>;
@@ -94,9 +97,16 @@ export class ObjectListComponent<GenObject extends BaseObject> implements OnDest
         this.list.get_next_page();
     }
 
+    @Input() selected_object: GenObject;
+    @Output() selected_object_change = new EventEmitter();
     public select_object(object: GenObject) {
         this.selected_object = object;
-        this.selected_objectChange.emit(object);
+        this.selected_object_change.emit(object);
+    }
+
+    @Output() activated_object_change = new EventEmitter();
+    public activate_object(object: GenObject) {
+        this.activated_object_change.emit(object);
     }
 
     ngOnDestroy(): void {

@@ -4,17 +4,18 @@
     {{ error }}
 </ngb-alert>
 
-<tabset #tab>
+<div *ngIf="!activated_photo">
 
-    <tab *ngIf="list" heading="List" id="list"[active]="active_tab === 'list'">
-        <object_list [list]="list" [selected_object]="object" (selected_objectChange)="select_object($event)"></object_list>
-    </tab>
+    <div *ngIf="list">
+        <h2>List of {{type_obj.type_verbose}}</h2>
+        <object_list [list]="list" [selected_object]="object" (selected_object_change)="select_object($event)"></object_list>
+    </div>
 
-    <tab *ngIf="object" [heading]="object?.title || 'null'" id="object" [active]="active_tab === 'object'">
-        <div *ngIf="object" class="card-block">
+    <div *ngIf="object">
+        <div class="card-block">
             <section class="text-center">
                 <div class="container">
-                    <h1>{{object.type_verbose}}: {{object.title}}</h1>
+                    <h2>{{object.type_verbose}}: {{object.title}}</h2>
                     <div #image class="image">
                         <button type="button" class="btn btn-secondary btn-prev" *ngIf="has_prev_page()" (click)="load_prev_object()">&lt;&lt;</button>
                         <photo_mid *ngIf="!is_fullscreen" [photo]="object.cover_photo"></photo_mid>
@@ -23,34 +24,33 @@
                     </div>
                     <markdown>{{object.description}}</markdown>
                     <p>
-                        <button type="button" (click)="select_children_tab()" class="btn btn-secondary" *ngIf="!child_list_empty">Children</button>
-                        <button type="button" (click)="select_photos_tab()" class="btn btn-secondary" *ngIf="!photo_list_empty">Photos</button>
                         <button type="button" (click)="full_screen()" class="btn btn-secondary">Full Screen</button>
                         <button type="button" (click)="create_object()" class="btn btn-secondary" *ngIf="permission.can_create">Create</button>
                         <button type="button" (click)="delete_object()" class="btn btn-secondary" *ngIf="permission.can_delete">Delete</button>
+                        <button type="button" *ngIf="show_close" class="btn btn-secondary"  (click)="on_close.emit(null)">Close</button>
                     </p>
                     <album_infobox *ngIf="type_obj.type_name==='albums'" [object]="object" [permission]="permission"></album_infobox>
                     <category_infobox *ngIf="type_obj.type_name==='categorys'" [object]="object" [permission]="permission"></category_infobox>
                     <person_infobox *ngIf="type_obj.type_name==='persons'" [object]="object" [permission]="permission"></person_infobox>
                     <place_infobox *ngIf="type_obj.type_name==='places'" [object]="object" [permission]="permission"></place_infobox>
-                    <photo_infobox *ngIf="type_obj.type_name==='photos'" [object]="object"[permission]="permission"></photo_infobox>
+                    <photo_infobox *ngIf="type_obj.type_name==='photos'" [object]="object" [permission]="permission"></photo_infobox>
                 </div>
             </section>
         </div>
-    </tab>
+    </div>
 
-    <tab *ngIf="!child_list_empty" heading="Selected Children" id="children" [active]="active_tab === 'children'">
-        <div *ngIf="!child_list_empty" class="card-block">
-            <album_list *ngIf="type_obj.type_name==='albums'" [list]="child_list" title="{{type_obj.type_verbose}}: {{ object.title }}: Children"></album_list>
-            <category_list *ngIf="type_obj.type_name==='categorys'" [list]="child_list" title="{{type_obj.type_verbose}}: {{ object.title }}: Children"></category_list>
-            <person_list *ngIf="type_obj.type_name==='persons'" [list]="child_list" title="{{type_obj.type_verbose}}: {{ object.title }}: Children"></person_list>
-            <place_list *ngIf="type_obj.type_name==='places'" [list]="child_list" title="{{type_obj.type_verbose}}: {{ object.title }}: Children"></place_list>
-            <photo_list *ngIf="type_obj.type_name==='photos'" [list]="child_list" title="{{type_obj.type_verbose}}: {{ object.title }}: Children"></photo_list>
-        </div>
-    </tab>
+    <div *ngIf="!child_list_empty">
+        <h2>{{object.title}}: Children</h2>
+        <object_list [list]="child_list" (activated_object_change)="select_object($event)"></object_list>
+    </div>
 
-    <tab *ngIf="!photo_list_empty" heading="Selected Photos" id="photos" [active]="active_tab === 'photos'">
-        <photo_list *ngIf="photo_list" [list]="photo_list" title="{{object.type_verbose}}: {{ object.title }}: Photos"></photo_list>
-    </tab>
+    <div *ngIf="!photo_list_empty">
+        <h2>{{object.title}}: Photos</h2>
+        <object_list [list]="photo_list" [selected_object]="selected_photo" (selected_object)="selected_photo=$event" (activated_object_change)="activated_photo=$event"></object_list>
+    </div>
 
-</tabset>
+</div>
+
+<div *ngIf="activated_photo">
+    <photo_detail [list]="photo_list" [object]="activated_photo" (object_change)="selected_photo=$event" [show_close]="true" (on_close)="activated_photo=null"></photo_detail>
+</div>

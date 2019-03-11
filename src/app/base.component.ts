@@ -9,6 +9,8 @@ import {
     Inject,
     HostListener,
     ChangeDetectorRef,
+    Output,
+    EventEmitter,
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
@@ -66,10 +68,10 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         implements OnInit, OnDestroy {
 
     public abstract readonly type_obj: BaseType<GenObject>;
-    public active_tab = 'list';
     protected session: Session = new Session();
 
     protected _service: BaseService<GenObject>;
+    protected photo_service: BaseService<PhotoObject>;
     protected get service(): BaseService<GenObject> {
         if (this._service == null) {
             this._service = this.spud_service.get_service(this.type_obj);
@@ -94,6 +96,9 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                }
             });
         }
+        if (this.photo_service == null) {
+            this.photo_service = this.spud_service.get_service(new PhotoType());
+        }
         return this._service;
     }
 
@@ -103,9 +108,84 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     private change_subscription: Subscription;
     private delete_subscription: Subscription;
 
-    public _object: GenObject;
+    @Input() show_close: boolean;
+    @Output() on_close: EventEmitter<null> = new EventEmitter();
+
+    private _object: GenObject;
     get object(): GenObject {
         return this._object;
+    }
+    @Output() object_change = new EventEmitter();
+    @Input('object') set object(object: GenObject) {
+        console.log('loaded', object);
+        this._object = object;
+        this.error = null;
+
+        this.child_list_empty = true;
+        this.photo_list_empty = true;
+
+        this.child_list = null;
+        this.photo_list = null;
+        this.selected_photo = null;
+        this.activated_photo = null;
+
+        if (object != null) {
+            const child_criteria = new Map<string, string>();
+            child_criteria.set('instance', String(object.id));
+            child_criteria.set('mode', 'children');
+
+            this.child_list = this.service.get_list(child_criteria);
+            this.child_list.get_is_empty()
+                .then(empty => {
+                    this.child_list_empty = empty;
+                    this.ref.markForCheck();
+                })
+                .catch(error => {
+                    this.child_list_empty = false;
+                    this.ref.markForCheck();
+                });
+
+            const photo_criteria: Map<string, string> = this.get_photo_criteria(object);
+            if (photo_criteria != null) {
+                this.photo_list = this.spud_service.get_list(new PhotoType(), photo_criteria);
+                this.photo_list.get_is_empty()
+                    .then(empty => {
+                        this.photo_list_empty = empty;
+                        this.ref.markForCheck();
+                    })
+                    .catch(error => {
+                        this.photo_list_empty = false;
+                        this.ref.markForCheck();
+                    });
+            }
+
+            if (this.list != null) {
+                this.index = this.list.get_index(object.id);
+            } else {
+                this.index = null;
+            }
+        }
+
+        this.object_change.emit(object);
+        this.ref.markForCheck();
+    }
+
+    protected _selected_photo: PhotoObject = null;
+    get selected_photo(): PhotoObject {
+        return this._selected_photo;
+    }
+    set selected_photo(photo: PhotoObject) {
+        this._selected_photo = photo;
+        this.ref.markForCheck();
+    }
+
+    protected _activated_photo: PhotoObject = null;
+    get activated_photo(): PhotoObject {
+        return this._activated_photo;
+    }
+    set activated_photo(photo: PhotoObject) {
+        this._activated_photo = photo;
+        this.ref.markForCheck();
     }
 
     private _list: ObjectList<GenObject>;
@@ -136,7 +216,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                 this.ref.markForCheck();
             }
         );
-        this.select_list_tab();
     }
     get list() {
         return this._list;
@@ -153,7 +232,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     public child_list_empty = true;
     public photo_list_empty = true;
 
-    @ViewChild('tab') tab;
     @ViewChild('image') image;
     @ViewChild('error_element') error_element;
 
@@ -205,32 +283,15 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         this.session = this.spud_service.session;
     }
 
-    select_list_tab(): void {
-        this.active_tab = 'list';
-    }
-
-    select_object_tab(): void {
-        this.active_tab = 'object';
-    }
-
-    select_photos_tab(): void {
-        this.active_tab = 'photos';
-    }
-
-    select_children_tab(): void {
-        this.active_tab = 'children';
-    }
-
     select_object(object: GenObject): void {
         this.object = object;
-        // this.select_object_tab();
         if (object != null && !object.is_full_object) {
-            console.log('got changes, need to load', this.object);
-            this.service.get_object(this.object.id)
+            console.log('got changes, need to load', object);
+            this.service.get_object(object.id)
                 .then(loaded_object => this.object = loaded_object)
                 .catch((message: string) => this.handle_error(message));
         } else {
-            console.log('got changes, no need to load', this.object);
+            console.log('got changes, no need to load', object);
         }
     }
 
@@ -264,63 +325,6 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
                 .then(loaded_object => this.object = loaded_object)
                 .catch((message: string) => this.handle_error(message));
         }
-    }
-
-    set object(object: GenObject) {
-        console.log('loaded', object);
-        this._object = object;
-        this.error = null;
-
-        this.child_list_empty = true;
-        this.photo_list_empty = true;
-
-        this.child_list = null;
-        this.photo_list = null;
-
-        if (object != null) {
-            const child_criteria = new Map<string, string>();
-            child_criteria.set('instance', String(object.id));
-            child_criteria.set('mode', 'children');
-
-            this.child_list = this.service.get_list(child_criteria);
-            this.child_list.get_is_empty()
-                .then(empty => {
-                    this.child_list_empty = empty;
-                    this.ref.markForCheck();
-                })
-                .catch(error => {
-                    this.child_list_empty = false;
-                    this.ref.markForCheck();
-                });
-
-            const photo_criteria: Map<string, string> = this.get_photo_criteria(object);
-            if (photo_criteria != null) {
-                this.photo_list = this.spud_service.get_list(new PhotoType(), photo_criteria);
-                this.photo_list.get_is_empty()
-                    .then(empty => {
-                        this.photo_list_empty = empty;
-                        this.ref.markForCheck();
-                    })
-                    .catch(error => {
-                        this.photo_list_empty = false;
-                        this.ref.markForCheck();
-                    });
-            }
-
-            if (this.list != null) {
-                this.index = this.list.get_index(object.id);
-            } else {
-                this.index = null;
-            }
-
-            console.log('select object tab');
-            this.select_object_tab();
-        } else {
-            console.log('select list tab');
-            this.select_list_tab()
-        }
-
-        this.ref.markForCheck();
     }
 
     private handle_error(message: string): void {

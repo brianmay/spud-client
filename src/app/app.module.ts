@@ -63,7 +63,6 @@ import {AppRoutingModule} from './app-routing.module';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
     declarations: [
@@ -105,7 +104,6 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
         HttpModule,
         NgbModule.forRoot(),
         BsDropdownModule.forRoot(),
-        TabsModule.forRoot(),
         AppRoutingModule,
         LocalStorageModule.forRoot({
             prefix: 'spud',

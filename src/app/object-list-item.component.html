@@ -1,6 +1,7 @@
 <div class="photo_item"
         [class.selected]="selected"
         (click)="select_object()"
+        (dblclick)="activate_object()"
 >
     <photo_thumb [photo]="object.cover_photo"></photo_thumb>
     <p class="title" *ngIf="object.title">{{object.title}}</p>
