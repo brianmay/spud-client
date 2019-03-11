@@ -1,31 +1,11 @@
-import { Component, Input, Inject, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { cloneDeep } from 'lodash';
 
-import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { base_url } from './settings';
 import { PhotoObject, PhotoType } from './photo';
 import { SpudService, BaseService } from './spud.service';
 import { Permission } from './session';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { single_to_array, array_to_single } from './utils';
-
-@Component({
-    selector: 'photo_detail',
-    templateUrl: './base-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class PhotoDetailComponent extends BaseDetailComponent<PhotoObject> {
-    public readonly type_obj = new PhotoType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
 
 @Component({
     selector: 'photo_infobox',

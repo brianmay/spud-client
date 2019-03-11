@@ -1,8 +1,6 @@
-import { Component, Input, Inject, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, ViewChild } from '@angular/core';
 import { cloneDeep } from 'lodash';
 
-import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { PersonObject, PersonType } from './person';
 import { SpudService, BaseService } from './spud.service';
 import { Permission } from './session';
@@ -10,23 +8,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { single_to_array, array_to_single } from './utils';
 import { PhotoObject } from './photo';
 import { PlaceObject } from './place';
-
-@Component({
-    selector: 'person_detail',
-    templateUrl: './base-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class PersonDetailComponent extends BaseDetailComponent<PersonObject> {
-    public readonly type_obj = new PersonType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
 
 @Component({
     selector: 'person_infobox',

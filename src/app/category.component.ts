@@ -1,31 +1,12 @@
-import {Component, Input, Inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, OnChanges} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, OnChanges} from '@angular/core';
 
 import { cloneDeep } from 'lodash';
-import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { CategoryObject, CategoryType } from './category';
 import {BaseService, SpudService} from './spud.service';
 import {PhotoObject} from './photo';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from './session';
 import { array_to_single, single_to_array } from './utils';
-
-@Component({
-    selector: 'category_detail',
-    templateUrl: './base-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class CategoryDetailComponent extends BaseDetailComponent<CategoryObject> {
-    public readonly type_obj = new CategoryType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
 
 @Component({
     selector: 'category_infobox',

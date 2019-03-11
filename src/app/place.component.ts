@@ -1,31 +1,12 @@
-import {Component, Input, Inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, OnChanges} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, OnChanges} from '@angular/core';
 
 import { cloneDeep } from 'lodash';
-import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { PlaceObject, PlaceType } from './place';
 import {BaseService, SpudService} from './spud.service';
 import {PhotoObject} from './photo';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {array_to_single, single_to_array} from './utils';
 import {Permission} from './session';
-
-@Component({
-    selector: 'place_detail',
-    templateUrl: './base-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class PlaceDetailComponent extends BaseDetailComponent<PlaceObject> {
-    public readonly type_obj = new PlaceType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
 
 @Component({
     selector: 'place_infobox',

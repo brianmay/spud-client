@@ -1,7 +1,3 @@
 <div *ngIf="type_obj">
-    <album_detail    *ngIf="type_obj.type_name==='albums'"    [list]="list"></album_detail>
-    <category_detail *ngIf="type_obj.type_name==='categorys'" [list]="list"></category_detail>
-    <person_detail   *ngIf="type_obj.type_name==='persons'"   [list]="list"></person_detail>
-    <place_detail    *ngIf="type_obj.type_name==='places'"    [list]="list"></place_detail>
-    <photo_detail    *ngIf="type_obj.type_name==='photos'"    [list]="list"></photo_detail>
+    <base_detail [type_obj]="type_obj" [list]="list"></base_detail>
 </div>

@@ -1,41 +1,21 @@
 import {
     Component,
     Input,
-    Inject,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     OnChanges,
     ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 import { cloneDeep } from 'lodash';
 import * as moment from 'moment';
 
-import { BaseListComponent, BaseDetailComponent } from './base.component';
 import { AlbumObject, AlbumType } from './album';
 import { PhotoObject } from './photo';
 import { BaseService, SpudService } from './spud.service';
 import { Permission } from './session';
 import { array_to_single, single_to_array } from './utils';
-
-@Component({
-    selector: 'album_detail',
-    templateUrl: './base-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class AlbumDetailComponent extends BaseDetailComponent<AlbumObject> {
-    public readonly type_obj = new AlbumType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
 
 @Component({
     selector: 'album_infobox',

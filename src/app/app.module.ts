@@ -20,26 +20,22 @@ import {
 
 import {
     BaseListComponent,
+    BaseDetailComponent,
 } from './base.component';
 
 import {
-    AlbumDetailComponent,
     AlbumInfoboxComponent
 } from './album.component';
 import {
-    CategoryDetailComponent,
     CategoryInfoboxComponent
 } from './category.component';
 import {
-    PersonDetailComponent,
     PersonInfoboxComponent
 } from './person.component';
 import {
-    PlaceDetailComponent,
     PlaceInfoboxComponent
 } from './place.component';
 import {
-    PhotoDetailComponent,
     PhotoInfoboxComponent,
     PhotoThumbComponent,
     PhotoMidComponent,
@@ -73,20 +69,16 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
         ObjectListComponent,
         ObjectListItemComponent,
         BaseListComponent,
-        AlbumDetailComponent,
+        BaseDetailComponent,
         AlbumInfoboxComponent,
         AlbumSelectComponent,
-        CategoryDetailComponent,
         CategoryInfoboxComponent,
         CategorySelectComponent,
         ErrorComponent,
-        PersonDetailComponent,
         PersonInfoboxComponent,
         PersonSelectComponent,
-        PlaceDetailComponent,
         PlaceInfoboxComponent,
         PlaceSelectComponent,
-        PhotoDetailComponent,
         PhotoInfoboxComponent,
         PhotoThumbComponent,
         PhotoMidComponent,

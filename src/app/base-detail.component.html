@@ -52,5 +52,5 @@
 </div>
 
 <div *ngIf="activated_photo">
-    <photo_detail [list]="photo_list" [object]="activated_photo" (object_change)="selected_photo=$event" [show_close]="true" (on_close)="activated_photo=null"></photo_detail>
+    <base_detail [type_obj]="photo_type_obj" [list]="photo_list" [object]="activated_photo" (object_change)="selected_photo=$event" [show_close]="true" (on_close)="activated_photo=null"></base_detail>
 </div>

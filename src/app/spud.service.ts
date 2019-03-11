@@ -55,7 +55,7 @@ export class ObjectList<GenObject extends BaseObject> {
 
     constructor(
         private readonly ssp: SpudServicePrivate,
-        private readonly type_obj: BaseType<GenObject>,
+        public readonly type_obj: BaseType<GenObject>,
         private readonly criteria: Map<string, string>,
     ) { };
 

@@ -18,7 +18,6 @@ import { Permission, Session } from './session';
 import { BaseObject, BaseType } from './base';
 import { PhotoObject, PhotoType } from './photo';
 import { SpudService, ObjectList, IndexEntry, BaseService } from './spud.service';
-import {AlbumObject} from './album';
 
 @Component({
     selector: 'base_list',
@@ -81,10 +80,25 @@ export class BaseListComponent<GenObject extends BaseObject>
 
 }
 
-export abstract class BaseDetailComponent<GenObject extends BaseObject>
+@Component({
+    selector: 'base_detail',
+    templateUrl: './base-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BaseDetailComponent<GenObject extends BaseObject>
         implements OnInit, OnDestroy {
 
-    public abstract readonly type_obj: BaseType<GenObject>;
+    private _type_obj: BaseType<GenObject>;
+    public get type_obj() : BaseType<GenObject> {
+        return this._type_obj;
+    }
+    @Input("type_obj") public set type_obj(type_obj : BaseType<GenObject>) {
+        this._type_obj = type_obj;
+        this.ref.markForCheck();
+    }
+
+    public photo_type_obj : PhotoType = new PhotoType();
+
     protected session: Session = new Session();
 
     protected _service: BaseService<GenObject>;
@@ -119,6 +133,7 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
         return this._service;
     }
 
+    private data_subscription: Subscription;
     private router_subscription: Subscription;
     private session_subscription: Subscription;
     private list_subscription: Subscription;
@@ -278,6 +293,10 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
 
     ngOnInit(): void {
         if (this.list == null && this.object == null) {
+            this.data_subscription = this.route.data
+                .subscribe((params: Params) => {
+                    this._type_obj = params["type_obj"];
+                });
             this.router_subscription = this.route.params
                 .switchMap((params: Params): Promise<GenObject> => {
                     const id: number = params['id'];
@@ -392,6 +411,9 @@ export abstract class BaseDetailComponent<GenObject extends BaseObject>
     }
 
     ngOnDestroy(): void {
+        if (this.data_subscription != null) {
+            this.data_subscription.unsubscribe();
+        }
         if (this.router_subscription != null) {
             this.router_subscription.unsubscribe();
         }
