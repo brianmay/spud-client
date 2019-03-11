@@ -202,6 +202,24 @@ export class BaseDetailComponent<GenObject extends BaseObject>
         this.ref.markForCheck();
     }
 
+    protected _selected_object: GenObject = null;
+    get selected_object(): GenObject {
+        return this._selected_object;
+    }
+    set selected_object(object: GenObject) {
+        this._selected_object = object;
+        this.ref.markForCheck();
+    }
+
+    protected _activated_object: GenObject = null;
+    get activated_object(): GenObject {
+        return this._activated_object;
+    }
+    set activated_object(object: GenObject) {
+        this._activated_object = object;
+        this.ref.markForCheck();
+    }
+
     protected _selected_photo: PhotoObject = null;
     get selected_photo(): PhotoObject {
         return this._selected_photo;
