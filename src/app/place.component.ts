@@ -11,24 +11,6 @@ import {array_to_single, single_to_array} from './utils';
 import {Permission} from './session';
 
 @Component({
-    selector: 'place_list',
-    templateUrl: './base-list.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class PlaceListComponent extends BaseListComponent<PlaceObject> {
-    title = 'Place List';
-    public readonly type_obj = new PlaceType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
-
-@Component({
     selector: 'place_detail',
     templateUrl: './base-detail.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,

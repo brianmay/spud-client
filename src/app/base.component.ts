@@ -10,7 +10,7 @@ import {
     HostListener,
     ChangeDetectorRef,
     Output,
-    EventEmitter,
+    EventEmitter, Component, ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
@@ -19,10 +19,18 @@ import { BaseObject, BaseType } from './base';
 import { PhotoObject, PhotoType } from './photo';
 import { SpudService, ObjectList, IndexEntry, BaseService } from './spud.service';
 
-export abstract class BaseListComponent<GenObject extends BaseObject>
+@Component({
+    selector: 'base_list',
+    templateUrl: './base-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BaseListComponent<GenObject extends BaseObject>
         implements OnInit, OnDestroy {
 
-    public readonly type_obj: BaseType<GenObject>;
+    private _type_obj: BaseType<GenObject>;
+    public get type_obj() : BaseType<GenObject> {
+        return this._type_obj;
+    }
     protected criteria: Map<string, string> = null;
 
     protected _service: BaseService<GenObject>;
@@ -33,6 +41,7 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
         return this._service;
     }
 
+    private data_subscription: Subscription;
     private router_subscription: Subscription;
 
     @Input() title: string;
@@ -46,6 +55,10 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
 
     ngOnInit(): void {
         if (this.list == null) {
+            this.data_subscription = this.route.data
+                .subscribe((params: Params) => {
+                    this._type_obj = params["type_obj"];
+                });
             this.router_subscription = this.route.queryParams
                 .subscribe((params: Params) => {
                     this.criteria = new Map<string, string>();
@@ -57,6 +70,9 @@ export abstract class BaseListComponent<GenObject extends BaseObject>
     };
 
     ngOnDestroy(): void {
+        if (this.data_subscription != null) {
+            this.data_subscription.unsubscribe();
+        }
         if (this.router_subscription != null) {
             this.router_subscription.unsubscribe();
         }

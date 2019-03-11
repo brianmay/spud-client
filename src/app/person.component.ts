@@ -12,24 +12,6 @@ import { PhotoObject } from './photo';
 import { PlaceObject } from './place';
 
 @Component({
-    selector: 'person_list',
-    templateUrl: './base-list.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class PersonListComponent extends BaseListComponent<PersonObject> {
-    title = 'Person List';
-    public readonly type_obj = new PersonType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
-
-@Component({
     selector: 'person_detail',
     templateUrl: './base-detail.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,

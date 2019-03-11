@@ -11,24 +11,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { single_to_array, array_to_single } from './utils';
 
 @Component({
-    selector: 'photo_list',
-    templateUrl: './base-list.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class PhotoListComponent extends BaseListComponent<PhotoObject> {
-    title = 'Photo List';
-    public readonly type_obj = new PhotoType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
-
-@Component({
     selector: 'photo_detail',
     templateUrl: './base-detail.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,

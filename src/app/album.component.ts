@@ -21,24 +21,6 @@ import { Permission } from './session';
 import { array_to_single, single_to_array } from './utils';
 
 @Component({
-    selector: 'album_list',
-    templateUrl: './base-list.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class AlbumListComponent extends BaseListComponent<AlbumObject> {
-    title = 'Album List';
-    public readonly type_obj = new AlbumType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
-
-@Component({
     selector: 'album_detail',
     templateUrl: './base-detail.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,

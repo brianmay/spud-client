@@ -1,23 +1,30 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AlbumListComponent, AlbumDetailComponent } from './album.component';
-import { CategoryListComponent, CategoryDetailComponent } from './category.component';
-import { PersonListComponent, PersonDetailComponent } from './person.component';
-import { PlaceListComponent, PlaceDetailComponent } from './place.component';
-import { PhotoListComponent, PhotoDetailComponent } from './photo.component';
+import { AlbumType} from './album';
+import { CategoryType } from './category';
+import { PersonType } from './person';
+import { PlaceType } from './place';
+import { PhotoType } from './photo';
+
+import { BaseListComponent } from './base.component';
+import { AlbumDetailComponent } from './album.component';
+import { CategoryDetailComponent } from './category.component';
+import { PersonDetailComponent } from './person.component';
+import { PlaceDetailComponent } from './place.component';
+import { PhotoDetailComponent } from './photo.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/albums', pathMatch: 'full' },
-    { path: 'albums', component: AlbumListComponent },
+    { path: 'albums', component: BaseListComponent, data: {'type_obj': new AlbumType()} },
     { path: 'albums/:id', component: AlbumDetailComponent },
-    { path: 'categorys', component: CategoryListComponent },
+    { path: 'categorys', component: BaseListComponent, data: {'type_obj': new CategoryType()} },
     { path: 'categorys/:id', component: CategoryDetailComponent },
-    { path: 'persons', component: PersonListComponent },
+    { path: 'persons', component: BaseListComponent, data: {'type_obj': new PersonType()} },
     { path: 'persons/:id', component: PersonDetailComponent },
-    { path: 'places', component: PlaceListComponent },
+    { path: 'places', component: BaseListComponent, data: {'type_obj': new PlaceType()} },
     { path: 'places/:id', component: PlaceDetailComponent },
-    { path: 'photos', component: PhotoListComponent },
+    { path: 'photos', component: BaseListComponent, data: {'type_obj': new PhotoType()} },
     { path: 'photos/:id', component: PhotoDetailComponent },
 ];
 

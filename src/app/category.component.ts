@@ -11,24 +11,6 @@ import {Permission} from './session';
 import { array_to_single, single_to_array } from './utils';
 
 @Component({
-    selector: 'category_list',
-    templateUrl: './base-list.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class CategoryListComponent extends BaseListComponent<CategoryObject> {
-    title = 'Category List';
-    public readonly type_obj = new CategoryType();
-
-    constructor(
-        @Inject(ActivatedRoute) route: ActivatedRoute,
-        @Inject(SpudService) spud_service: SpudService,
-        @Inject(ChangeDetectorRef) ref: ChangeDetectorRef,
-    ) {
-        super(route, spud_service, ref);
-    }
-}
-
-@Component({
     selector: 'category_detail',
     templateUrl: './base-detail.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
