@@ -16,6 +16,7 @@ import {
     ObjectLinkComponent,
     ObjectListComponent,
     ObjectListItemComponent,
+    ObjectDetailComponent,
 } from './object.component';
 
 import {
@@ -68,6 +69,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
         ObjectArrayComponent,
         ObjectListComponent,
         ObjectListItemComponent,
+        ObjectDetailComponent,
         BaseListComponent,
         BaseDetailComponent,
         AlbumInfoboxComponent,
