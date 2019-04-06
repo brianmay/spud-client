@@ -22,6 +22,7 @@ export function set_photo_constructor(pc: photo_constructor): void {
 export class BaseObject {
     id: number;
     title: string;
+    description: string;
     cover_photo: PhotoInterface;
     private full_object: boolean;
 

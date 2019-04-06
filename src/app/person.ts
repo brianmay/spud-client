@@ -7,7 +7,6 @@ export class PersonObject extends BaseObject {
     middle_name: string;
     last_name: string;
     called: string;
-    description: string;
     sex: string;
     email: string;
     dob: string;

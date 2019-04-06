@@ -4,7 +4,6 @@ import { BaseObject, BaseType } from './base';
 
 export class AlbumObject extends BaseObject {
     revised: DateTimeZone;
-    description: string;
     sort_order: string;
     sort_name: string;
     ascendants: Array<AlbumObject>;

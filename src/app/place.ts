@@ -2,7 +2,6 @@ import * as s from './streamable';
 import { BaseObject, BaseType } from './base';
 
 export class PlaceObject extends BaseObject {
-    description: string;
     address: string;
     address2: string;
     city: string;

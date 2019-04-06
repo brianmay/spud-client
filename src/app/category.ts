@@ -2,7 +2,6 @@ import * as s from './streamable';
 import { BaseObject, BaseType } from './base';
 
 export class CategoryObject extends BaseObject {
-    description: string;
     sort_order: string;
     sort_name: string;
     ascendants: Array<CategoryObject>;
