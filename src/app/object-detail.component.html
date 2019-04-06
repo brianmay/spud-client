@@ -8,7 +8,7 @@
 
     <div *ngIf="list">
         <h2>List of {{type_obj.type_verbose}}</h2>
-        <object_list [list]="list" [selected_object]="object" (selected_object_change)="select_object($event)"></object_list>
+        <object_list [list]="list" [selected_object]="object" (selected_object_change)="object = $event"></object_list>
     </div>
 
     <div *ngIf="object">

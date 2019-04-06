@@ -16,13 +16,14 @@ class PhotoThumb {
     width: number;
     height: number;
     url: string;
+    mime_type: string;
 }
 
 class PhotoVideo {
     width: number;
     height: number;
     url: string;
-    format: string;
+    mime_type: string;
 }
 
 export class PhotoObject extends BaseObject implements PhotoInterface {
@@ -115,18 +116,27 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
         for (const size in streamable_thumbs) {
             if (streamable_thumbs.hasOwnProperty(size)) {
                 const item = streamable_thumbs[size];
-                const thumb: PhotoThumb = new PhotoThumb();
-                thumb.width = s.get_streamable_number(item, 'width');
-                thumb.height = s.get_streamable_number(item, 'height');
-                thumb.url = s.get_streamable_string(item, 'url');
-                this.thumbs[size] = thumb;
+
+                const streamable_array = s.streamable_to_array(item);
+                // For now we only care about first thumb for given size.
+                if (streamable_array.length > 0) {
+                    const sthumb: s.Streamable = streamable_array[0];
+
+                    const thumb: PhotoThumb = new PhotoThumb();
+                    thumb.width = s.get_streamable_number(sthumb, 'width');
+                    thumb.height = s.get_streamable_number(sthumb, 'height');
+                    thumb.url = s.get_streamable_string(sthumb, 'url');
+                    thumb.mime_type = s.get_streamable_string(sthumb, 'mime_type');
+
+                    this.thumbs[size] = thumb;
+                }
             }
         }
 
         const streamable_videos = s.get_streamable_string_array(streamable, 'videos');
         this.videos = {};
         for (const size in streamable_videos) {
-            if (streamable_thumbs.hasOwnProperty(size)) {
+            if (streamable_videos.hasOwnProperty(size)) {
                 const item = streamable_videos[size];
 
                 this.videos[size] = [];
@@ -138,7 +148,7 @@ export class PhotoObject extends BaseObject implements PhotoInterface {
                     video.width = s.get_streamable_number(svideo, 'width');
                     video.height = s.get_streamable_number(svideo, 'height');
                     video.url = s.get_streamable_string(svideo, 'url');
-                    video.format = s.get_streamable_string(svideo, 'format');
+                    video.mime_type = s.get_streamable_string(svideo, 'mime_type');
 
                     this.videos[size].push(video);
                 }

@@ -189,8 +189,7 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
     }
     @Output() object_change = new EventEmitter();
     @Input('object') set object(object: GenObject) {
-        console.log('loaded', object);
-        this._object = object;
+        console.log('setting', object);
         this.error = null;
 
         this.child_list_empty = true;
@@ -203,6 +202,19 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
 
         this.reload_lists(object);
 
+        if (object != null && !object.is_full_object) {
+            console.log('got partial object, need to load', object);
+            this.service.get_object(object.id)
+                .then(loaded_object => this.set_loaded_object(loaded_object))
+                .catch((message: string) => this.handle_error(message));
+        } else {
+            console.log('got full object, no need to load', object);
+            this.set_loaded_object(object);
+        }
+    }
+
+    private set_loaded_object(object: GenObject): void {
+        console.log('loaded', object);
         if (object != null) {
             if (this.list != null) {
                 this.index = this.list.get_index(object.id);
@@ -210,7 +222,7 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
                 this.index = null;
             }
         }
-
+        this._object = object;
         this.object_change.emit(object);
         this.ref.markForCheck();
     }
@@ -366,18 +378,6 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
                 this.session = session;
             });
         this.session = this.spud_service.session;
-    }
-
-    select_object(object: GenObject): void {
-        this.object = object;
-        if (object != null && !object.is_full_object) {
-            console.log('got changes, need to load', object);
-            this.service.get_object(object.id)
-                .then(loaded_object => this.object = loaded_object)
-                .catch((message: string) => this.handle_error(message));
-        } else {
-            console.log('got changes, no need to load', object);
-        }
     }
 
     load_object(id: number) {
