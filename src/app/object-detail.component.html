@@ -22,7 +22,7 @@
                         <photo_large *ngIf="is_fullscreen" [photo]="object.cover_photo"></photo_large>
                         <button type="button" class="btn btn-secondary btn-next" *ngIf="has_next_page()" (click)="load_next_object()">&gt;&gt;</button>
                     </div>
-                    <markdown>{{object.description}}</markdown>
+                    <markdown [data]="object.description"></markdown>
                     <p>
                         <button type="button" (click)="full_screen()" class="btn btn-secondary">Full Screen</button>
                         <button type="button" (click)="create_object()" class="btn btn-secondary" *ngIf="permission.can_create">Create</button>
