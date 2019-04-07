@@ -204,6 +204,7 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
 
         if (object != null && !object.is_full_object) {
             console.log('got partial object, need to load', object);
+            this.set_loaded_object(object);
             this.service.get_object(object.id)
                 .then(loaded_object => this.set_loaded_object(loaded_object))
                 .catch((message: string) => this.handle_error(message));

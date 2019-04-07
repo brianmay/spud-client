@@ -40,12 +40,12 @@
     </div>
 
     <div *ngIf="!child_list_empty">
-        <h2>{{object.title}}: Children</h2>
+        <h2>{{object?.title}}: Children</h2>
         <object_list [list]="child_list" [selected_object]="selected_object" (selected_object)="selected_object=$event" (activated_object_change)="activated_object=$event"></object_list>
     </div>
 
     <div *ngIf="!photo_list_empty">
-        <h2>{{object.title}}: Photos</h2>
+        <h2>{{object?.title}}: Photos</h2>
         <object_list [list]="photo_list" [selected_object]="selected_photo" (selected_object)="selected_photo=$event" (activated_object_change)="activated_photo=$event"></object_list>
     </div>
 
