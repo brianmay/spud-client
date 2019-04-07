@@ -152,12 +152,14 @@ export class ObjectList<GenObject extends BaseObject> {
             .catch(error => error);
     }
 
-    object_changed(object: GenObject): void {
+    object_changed(object: GenObject): ObjectList<GenObject> {
+        let clone = Object.create(this);
         const index = this.get_index(object.id);
         if (index != null) {
-            this.objects = this.objects.set(index.this_i, object);
-            this.change_source.next(this.objects);
+            clone.objects = clone.objects.set(index.this_i, object);
+            clone.change_source.next(clone.objects);
         }
+        return clone
     }
 
     object_deleted(object: GenObject): void {
@@ -231,6 +233,30 @@ export class BaseService<GenObject extends BaseObject> {
                 const new_object = this.type_obj.object_from_streamable(response.json(), true);
                 this.change_source.next(new_object);
                 return new_object;
+            })
+            .catch(error => {
+                return Promise.reject(error_to_string(error));
+            });
+    }
+
+    bulk_update(objects: Array<GenObject>, values: s.Streamable): Promise<Number> {
+        const http = this.ssp.http;
+        const options = this.ssp.get_options();
+        const streamable: s.Streamable = {
+            criteria: { photos: objects.map(photo => photo.id)},
+            values: values,
+        };
+
+        // this.change_source.next(object);
+        return http.patch(api_url + this.type_obj.type_name + '/', streamable, options)
+            .toPromise()
+            .then(response => {
+                for (let i = 0; i < objects.length; i++) {
+                    this.get_object(objects[i].id)
+                        .then(loaded_object => this.change_source.next(loaded_object))
+                        .catch((message: string) => null);
+                }
+                return response["count"];
             })
             .catch(error => {
                 return Promise.reject(error_to_string(error));

@@ -49,12 +49,17 @@ export class ObjectListItemComponent<GenObject extends BaseObject> {
     @Input() selected: boolean;
 
     @Output() selected_change = new EventEmitter();
-    public select_object() {
-        this.selected_change.emit(true);
+    @Output() toggled_change = new EventEmitter();
+    public click_object(event) {
+        if (event.ctrlKey) {
+            this.toggled_change.emit(true)
+        } else {
+            this.selected_change.emit(true);
+        }
     }
 
     @Output() activated_change = new EventEmitter();
-    public activate_object() {
+    public dblclick_object(event) {
         this.activated_change.emit(true);
     }
 }
@@ -103,11 +108,22 @@ export class ObjectListComponent<GenObject extends BaseObject> implements OnDest
         this.list.get_next_page();
     }
 
-    @Input() selected_object: GenObject;
-    @Output() selected_object_change = new EventEmitter();
+    @Input() selected_objects: Array<GenObject>;
+    @Output() selected_objects_change = new EventEmitter();
     public select_object(object: GenObject) {
-        this.selected_object = object;
-        this.selected_object_change.emit(object);
+        this.selected_objects = [object];
+        this.selected_objects_change.emit(this.selected_objects);
+    }
+
+    public toggle_object(object: GenObject) {
+        const index = this.selected_objects.indexOf(object, 0);
+
+        if (index > -1) {
+            this.selected_objects.splice(index, 1)
+        } else {
+            this.selected_objects.push(object)
+        }
+        this.selected_objects_change.emit(this.selected_objects);
     }
 
     @Output() activated_object_change = new EventEmitter();
@@ -149,12 +165,16 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
         if (this._service == null) {
             this._service = this.spud_service.get_service(this.type_obj);
             this.change_subscription = this._service.change.subscribe(object => {
-                if (this.object != null && this.object.id === object.id) {
-                    this.object = object;
-                    this.ref.markForCheck();
+                let objects: Array<GenObject> = this.objects;
+                for (let i = 0; i < this.objects.length; i++) {
+                    if (objects[i].id == object.id) {
+                        objects[i] = object;
+                        this.ref.markForCheck();
+                    }
                 }
+                this.objects = objects;
                 if (this.list != null) {
-                    this.list.object_changed(object);
+                    this.list = this.list.object_changed(object);
                     this.ref.markForCheck();
                 }
             });
@@ -183,6 +203,20 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
     @Input() show_close: boolean;
     @Output() on_close: EventEmitter<null> = new EventEmitter();
 
+    _objects: Array<GenObject> = [];
+    get objects() : Array<GenObject> {
+        return this._objects;
+    }
+    set objects(objects: Array<GenObject>) {
+        this._objects = objects;
+        if (this._objects.length == 1) {
+            this.object = this._objects[0];
+        } else {
+            this.object = null;
+        }
+        this.ref.markForCheck();
+    }
+
     private _object: GenObject;
     get object(): GenObject {
         return this._object;
@@ -197,7 +231,7 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
 
         this.child_list = null;
         this.photo_list = null;
-        this.selected_photo = null;
+        this.selected_photos = [];
         this.activated_photo = null;
 
         this.reload_lists(object);
@@ -211,6 +245,10 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
         } else {
             console.log('got full object, no need to load', object);
             this.set_loaded_object(object);
+        }
+
+        if (object != null) {
+            this._objects = [object];
         }
     }
 
@@ -264,12 +302,12 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
         }
     }
 
-    protected _selected_object: GenObject = null;
-    get selected_object(): GenObject {
-        return this._selected_object;
+    protected _selected_objects: Array<GenObject> = [];
+    get selected_objects(): Array<GenObject> {
+        return this._selected_objects;
     }
-    set selected_object(object: GenObject) {
-        this._selected_object = object;
+    set selected_objects(objects: Array<GenObject>) {
+        this._selected_objects = objects;
         this.ref.markForCheck();
     }
 
@@ -282,12 +320,12 @@ export class ObjectDetailComponent<GenObject extends BaseObject>
         this.ref.markForCheck();
     }
 
-    protected _selected_photo: PhotoObject = null;
-    get selected_photo(): PhotoObject {
-        return this._selected_photo;
+    protected _selected_photos: Array<PhotoObject> = null;
+    get selected_photos(): Array<PhotoObject> {
+        return this._selected_photos;
     }
-    set selected_photo(photo: PhotoObject) {
-        this._selected_photo = photo;
+    set selected_photos(photos: Array<PhotoObject>) {
+        this._selected_photos = photos;
         this.ref.markForCheck();
     }
 

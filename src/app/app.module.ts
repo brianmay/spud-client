@@ -38,6 +38,7 @@ import {
 } from './place.component';
 import {
     PhotoInfoboxComponent,
+    PhotoBulkComponent,
     PhotoThumbComponent,
     PhotoMidComponent,
     PhotoLargeComponent
@@ -82,6 +83,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
         PlaceInfoboxComponent,
         PlaceSelectComponent,
         PhotoInfoboxComponent,
+        PhotoBulkComponent,
         PhotoThumbComponent,
         PhotoMidComponent,
         PhotoLargeComponent,

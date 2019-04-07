@@ -6,6 +6,8 @@ import { PhotoObject, PhotoType } from './photo';
 import { SpudService, BaseService } from './spud.service';
 import { Permission } from './session';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as s from './streamable';
+
 
 @Component({
     selector: 'photo_infobox',
@@ -132,4 +134,74 @@ export class PhotoLargeComponent {
         return this._photo;
     }
     readonly base_url: string = base_url;
+}
+
+
+@Component({
+    selector: 'photo_bulk',
+    templateUrl: './photo-bulk.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class PhotoBulkComponent {
+    @Input() objects: Array<PhotoObject>;
+    @Input() permission: Permission;
+
+    form_group: FormGroup;
+    popup_error: string;
+
+    @ViewChild('error_element') error_element;
+
+    private service: BaseService<PhotoObject>;
+
+    constructor(
+        private readonly spud_service: SpudService,
+        private readonly fb: FormBuilder,
+        private readonly ref: ChangeDetectorRef,
+    ) {
+        this.create_form();
+        this.service = spud_service.get_service(new PhotoType());
+    }
+
+    private create_form(): void {
+        this.form_group = this.fb.group({
+            title: null,
+            description: null,
+        });
+        this.form_group.valueChanges.subscribe(() => this.ref.markForCheck());
+    }
+
+    submit(): void {
+        const values: s.Streamable = {};
+
+        if (this.form_group.value.title) {
+            values['title'] = this.form_group.value.title;
+        }
+
+        if (this.form_group.value.description) {
+            values.description = this.form_group.value.description;
+        }
+
+        this.service.bulk_update(this.objects, values)
+            .then(object => {
+                this.ref.markForCheck();
+            })
+            .catch(error => {
+                console.log(error);
+                this.open_error(error);
+            });
+    }
+
+    revert(): void {
+        this.form_group.reset({
+            title: "",
+            description: "",
+        });
+    }
+
+    private open_error(error: string): void {
+        this.popup_error = error;
+        this.error_element.show();
+        this.ref.markForCheck();
+    }
+
 }

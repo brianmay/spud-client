@@ -5,8 +5,9 @@
     <object_list_item
         *ngFor="let object of objects"
         [object]="object"
-        [selected]="selected_object && selected_object.id==object.id"
+        [selected]="selected_objects.includes(object) > 0"
         (selected_change)="select_object(object)"
+        (toggled_change)="toggle_object(object)"
         (activated_change)="activate_object(object)"
     ></object_list_item>
 
