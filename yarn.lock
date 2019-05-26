@@ -4888,10 +4888,10 @@ ng2-datetime-picker@^0.15.1:
   resolved "https://registry.yarnpkg.com/ng2-datetime-picker/-/ng2-datetime-picker-0.15.1.tgz#20ba96f4cf9aeb9f9151fca559ab384997d97f32"
   integrity sha1-ILqW9M+a65+RUfylWas4SZfZfzI=
 
-ngx-bootstrap@^3.0.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-3.3.0.tgz#91f1644a6fff8a493bc58a16bd9d02db7320bd6a"
-  integrity sha512-eGKjMPM4XhYVCr/NdGnQ3SCOSUGMe00lytOmuDAgHf2JwMGfMD3EE7hX9KAONfNbUEuHzRfsjDAuQhWbCvZ8xg==
+ngx-bootstrap@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-4.2.0.tgz#866e81b8976c0991b22fc23504df14d4fb36ca12"
+  integrity sha512-+oqkTiNWgd0IOUI0+DDlBjbdYN40Ymqu5kBgsbfxTnySOVgWfdO4BLbbv5YuKRWNnzkCLECLiL5WWB6WrWmDsA==
 
 ngx-markdown@^7.1.5:
   version "7.1.5"
