@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10-browsers
     steps:
       - checkout
       - restore_cache:
@@ -21,7 +21,7 @@ jobs:
 
   deploy-prod:
     docker:
-      - image: circleci/node:9
+      - image: circleci/node:10
     steps:
       - checkout # check out the code in the project directory
       - setup_remote_docker:
