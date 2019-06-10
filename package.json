@@ -31,7 +31,7 @@
     "lodash": "^4.17.5",
     "moment": "^2.22.0",
     "ng2-datetime-picker": "^0.15.1",
-    "ngx-bootstrap": "^4.2.0",
+    "ngx-bootstrap": "^4.3.0",
     "ngx-markdown": "^8.0.2",
     "npm-check": "^5.6.0",
     "popper.js": "^1.14.1",
