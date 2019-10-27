@@ -24,8 +24,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout # check out the code in the project directory
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - run: |
           docker build \
             --file "Dockerfile" \
