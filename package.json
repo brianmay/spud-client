@@ -24,7 +24,7 @@
     "@angular/router": "^7.2.7",
     "@ng-bootstrap/ng-bootstrap": "^4.2.2",
     "angular-2-local-storage": "^3.0.2",
-    "core-js": "^2.6.9",
+    "core-js": "^3.4.7",
     "immutable": "^4.0.0-rc.12",
     "jasmine": "^3.5.0",
     "jquery": "^3.4.1",
