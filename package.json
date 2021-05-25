@@ -27,7 +27,7 @@
     "core-js": "^2.6.9",
     "immutable": "^4.0.0-rc.12",
     "jasmine": "^3.5.0",
-    "jquery": "^3.5.0",
+    "jquery": "^3.6.0",
     "lodash": "^4.17.20",
     "moment": "^2.22.0",
     "ng2-datetime-picker": "^0.15.1",
